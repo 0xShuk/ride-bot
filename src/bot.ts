@@ -170,6 +170,22 @@ export class Bot {
     }
   }
 
+  /**
+   * After a restart: a call left mid-open is watched if it got as far as a build
+   * (its bond may be locked and ride-api's backstop can finish the swap), else dropped.
+   */
+  async recover(): Promise<void> {
+    for (const c of await this.store.activeCalls()) {
+      if (c.status !== "building") continue;
+      if (c.proposalPk) {
+        await this.store.updateCall(c.id, { status: "open", error: c.error ?? "restarted mid-open" });
+        await this.tg.send(`Restarted while opening ${c.symbol}; watching it in case it completed.`);
+      } else {
+        await this.store.updateCall(c.id, { status: "failed", error: "restarted before build" });
+      }
+    }
+  }
+
   // ---- monitoring ----
 
   async monitorRound(): Promise<void> {

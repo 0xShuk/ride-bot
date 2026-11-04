@@ -13,16 +13,32 @@ import { RideApi } from "./ride";
 import { MemoryStore, PgStore } from "./store";
 import { Telegram } from "./telegram";
 
-/** Runs `fn` every `ms`, never overlapping itself; errors are logged, not fatal. */
-function every(name: string, ms: number, fn: () => Promise<void>) {
+/** Error alerts per loop: at most one Telegram message per 30 minutes, plus one when it recovers. */
+const ALERT_EVERY_MS = 30 * 60_000;
+
+/** Runs `fn` every `ms`, never overlapping itself. Errors are logged and alerted, never fatal. */
+function every(name: string, ms: number, fn: () => Promise<void>, tg: Telegram) {
   let busy = false;
+  let failing = 0;
+  let alertedAt = 0;
   const tick = async () => {
     if (busy) return;
     busy = true;
     try {
       await fn();
+      if (failing) {
+        if (alertedAt) await tg.send(`${name} loop recovered after ${failing} failed round(s).`);
+        failing = 0;
+        alertedAt = 0;
+      }
     } catch (e) {
-      console.error(`[${name}]`, e instanceof Error ? e.message : e);
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error(`[${name}]`, msg);
+      failing++;
+      if (Date.now() - alertedAt > ALERT_EVERY_MS) {
+        alertedAt = Date.now();
+        await tg.send(`${name} loop error (${failing} in a row), will retry: ${msg}`);
+      }
     } finally {
       busy = false;
     }
@@ -62,8 +78,9 @@ async function main() {
     process.exit(0);
   }
 
-  every("decide", DECIDE_EVERY_MS, () => bot.decideRound());
-  every("monitor", MONITOR_EVERY_MS, () => bot.monitorRound());
+  await bot.recover();
+  every("decide", DECIDE_EVERY_MS, () => bot.decideRound(), tg);
+  every("monitor", MONITOR_EVERY_MS, () => bot.monitorRound(), tg);
   // Daily summary at 00:00 UTC.
   let lastDay = new Date().getUTCDate();
   setInterval(() => {
@@ -76,7 +93,13 @@ async function main() {
   if (!env.dryRun) await tg.send(`Ride Bot started on ${FUND.key}${env.killSwitch ? " (kill switch ON)" : ""}`);
 }
 
+// Anything that escapes the loops: log it and exit, and Render restarts the worker.
+process.on("unhandledRejection", (e) => {
+  console.error("[fatal] unhandled rejection", e);
+  process.exit(1);
+});
+
 main().catch((e) => {
-  console.error(e);
+  console.error("[fatal]", e);
   process.exit(1);
 });
