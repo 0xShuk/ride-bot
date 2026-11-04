@@ -1,5 +1,7 @@
 // Market data: Birdeye for the token list and candles, Jupiter for the verified list and live prices.
 
+import { fetchWithTimeout } from "./http";
+
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36";
 
 export type ListToken = {
@@ -27,9 +29,8 @@ export class Market {
 
   private async birdeye<T>(path: string, params: Record<string, string>): Promise<T> {
     const url = `https://public-api.birdeye.so/${path}?${new URLSearchParams(params)}`;
-    const res = await fetch(url, {
+    const res = await fetchWithTimeout(`birdeye ${path}`, url, {
       headers: { "X-API-KEY": this.birdeyeKey, "x-chain": "solana", accept: "application/json" },
-      signal: AbortSignal.timeout(10_000),
     });
     if (!res.ok) throw new Error(`birdeye ${path} ${res.status}`);
     const json = (await res.json()) as { success?: boolean; data?: T };
@@ -99,10 +100,12 @@ export class Market {
   /** Jupiter-verified mints and their decimals, cached for an hour. */
   async verifiedMints(): Promise<Map<string, number>> {
     if (this.verified && Date.now() - this.verified.at < 3_600_000) return this.verified.mints;
-    const res = await fetch("https://api.jup.ag/tokens/v2/tag?query=verified", {
-      headers: this.jupiterHeaders(),
-      signal: AbortSignal.timeout(15_000),
-    });
+    const res = await fetchWithTimeout(
+      "jupiter verified list",
+      "https://api.jup.ag/tokens/v2/tag?query=verified",
+      { headers: this.jupiterHeaders() },
+      45_000,
+    );
     if (!res.ok) throw new Error(`jupiter tokens ${res.status}`);
     const tokens = (await res.json()) as { id: string; decimals: number }[];
     const mints = new Map(tokens.map((t) => [t.id, t.decimals]));
@@ -115,9 +118,8 @@ export class Market {
     const out = new Map<string, number>();
     for (let i = 0; i < mints.length; i += 50) {
       const ids = mints.slice(i, i + 50);
-      const res = await fetch(`https://api.jup.ag/price/v3?ids=${ids.join(",")}`, {
+      const res = await fetchWithTimeout("jupiter price", `https://api.jup.ag/price/v3?ids=${ids.join(",")}`, {
         headers: this.jupiterHeaders(),
-        signal: AbortSignal.timeout(10_000),
       });
       if (!res.ok) throw new Error(`jupiter price ${res.status}`);
       const json = (await res.json()) as Record<string, { usdPrice?: number } | undefined>;

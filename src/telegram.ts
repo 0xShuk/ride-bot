@@ -16,7 +16,10 @@ export class Telegram {
         body: JSON.stringify({ chat_id: this.chat, text, disable_web_page_preview: true }),
         signal: AbortSignal.timeout(10_000),
       });
-      if (!res.ok) console.error(`[tg] send failed ${res.status}`);
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { description?: string };
+        console.error(`[tg] send failed ${res.status}: ${body.description ?? "no description"} (chat ${this.chat})`);
+      }
     } catch (e) {
       console.error("[tg] send failed", e);
     }

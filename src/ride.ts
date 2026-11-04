@@ -3,6 +3,7 @@
 import type { Keypair } from "@solana/web3.js";
 import nacl from "tweetnacl";
 import { FUND } from "./config";
+import { fetchWithTimeout } from "./http";
 
 export type BuiltTx = { label: string; txB64: string; needsUserSig: boolean };
 export type BuildOk = {
@@ -38,7 +39,12 @@ export class RideApi {
   constructor(private base: string) {}
 
   private async json<T>(path: string, init?: RequestInit): Promise<{ status: number; body: T }> {
-    const res = await fetch(`${this.base}${path}`, { ...init, signal: AbortSignal.timeout(60_000) });
+    // POSTs are not retried here: build-trade relies on the Idempotency-Key and the caller's own retry loop.
+    const res = init?.method === "POST"
+      ? await fetch(`${this.base}${path}`, { ...init, signal: AbortSignal.timeout(60_000) }).catch((e: Error) => {
+          throw new Error(`ride-api ${path.split("?")[0]}: ${e.name === "TimeoutError" ? "timed out after 60s" : e.message}`);
+        })
+      : await fetchWithTimeout(`ride-api ${path.split("?")[0]}`, `${this.base}${path}`, init, 30_000);
     const body = (await res.json().catch(() => ({}))) as T;
     return { status: res.status, body };
   }
