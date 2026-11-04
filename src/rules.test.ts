@@ -1,0 +1,69 @@
+import { describe, expect, it } from "vitest";
+import { FUND, USDC_MINT } from "./config";
+import type { ListToken } from "./market";
+import { eligible, score, shortlist } from "./rules";
+
+const tok = (mint: string, o: Partial<ListToken> = {}): ListToken => ({
+  mint,
+  symbol: mint.toUpperCase(),
+  price: 1,
+  liquidity: 500_000,
+  volume24h: 5_000_000,
+  change5m: 0,
+  change1h: 0,
+  change6h: 0,
+  change24h: 0,
+  trades24h: 1000,
+  ...o,
+});
+const verified = new Map([
+  ["a", 6],
+  ["b", 6],
+  ["c", 6],
+  ["d", 6],
+  [USDC_MINT, 6],
+  [FUND.bondMint, 6],
+]);
+
+describe("eligible", () => {
+  it("needs Jupiter-verified, liquidity, volume, not a stablecoin or the bond coin", () => {
+    expect(eligible(tok("a"), verified)).toBe(true);
+    expect(eligible(tok("zz"), verified)).toBe(false);
+    expect(eligible(tok("a", { liquidity: 99_999 }), verified)).toBe(false);
+    expect(eligible(tok("a", { volume24h: 999_999 }), verified)).toBe(false);
+    expect(eligible(tok(USDC_MINT), verified)).toBe(false);
+    expect(eligible(tok(FUND.bondMint), verified)).toBe(false);
+  });
+
+  it("drops a rug (down 90%+ on every timeframe) but keeps a token with gaps in its data", () => {
+    expect(eligible(tok("a", { change5m: -91, change1h: -95, change6h: -95, change24h: -99 }), verified)).toBe(false);
+    expect(eligible(tok("a", { change5m: null, change1h: -95, change6h: -95, change24h: -99 }), verified)).toBe(true);
+  });
+});
+
+describe("score", () => {
+  it("ranks fresh momentum above flat", () => {
+    expect(score(tok("a", { change5m: 2, change1h: 5 }))).toBeGreaterThan(score(tok("b")));
+  });
+
+  it("damps a parabolic 5m spike below a steady climb", () => {
+    const spike = tok("a", { change5m: 30, change1h: 30 });
+    const steady = tok("b", { change5m: 3, change1h: 10 });
+    expect(score(steady)).toBeGreaterThan(score(spike));
+  });
+});
+
+describe("shortlist", () => {
+  it("returns the top N eligible, skips excluded mints and duplicates", () => {
+    const list = [
+      tok("a", { change1h: 1 }),
+      tok("b", { change1h: 8 }),
+      tok("b", { change1h: 8 }),
+      tok("c", { change1h: 4 }),
+      tok("d", { change1h: 6 }),
+      tok("zz", { change1h: 20 }),
+    ];
+    expect(shortlist(list, verified, 2).map((t) => t.mint)).toEqual(["b", "d"]);
+    expect(shortlist(list, verified, 2, new Set(["b"])).map((t) => t.mint)).toEqual(["d", "c"]);
+  });
+});

@@ -1,0 +1,2837 @@
+{
+  "address": "tRADeQ3SJVHnFXv1rpwZzVt5HE6DWDu4J6cH34Md6ZA",
+  "metadata": {
+    "name": "trade_executor",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "cancel_intent",
+      "discriminator": [
+        67,
+        73,
+        238,
+        244,
+        208,
+        89,
+        225,
+        59
+      ],
+      "accounts": [
+        {
+          "name": "treasury",
+          "docs": [
+            "Treasury must sign — in governance context, a proposal must pass",
+            "and the governance program CPIs with the treasury PDA as signer.",
+            "Receives vault rent back."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "intent",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "vault_authority"
+              },
+              {
+                "kind": "account",
+                "path": "input_token_program"
+              },
+              {
+                "kind": "account",
+                "path": "input_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "intent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury_input_ata",
+          "docs": [
+            "Treasury's token account to receive escrowed tokens back.",
+            "For native SOL input this is unused — pass any account (e.g. treasury)."
+          ],
+          "writable": true
+        },
+        {
+          "name": "input_mint"
+        },
+        {
+          "name": "input_token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_intents",
+      "discriminator": [
+        134,
+        146,
+        8,
+        17,
+        210,
+        252,
+        183,
+        218
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "docs": [
+            "Anyone can crank this — permissionless cleanup."
+          ],
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_perp_intent",
+      "discriminator": [
+        43,
+        68,
+        63,
+        204,
+        46,
+        190,
+        198,
+        116
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "docs": [
+            "Anyone can crank this — permissionless cleanup."
+          ],
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_intent",
+      "discriminator": [
+        216,
+        214,
+        79,
+        121,
+        23,
+        194,
+        96,
+        104
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "treasury",
+          "docs": [
+            "Treasury — signer that funds the intent and is stored on the Intent",
+            "account for returning tokens later. In a governance context, the",
+            "native treasury PDA signs via CPI when a proposal executes this",
+            "instruction. Must be mut for native SOL transfers."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "intent",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  116,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "treasury"
+              },
+              {
+                "kind": "arg",
+                "path": "params.intent_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "vault_authority"
+              },
+              {
+                "kind": "account",
+                "path": "input_token_program"
+              },
+              {
+                "kind": "account",
+                "path": "input_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "intent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "source_token_account",
+          "docs": [
+            "Source token account holding input tokens. Must be owned by treasury.",
+            "For native SOL input this account is unused — pass any account (e.g. treasury)."
+          ],
+          "writable": true
+        },
+        {
+          "name": "input_mint"
+        },
+        {
+          "name": "output_mint",
+          "docs": [
+            "Validated as a real mint so the intent can't store garbage."
+          ]
+        },
+        {
+          "name": "input_token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "CreateIntentParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "create_perp_intent",
+      "discriminator": [
+        99,
+        143,
+        132,
+        228,
+        139,
+        148,
+        134,
+        199
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "perp_intent",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  105,
+                  110,
+                  116,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "treasury"
+              },
+              {
+                "kind": "arg",
+                "path": "params.intent_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "perp_slot",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  115,
+                  108,
+                  111,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "params.slot_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "params.slot_index"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_usdc_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "slot_authority"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "collateral_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "treasury_usdc",
+          "writable": true
+        },
+        {
+          "name": "collateral_mint"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "CreatePerpIntentParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "execute_intent",
+      "discriminator": [
+        53,
+        130,
+        47,
+        154,
+        227,
+        220,
+        122,
+        212
+      ],
+      "accounts": [
+        {
+          "name": "executor",
+          "docs": [
+            "Executor is permissionless — anyone can crank.",
+            "Pays for ATA creation if needed. Receives tip if tip_bps > 0."
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "intent",
+          "writable": true
+        },
+        {
+          "name": "treasury",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "docs": [
+            "Vault holding the escrowed input tokens (ATA of vault_authority)."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "vault_authority"
+              },
+              {
+                "kind": "account",
+                "path": "input_token_program"
+              },
+              {
+                "kind": "account",
+                "path": "input_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "intent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "output_vault",
+          "docs": [
+            "Program-controlled output vault (ATA of vault_authority for output mint).",
+            "Swap routes ALL output here; the program then distributes treasury share and executor tip."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "vault_authority"
+              },
+              {
+                "kind": "account",
+                "path": "output_token_program"
+              },
+              {
+                "kind": "account",
+                "path": "output_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "treasury_output_ata",
+          "docs": [
+            "Treasury's token account for the output mint.",
+            "Created if it doesn't exist (executor pays ATA rent)."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "treasury"
+              },
+              {
+                "kind": "account",
+                "path": "output_token_program"
+              },
+              {
+                "kind": "account",
+                "path": "output_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "executor_output_ata",
+          "docs": [
+            "Executor's token account for the output mint (receives tip).",
+            "Created if it doesn't exist. If tip_bps is 0 the swap just won't route here."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "executor"
+              },
+              {
+                "kind": "account",
+                "path": "output_token_program"
+              },
+              {
+                "kind": "account",
+                "path": "output_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "treasury_input_ata",
+          "docs": [
+            "Treasury's token account for the input mint. Receives remaining dust after swap.",
+            "For native SOL input this is unused — pass any account (e.g. treasury)."
+          ],
+          "writable": true
+        },
+        {
+          "name": "input_mint"
+        },
+        {
+          "name": "output_mint"
+        },
+        {
+          "name": "swap_program"
+        },
+        {
+          "name": "input_token_program"
+        },
+        {
+          "name": "output_token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "governance",
+          "docs": [
+            "[\"native-treasury\", governance] PDA == intent.treasury."
+          ],
+          "optional": true
+        },
+        {
+          "name": "sowellian_config",
+          "docs": [
+            "[\"sowellian-config\", governance.realm] PDA matches."
+          ],
+          "optional": true
+        },
+        {
+          "name": "api_authority",
+          "docs": [
+            "Off-chain risk-API co-signer. Required when the realm's",
+            "`SowellianConfig.api_authority` is non-default; ignored otherwise."
+          ],
+          "signer": true,
+          "optional": true
+        },
+        {
+          "name": "forward_intent",
+          "docs": [
+            "The paired forward intent (USDC→asset). Owned by this program; key must",
+            "equal `intent.forward_intent_id`"
+          ],
+          "optional": true
+        },
+        {
+          "name": "bet",
+          "docs": [
+            "validated by raw-offset read in the handler."
+          ],
+          "optional": true
+        },
+        {
+          "name": "caller_usdc_ata",
+          "docs": [
+            "mint == USDC and owner == bet.creator, validated manually in the handler."
+          ],
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "fee_taker_usdc_ata",
+          "writable": true,
+          "optional": true
+        }
+      ],
+      "args": [
+        {
+          "name": "swap_data",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "perp_close",
+      "discriminator": [
+        172,
+        185,
+        239,
+        239,
+        135,
+        218,
+        221,
+        165
+      ],
+      "accounts": [
+        {
+          "name": "executor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "perp_intent",
+          "writable": true
+        },
+        {
+          "name": "perp_slot",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  115,
+                  108,
+                  111,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "trader_account"
+        },
+        {
+          "name": "eternal_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "base_lots",
+          "type": "u64"
+        },
+        {
+          "name": "price_ticks",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "perp_deposit",
+      "discriminator": [
+        92,
+        29,
+        29,
+        118,
+        205,
+        97,
+        81,
+        98
+      ],
+      "accounts": [
+        {
+          "name": "executor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "perp_intent",
+          "writable": true
+        },
+        {
+          "name": "perp_slot",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  115,
+                  108,
+                  111,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_usdc_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "slot_authority"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "usdc_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "slot_phyusd_ata",
+          "docs": [
+            "The slot authority's PhyUSD ATA (Ember output → DepositFunds source)/"
+          ],
+          "writable": true
+        },
+        {
+          "name": "trader_account"
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "ember_program"
+        },
+        {
+          "name": "eternal_program"
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "perp_finalize",
+      "discriminator": [
+        139,
+        192,
+        236,
+        189,
+        108,
+        166,
+        229,
+        138
+      ],
+      "accounts": [
+        {
+          "name": "executor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "perp_intent",
+          "writable": true
+        },
+        {
+          "name": "perp_slot",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  115,
+                  108,
+                  111,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_usdc_ata",
+          "docs": [
+            "Slot authority's USDC ATA"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "slot_authority"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "usdc_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "slot_phyusd_ata",
+          "docs": [
+            "Slot authority's PhyUSD ATA"
+          ],
+          "writable": true
+        },
+        {
+          "name": "ember_program"
+        },
+        {
+          "name": "treasury_usdc",
+          "writable": true
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "bet",
+          "optional": true
+        },
+        {
+          "name": "governance",
+          "optional": true
+        },
+        {
+          "name": "sowellian_config",
+          "optional": true
+        },
+        {
+          "name": "caller_usdc_ata",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "fee_taker_usdc_ata",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "perp_open",
+      "discriminator": [
+        136,
+        119,
+        33,
+        249,
+        12,
+        88,
+        194,
+        136
+      ],
+      "accounts": [
+        {
+          "name": "executor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "perp_intent",
+          "writable": true
+        },
+        {
+          "name": "perp_slot",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  115,
+                  108,
+                  111,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "trader_account"
+        },
+        {
+          "name": "eternal_program"
+        },
+        {
+          "name": "governance",
+          "docs": [
+            "[\"native-treasury\", governance] PDA == perp_intent.treasury."
+          ],
+          "optional": true
+        },
+        {
+          "name": "sowellian_config",
+          "docs": [
+            "[\"sowellian-config\", governance.realm] canonical PDA."
+          ],
+          "optional": true
+        },
+        {
+          "name": "api_authority",
+          "docs": [
+            "Off-chain risk-API co-signer. Required when the realm's",
+            "`SowellianConfig.api_authority` is non-default; ignored otherwise."
+          ],
+          "signer": true,
+          "optional": true
+        }
+      ],
+      "args": [
+        {
+          "name": "base_lots",
+          "type": "u64"
+        },
+        {
+          "name": "price_ticks",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "perp_reclaim",
+      "discriminator": [
+        228,
+        89,
+        3,
+        135,
+        250,
+        74,
+        77,
+        218
+      ],
+      "accounts": [
+        {
+          "name": "executor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "perp_intent",
+          "writable": true
+        },
+        {
+          "name": "perp_slot",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  115,
+                  108,
+                  111,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_usdc_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "slot_authority"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "usdc_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "treasury_usdc",
+          "writable": true
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "perp_request_withdraw",
+      "discriminator": [
+        174,
+        109,
+        118,
+        25,
+        41,
+        56,
+        95,
+        49
+      ],
+      "accounts": [
+        {
+          "name": "executor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "perp_intent",
+          "writable": true
+        },
+        {
+          "name": "perp_slot",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  115,
+                  108,
+                  111,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "slot_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  101,
+                  114,
+                  112,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "perp_intent.slot_index",
+                "account": "PerpIntent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "trader_account"
+        },
+        {
+          "name": "slot_phyusd_ata",
+          "docs": [
+            "The slot authority's PhyUSD ATA"
+          ],
+          "writable": true
+        },
+        {
+          "name": "usdc_mint"
+        },
+        {
+          "name": "eternal_program"
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "reclaim_expired",
+      "discriminator": [
+        125,
+        185,
+        48,
+        75,
+        0,
+        71,
+        93,
+        98
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "docs": [
+            "Anyone can reclaim after expiry."
+          ],
+          "signer": true
+        },
+        {
+          "name": "intent",
+          "writable": true
+        },
+        {
+          "name": "treasury",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "vault_authority"
+              },
+              {
+                "kind": "account",
+                "path": "input_token_program"
+              },
+              {
+                "kind": "account",
+                "path": "input_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "intent"
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury_input_ata",
+          "docs": [
+            "Treasury's token account to receive escrowed tokens back.",
+            "For native SOL input this is unused — pass any account (e.g. treasury)."
+          ],
+          "writable": true
+        },
+        {
+          "name": "input_mint"
+        },
+        {
+          "name": "input_token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Intent",
+      "discriminator": [
+        247,
+        162,
+        35,
+        165,
+        254,
+        111,
+        129,
+        109
+      ]
+    },
+    {
+      "name": "PerpIntent",
+      "discriminator": [
+        122,
+        32,
+        170,
+        103,
+        49,
+        254,
+        228,
+        106
+      ]
+    },
+    {
+      "name": "PerpSlot",
+      "discriminator": [
+        179,
+        4,
+        227,
+        121,
+        49,
+        74,
+        6,
+        37
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "IntentSettled",
+      "discriminator": [
+        112,
+        202,
+        229,
+        173,
+        39,
+        129,
+        254,
+        38
+      ]
+    },
+    {
+      "name": "PerpReclaimed",
+      "discriminator": [
+        74,
+        148,
+        43,
+        215,
+        238,
+        255,
+        119,
+        95
+      ]
+    },
+    {
+      "name": "PerpSettled",
+      "discriminator": [
+        181,
+        13,
+        17,
+        229,
+        147,
+        4,
+        206,
+        249
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "ZeroAmount",
+      "msg": "Amount must be greater than zero"
+    },
+    {
+      "code": 6001,
+      "name": "IntentNotOpen",
+      "msg": "Intent is not open"
+    },
+    {
+      "code": 6002,
+      "name": "IntentExpired",
+      "msg": "Intent has expired"
+    },
+    {
+      "code": 6003,
+      "name": "IntentNotExpired",
+      "msg": "Intent has not expired yet"
+    },
+    {
+      "code": 6004,
+      "name": "IntentNeverExpires",
+      "msg": "Intent never expires"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidSwapProgram",
+      "msg": "Swap program does not match intent"
+    },
+    {
+      "code": 6006,
+      "name": "BelowMinOutput",
+      "msg": "Output received is below minimum"
+    },
+    {
+      "code": 6007,
+      "name": "AboveMaxOutput",
+      "msg": "Output received is above maximum"
+    },
+    {
+      "code": 6008,
+      "name": "MintMismatch",
+      "msg": "Mint mismatch"
+    },
+    {
+      "code": 6009,
+      "name": "TreasuryMismatch",
+      "msg": "Treasury mismatch"
+    },
+    {
+      "code": 6010,
+      "name": "NothingSwapped",
+      "msg": "Nothing was swapped"
+    },
+    {
+      "code": 6011,
+      "name": "OracleNotConfigured",
+      "msg": "No oracle configured"
+    },
+    {
+      "code": 6012,
+      "name": "OraclePriceStale",
+      "msg": "Oracle price is stale"
+    },
+    {
+      "code": 6013,
+      "name": "OraclePriceInvalid",
+      "msg": "Oracle price is invalid"
+    },
+    {
+      "code": 6014,
+      "name": "OracleMathOverflow",
+      "msg": "Oracle math overflow"
+    },
+    {
+      "code": 6015,
+      "name": "OracleFeedMismatch",
+      "msg": "Oracle feed mismatch"
+    },
+    {
+      "code": 6016,
+      "name": "IntentFullyFilled",
+      "msg": "Intent is fully filled"
+    },
+    {
+      "code": 6017,
+      "name": "CooldownNotElapsed",
+      "msg": "Cooldown has not elapsed"
+    },
+    {
+      "code": 6018,
+      "name": "OverFilled",
+      "msg": "Overfilled — input exceeds max per execution"
+    },
+    {
+      "code": 6019,
+      "name": "TipBpsTooHigh",
+      "msg": "Tip basis points exceed maximum (1000 = 10%)"
+    },
+    {
+      "code": 6020,
+      "name": "OracleFeedNotSet",
+      "msg": "Oracle feed must be set when oracle type is not None"
+    },
+    {
+      "code": 6021,
+      "name": "DirectRouteDetected",
+      "msg": "Swap routed tokens directly to treasury or executor — must route through output vault"
+    },
+    {
+      "code": 6022,
+      "name": "InvalidRemainingAccounts",
+      "msg": "Remaining accounts must be (intent, treasury) pairs or groups of 7 with vaults"
+    },
+    {
+      "code": 6023,
+      "name": "IntentStillOpen",
+      "msg": "Intent is still open — cancel or reclaim before closing"
+    },
+    {
+      "code": 6024,
+      "name": "ForwardBetUnresolved",
+      "msg": "Forward intent cannot be closed until its bet is terminal (reverse may still need it)"
+    },
+    {
+      "code": 6025,
+      "name": "AccountNotWritable",
+      "msg": "Account must be writable"
+    },
+    {
+      "code": 6026,
+      "name": "InvalidAccountOwner",
+      "msg": "Account not owned by this program"
+    },
+    {
+      "code": 6027,
+      "name": "InvalidAccountSize",
+      "msg": "Intent account data size is invalid"
+    },
+    {
+      "code": 6028,
+      "name": "InvalidIntentAccount",
+      "msg": "Cannot deserialize as valid Intent account"
+    },
+    {
+      "code": 6029,
+      "name": "InvalidVaultAuthority",
+      "msg": "Vault authority PDA does not match intent"
+    },
+    {
+      "code": 6030,
+      "name": "InvalidVaultPda",
+      "msg": "Vault PDA address does not match intent"
+    },
+    {
+      "code": 6031,
+      "name": "InvalidVaultAccount",
+      "msg": "Account is not a valid token vault"
+    },
+    {
+      "code": 6032,
+      "name": "VaultNotEmpty",
+      "msg": "Vault still holds tokens — use cancel or reclaim to recover funds"
+    },
+    {
+      "code": 6033,
+      "name": "InvalidSourceAccount",
+      "msg": "Source token account mint or authority does not match"
+    },
+    {
+      "code": 6034,
+      "name": "InvalidInputMint",
+      "msg": "Input mint must be USDC"
+    },
+    {
+      "code": 6035,
+      "name": "InvalidOutputMint",
+      "msg": "Output mint must be USDC"
+    },
+    {
+      "code": 6036,
+      "name": "InvalidGovernance",
+      "msg": "Governance account missing or not bound to intent.treasury"
+    },
+    {
+      "code": 6037,
+      "name": "InvalidSowellianConfig",
+      "msg": "SowellianConfig account missing or not canonical for governance.realm"
+    },
+    {
+      "code": 6038,
+      "name": "UnauthorizedApiAuthority",
+      "msg": "API authority does not match realm SowellianConfig.api_authority"
+    },
+    {
+      "code": 6039,
+      "name": "EarlyCloseAccountMissing",
+      "msg": "Early-close: required forward/bet/governance/config/caller account missing"
+    },
+    {
+      "code": 6040,
+      "name": "EarlyCloseForwardMismatch",
+      "msg": "Early-close: forward_intent does not match reverse.forward_intent_id or is wrong program"
+    },
+    {
+      "code": 6041,
+      "name": "EarlyCloseBetMismatch",
+      "msg": "Early-close: bet account does not match forward.bet or is not owned by sowell-gov"
+    },
+    {
+      "code": 6042,
+      "name": "EarlyCloseMintMismatch",
+      "msg": "Early-close: mint pairing invalid (forward USDC→asset, reverse asset→USDC)"
+    },
+    {
+      "code": 6043,
+      "name": "EarlyCloseNotFullPosition",
+      "msg": "Early-close: reverse must liquidate the entire forward position"
+    },
+    {
+      "code": 6044,
+      "name": "EarlyCloseDustTooHigh",
+      "msg": "Early-close: imputed unsold dust exceeds max_liquidation_dust_usdc"
+    },
+    {
+      "code": 6045,
+      "name": "EarlyCloseNotProfitable",
+      "msg": "Early-close: round-trip profit below min_early_profit_bps"
+    },
+    {
+      "code": 6046,
+      "name": "EarlyCloseOutsideWindow",
+      "msg": "Early-close: now is outside the bet evaluation window"
+    },
+    {
+      "code": 6047,
+      "name": "EarlyCloseBetNotResolvable",
+      "msg": "Early-close: bet is cancelled, unexecuted, or already resolved"
+    },
+    {
+      "code": 6048,
+      "name": "EarlyCloseCallerAtaMismatch",
+      "msg": "Early-close: caller token account is not the caller's USDC ATA"
+    },
+    {
+      "code": 6049,
+      "name": "EarlyCloseFeeAtaMismatch",
+      "msg": "Early-close: fee token account is not the fee taker's USDC ATA"
+    },
+    {
+      "code": 6050,
+      "name": "EarlyCloseMathOverflow",
+      "msg": "Early-close: arithmetic overflow"
+    },
+    {
+      "code": 6051,
+      "name": "InvalidPerpProgram",
+      "msg": "Perp CPI target program is not executable"
+    },
+    {
+      "code": 6052,
+      "name": "InvalidCollateralMint",
+      "msg": "Collateral mint must be USDC"
+    },
+    {
+      "code": 6053,
+      "name": "PerpSlotBusy",
+      "msg": "Perp slot is already in use by another intent"
+    },
+    {
+      "code": 6054,
+      "name": "PerpInvalidSize",
+      "msg": "Perp target/min-fill size is invalid"
+    },
+    {
+      "code": 6055,
+      "name": "PerpIntentExpired",
+      "msg": "Perp intent has expired"
+    },
+    {
+      "code": 6056,
+      "name": "PerpBadState",
+      "msg": "Perp step precondition not met (wrong flag state)"
+    },
+    {
+      "code": 6057,
+      "name": "PerpNotResolver",
+      "msg": "Perp exit instructions require the resolver signer"
+    },
+    {
+      "code": 6058,
+      "name": "PerpProgramNotAllowed",
+      "msg": "Perp CPI targets a program that is not allowlisted (or a non-Approve token ix)"
+    },
+    {
+      "code": 6059,
+      "name": "PerpTraderDecode",
+      "msg": "Failed to decode the Phoenix trader account"
+    },
+    {
+      "code": 6060,
+      "name": "PerpOrderSize",
+      "msg": "Perp order size is zero or exceeds the remaining target"
+    },
+    {
+      "code": 6061,
+      "name": "PerpWrongTraderAccount",
+      "msg": "Perp trader account is not the canonical account for this slot"
+    },
+    {
+      "code": 6062,
+      "name": "PerpNotFlat",
+      "msg": "Perp position is not flat (cannot proceed until squared off)"
+    },
+    {
+      "code": 6063,
+      "name": "PerpOrderPrice",
+      "msg": "Perp order price is outside the intent's guard (floor on open / ceiling on close)"
+    },
+    {
+      "code": 6064,
+      "name": "PerpAccountMismatch",
+      "msg": "Perp CPI account does not match the expected bound account (wrong ATA / trader / market)"
+    },
+    {
+      "code": 6065,
+      "name": "PerpDepositNotVerified",
+      "msg": "Perp deposit did not land in the trader account (collateral not moved)"
+    },
+    {
+      "code": 6066,
+      "name": "PerpLeverageTooHigh",
+      "msg": "Perp position leverage exceeds the max leverage ceiling"
+    },
+    {
+      "code": 6067,
+      "name": "FeeMathOverflow",
+      "msg": "Fee arithmetic overflowed"
+    },
+    {
+      "code": 6068,
+      "name": "FeeTakerAtaMismatch",
+      "msg": "Fee taker token account is not the fee taker's USDC ATA"
+    },
+    {
+      "code": 6069,
+      "name": "FeeAccountMissing",
+      "msg": "Fee taker USDC ATA must be supplied"
+    }
+  ],
+  "types": [
+    {
+      "name": "CreateIntentParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "intent_id",
+            "type": "u64"
+          },
+          {
+            "name": "total_input_amount",
+            "type": "u64"
+          },
+          {
+            "name": "min_output",
+            "type": "u64"
+          },
+          {
+            "name": "max_output",
+            "type": "u64"
+          },
+          {
+            "name": "expiry",
+            "type": "i64"
+          },
+          {
+            "name": "swap_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "bet",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "forward_intent_id",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "max_input_per_execution",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "cooldown_seconds",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "tip_bps",
+            "type": {
+              "option": "u16"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreatePerpIntentParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "intent_id",
+            "type": "u64"
+          },
+          {
+            "name": "slot_index",
+            "type": "u16"
+          },
+          {
+            "name": "deposited_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "market",
+            "docs": [
+              "Eternal market (orderbook) this short trades on."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "asset_id",
+            "type": "u64"
+          },
+          {
+            "name": "price_floor_ticks",
+            "type": "u64"
+          },
+          {
+            "name": "price_ceiling_ticks",
+            "type": "u64"
+          },
+          {
+            "name": "target_base_lots",
+            "type": "u64"
+          },
+          {
+            "name": "min_fill_base_lots",
+            "type": "u64"
+          },
+          {
+            "name": "expiry",
+            "type": "i64"
+          },
+          {
+            "name": "bet",
+            "type": {
+              "option": "pubkey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Intent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "authority_bump",
+            "type": "u8"
+          },
+          {
+            "name": "input_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "output_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_input_amount",
+            "type": "u64"
+          },
+          {
+            "name": "min_output",
+            "type": "u64"
+          },
+          {
+            "name": "max_output",
+            "type": "u64"
+          },
+          {
+            "name": "forward_intent_id",
+            "type": "pubkey"
+          },
+          {
+            "name": "bet",
+            "type": "pubkey"
+          },
+          {
+            "name": "reserved",
+            "type": {
+              "array": [
+                "u8",
+                9
+              ]
+            }
+          },
+          {
+            "name": "expiry",
+            "type": "i64"
+          },
+          {
+            "name": "max_input_per_execution",
+            "type": "u64"
+          },
+          {
+            "name": "cooldown_seconds",
+            "type": "i64"
+          },
+          {
+            "name": "total_input_spent",
+            "type": "u64"
+          },
+          {
+            "name": "total_output_received",
+            "type": "u64"
+          },
+          {
+            "name": "last_executed_at",
+            "type": "i64"
+          },
+          {
+            "name": "num_executions",
+            "type": "u32"
+          },
+          {
+            "name": "tip_bps",
+            "type": "u16"
+          },
+          {
+            "name": "swap_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "IntentStatus"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "IntentSettled",
+      "docs": [
+        "Emitted at the end of every `execute_intent` fill."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "intent",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "bet",
+            "type": "pubkey"
+          },
+          {
+            "name": "caller",
+            "type": "pubkey"
+          },
+          {
+            "name": "output_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_output",
+            "type": "u64"
+          },
+          {
+            "name": "caller_payout",
+            "type": "u64"
+          },
+          {
+            "name": "profit_fee",
+            "type": "u64"
+          },
+          {
+            "name": "swap_fee",
+            "docs": [
+              "Swap fee (USDC-return leg only)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "tip",
+            "type": "u64"
+          },
+          {
+            "name": "treasury_amount",
+            "type": "u64"
+          },
+          {
+            "name": "early_close",
+            "type": "bool"
+          },
+          {
+            "name": "is_last_fill",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IntentStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Open"
+          },
+          {
+            "name": "Completed"
+          },
+          {
+            "name": "Cancelled"
+          },
+          {
+            "name": "Reclaimed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PerpIntent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "slot_index",
+            "docs": [
+              "Which pool slot (→ slot authority + Phoenix trader account) this trade uses."
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "authority_bump",
+            "type": "u8"
+          },
+          {
+            "name": "collateral_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "market",
+            "docs": [
+              "Eternal market (orderbook) this short trades on."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "asset_id",
+            "docs": [
+              "Phoenix asset id for `market` — used to locate our position in the trader",
+              "account's position map"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "deposited_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "withdrawn_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "price_floor_ticks",
+            "type": "u64"
+          },
+          {
+            "name": "price_ceiling_ticks",
+            "type": "u64"
+          },
+          {
+            "name": "target_base_lots",
+            "type": "u64"
+          },
+          {
+            "name": "min_fill_base_lots",
+            "type": "u64"
+          },
+          {
+            "name": "bet",
+            "type": "pubkey"
+          },
+          {
+            "name": "expiry",
+            "type": "i64"
+          },
+          {
+            "name": "flags",
+            "docs": [
+              "Lifecycle progress"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "reserved",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PerpReclaimed",
+      "docs": [
+        "Emitted by `perp_reclaim`"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "perp_intent",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "refunded_usdc",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PerpSettled",
+      "docs": [
+        "Emitted by `perp_finalize`"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "perp_intent",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "bet",
+            "type": "pubkey"
+          },
+          {
+            "name": "caller",
+            "type": "pubkey"
+          },
+          {
+            "name": "deposited_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "withdrawn_usdc",
+            "type": "u64"
+          },
+          {
+            "name": "realized_pnl",
+            "type": "i64"
+          },
+          {
+            "name": "caller_payout",
+            "type": "u64"
+          },
+          {
+            "name": "profit_fee",
+            "type": "u64"
+          },
+          {
+            "name": "swap_fee",
+            "type": "u64"
+          },
+          {
+            "name": "treasury_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PerpSlot",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "slot_index",
+            "type": "u16"
+          },
+          {
+            "name": "current_intent",
+            "docs": [
+              "The intent currently holding the slot"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ]
+}
