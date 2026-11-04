@@ -7,7 +7,7 @@ import { PublicKey } from "@solana/web3.js";
 import { Bot } from "./bot";
 import { Brain } from "./brain";
 import { Chain, TREASURY, parseKeypair } from "./chain";
-import { DECIDE_EVERY_MS, FUND, MONITOR_EVERY_MS, loadEnv } from "./config";
+import { FUND, MONITOR_EVERY_MS, loadEnv } from "./config";
 import { Market } from "./market";
 import { RideApi } from "./ride";
 import { MemoryStore, PgStore } from "./store";
@@ -79,7 +79,8 @@ async function main() {
   }
 
   await bot.recover();
-  every("decide", DECIDE_EVERY_MS, () => bot.decideRound(), tg);
+  // Checked every minute; decideRound itself waits until 15 minutes have passed since the last decision.
+  every("decide", 60_000, () => bot.decideRound(), tg);
   every("monitor", MONITOR_EVERY_MS, () => bot.monitorRound(), tg);
   // Daily summary at 00:00 UTC.
   let lastDay = new Date().getUTCDate();

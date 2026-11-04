@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import type { Keypair, PublicKey } from "@solana/web3.js";
 import { type Candidate, Brain } from "./brain";
 import { type Chain } from "./chain";
-import { FUND, MIN_LIQUIDITY_USD, SHORTLIST_SIZE, SIZE_SHARE, TAKE_PROFIT, type Env } from "./config";
+import { DECIDE_EVERY_MS, FUND, MIN_LIQUIDITY_USD, SHORTLIST_SIZE, SIZE_SHARE, TAKE_PROFIT, type Env } from "./config";
 import type { Market } from "./market";
 import { type BuildOk, type RideApi, isReset, isTransient } from "./ride";
 import { shortlist } from "./rules";
@@ -20,6 +20,7 @@ const mins = (secs: number) => `${secs / 60}m`;
 
 export class Bot {
   private lowBalanceAlertAt = 0;
+  private lastRoundAt = 0;
 
   constructor(
     private env: Env,
@@ -36,6 +37,11 @@ export class Bot {
   // ---- deciding ----
 
   async decideRound(): Promise<void> {
+    // One round per 15 minutes, counted from the last round this process ran and, across
+    // restarts (e.g. each deploy), from the last decision in the database.
+    const last = Math.max(this.lastRoundAt, (await this.store.lastDecisionAt()) ?? 0);
+    if (Date.now() - last < DECIDE_EVERY_MS - 30_000) return;
+    this.lastRoundAt = Date.now();
     if (this.env.killSwitch) {
       console.log("[decide] kill switch on: no new calls");
       return;

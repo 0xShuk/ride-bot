@@ -36,12 +36,20 @@ export interface Store {
   activeCalls(): Promise<CallRow[]>;
   /** Resolved calls since `sinceMs`, for the daily summary. */
   resolvedSince(sinceMs: number): Promise<CallRow[]>;
+  /** When the last decision was made (unix ms), or null. Survives restarts in Postgres. */
+  lastDecisionAt(): Promise<number | null>;
 }
 
 export class MemoryStore implements Store {
   private calls: CallRow[] = [];
+  private lastDecision: number | null = null;
   async init() {}
-  async logDecision() {}
+  async logDecision() {
+    this.lastDecision = Date.now();
+  }
+  async lastDecisionAt() {
+    return this.lastDecision;
+  }
   async createCall(c: Parameters<Store["createCall"]>[0]) {
     const row: CallRow = {
       ...c,
@@ -147,6 +155,11 @@ export class PgStore implements Store {
       d.reason,
       d.shortlist,
     ]);
+  }
+
+  async lastDecisionAt() {
+    const { rows } = await this.pool.query("select extract(epoch from max(at)) * 1000 as at from ridebot.decisions");
+    return rows[0]?.at == null ? null : Number(rows[0].at);
   }
 
   async createCall(c: Parameters<Store["createCall"]>[0]) {
