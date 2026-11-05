@@ -22,8 +22,9 @@ const hours = (m: number) => (m % 60 ? `${m} minutes` : `${m / 60} hour${m === 6
 function system(windows: WindowMin[]): string {
   return `You run a small autonomous trading experiment on Solana.
 Each call buys one token with USDC, holds it for a fixed window (${windows.map(hours).join(", ")}), then sells it back to USDC.
-Profit is only what comes back minus what went in. The call is closed early once it is up ${TAKE_PROFIT * 100}%; there is no stop-loss.
-Swapping in and out costs money: each candidate shows its estimated round-trip cost. A call only wins if the price rises by more than that.
+Profit is only what comes back minus what went in; there is no stop-loss.
+Swapping in and out costs money: each candidate shows its estimated round-trip cost. A call wins whenever the price rises by more than that cost by the end of the window, even by a fraction of a percent.
+If a call is up ${TAKE_PROFIT * 100}% before the window ends, it is closed early to lock the gain. That is a cap, not a target: a call does not need to reach it to be worth making.
 You get a shortlist of liquid tokens already filtered to established uptrends without a fresh 5-minute spike, with 15-minute and hourly candles.
 Pick at most one token and the window that best fits its setup, or pass if none is likely to rise clearly more than its cost within the window.
 Avoid tokens that already ran far above their recent range: buying near short-term tops lost the most in earlier calls.

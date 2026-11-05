@@ -33,7 +33,7 @@ A bot that makes Up calls on the Ride fund **fomcvault** on its own, through rid
 - **Pace:** as many calls as the fund limits allow (up to 16/day).
 - **Size:** 25% of the live USDC treasury per call.
 - **Duration:** 1, 4 or 6 hours, picked per call (`WINDOWS_MINUTES`; 4h/6h once fomcvault accepts them).
-- **Entry filters:** skip a token up more than 1.5% in the last 5 minutes, and one whose buy + sell-back costs more than 0.6% at the call's size (Jupiter quote + 0.15% allowance).
+- **Entry filters:** skip a token up more than 1.5% in the last 5 minutes, and one whose buy + sell-back costs more than 1% at the call's size (Jupiter quote + 0.15% allowance).
 - **Early close:** checked at a regular interval; if a call is up 5% or more on the trade, close it.
 - **Safety:** kill switch only.
 - **Disclosure:** none; calls look like any other caller's. Claude's reasons stay in the bot's own records.

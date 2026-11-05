@@ -28,7 +28,7 @@ export const TAKE_PROFIT = 0.05;
 /** Skip a token that rose more than this (%) in the last 5 minutes: buying right after a jump lost the most. */
 export const MAX_PUMP_5M_PCT = 1.5;
 /** Skip a token whose buy-and-sell-back at the call's size costs more than this, all in. */
-export const MAX_ROUND_TRIP_COST = 0.006;
+export const MAX_ROUND_TRIP_COST = 0.01;
 /** Added to Jupiter's quoted round trip for what the quote doesn't show (executor tip, drift between
  *  quote and execution). Measured buy legs on liquid tokens cost 0-0.3% against 0.02-0.06% quotes. */
 export const ROUND_TRIP_OVERHEAD = 0.0015;
