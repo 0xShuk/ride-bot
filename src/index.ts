@@ -62,7 +62,7 @@ async function main() {
     kp,
     new Chain(env.rpcUrl),
     new Market(env.birdeyeKey, env.jupiterKey),
-    new Brain(env.anthropicKey),
+    new Brain(env.anthropicKey, env.windowsMin),
     new RideApi(env.rideApi),
     store,
     tg,
@@ -70,6 +70,7 @@ async function main() {
 
   console.log(
     `[ride-bot] fund ${FUND.key}, wallet ${wallet.toBase58()}, treasury ${TREASURY.toBase58()}` +
+      `, windows ${env.windowsMin.join("/")}m` +
       `${env.dryRun ? ", DRY RUN" : ""}${env.killSwitch ? ", KILL SWITCH ON" : ""}`,
   );
 

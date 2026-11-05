@@ -35,6 +35,11 @@ describe("eligible", () => {
     expect(eligible(tok(FUND.bondMint), verified)).toBe(false);
   });
 
+  it("drops a token that jumped more than 1.5% in the last 5 minutes", () => {
+    expect(eligible(tok("a", { change5m: 1.5 }), verified)).toBe(true);
+    expect(eligible(tok("a", { change5m: 2.4 }), verified)).toBe(false);
+  });
+
   it("drops a rug (down 90%+ on every timeframe) but keeps a token with gaps in its data", () => {
     expect(eligible(tok("a", { change5m: -91, change1h: -95, change6h: -95, change24h: -99 }), verified)).toBe(false);
     expect(eligible(tok("a", { change5m: null, change1h: -95, change6h: -95, change24h: -99 }), verified)).toBe(true);
@@ -42,8 +47,14 @@ describe("eligible", () => {
 });
 
 describe("score", () => {
-  it("ranks fresh momentum above flat", () => {
-    expect(score(tok("a", { change5m: 2, change1h: 5 }))).toBeGreaterThan(score(tok("b")));
+  it("ranks an established trend above flat", () => {
+    expect(score(tok("a", { change1h: 2, change6h: 6, change24h: 10 }))).toBeGreaterThan(score(tok("b")));
+  });
+
+  it("counts a fresh 5-minute jump against a token", () => {
+    const calm = tok("a", { change5m: 0.2, change1h: 3, change6h: 8 });
+    const jumped = tok("b", { change5m: 2.5, change1h: 3, change6h: 8 });
+    expect(score(calm)).toBeGreaterThan(score(jumped));
   });
 
   it("damps a parabolic 5m spike below a steady climb", () => {
@@ -57,11 +68,11 @@ describe("shortlist", () => {
   it("returns the top N eligible, skips excluded mints and duplicates", () => {
     const list = [
       tok("a", { change1h: 1 }),
-      tok("b", { change1h: 8 }),
-      tok("b", { change1h: 8 }),
-      tok("c", { change1h: 4 }),
-      tok("d", { change1h: 6 }),
-      tok("zz", { change1h: 20 }),
+      tok("b", { change1h: 5 }),
+      tok("b", { change1h: 5 }),
+      tok("c", { change1h: 3 }),
+      tok("d", { change1h: 4 }),
+      tok("zz", { change1h: 5.5 }),
     ];
     expect(shortlist(list, verified, 2).map((t) => t.mint)).toEqual(["b", "d"]);
     expect(shortlist(list, verified, 2, new Set(["b"])).map((t) => t.mint)).toEqual(["d", "c"]);

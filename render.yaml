@@ -16,6 +16,8 @@ services:
         value: "true"
       - key: KILL_SWITCH
         value: "false"
+      - key: WINDOWS_MINUTES
+        value: "60"
       - key: RPC_URL
         sync: false
       - key: BOT_KEYPAIR

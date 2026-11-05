@@ -10,7 +10,8 @@
     "local": "tsx --env-file=.env src/index.ts",
     "local:once": "tsx --env-file=.env src/index.ts --once",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "analyze": "tsx --env-file=.env scripts/analyze.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.4.0",

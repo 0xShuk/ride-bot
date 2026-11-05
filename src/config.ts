@@ -15,15 +15,23 @@ export const PROGRAMS = {
 
 export const USDC_MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 
-/** Call windows the bot may pick, in seconds. */
-export const DURATIONS = [300, 1800, 3600] as const;
-export type Duration = (typeof DURATIONS)[number];
+/** Windows the code supports, in minutes. Which ones the bot may pick is set by WINDOWS_MINUTES
+ *  (fomcvault must accept them: until ride-api allows 4h/6h, keep it at "60"). */
+export const SUPPORTED_WINDOWS_MIN = [60, 240, 360] as const;
+export type WindowMin = (typeof SUPPORTED_WINDOWS_MIN)[number];
 
 /** Each call asks for this share of the live USDC treasury (the fund's cap is 25%).
  *  A hair under, so a small treasury move between build and execute doesn't trip SpendingLimitExceeded. */
 export const SIZE_SHARE = 0.25 * 0.97;
 /** Request an early close once the position is up this much on the trade. */
 export const TAKE_PROFIT = 0.05;
+/** Skip a token that rose more than this (%) in the last 5 minutes: buying right after a jump lost the most. */
+export const MAX_PUMP_5M_PCT = 1.5;
+/** Skip a token whose buy-and-sell-back at the call's size costs more than this, all in. */
+export const MAX_ROUND_TRIP_COST = 0.006;
+/** Added to Jupiter's quoted round trip for what the quote doesn't show (executor tip, drift between
+ *  quote and execution). Measured buy legs on liquid tokens cost 0-0.3% against 0.02-0.06% quotes. */
+export const ROUND_TRIP_OVERHEAD = 0.0015;
 
 /** Never called: stablecoins and the bond coin itself. */
 export const SKIP_MINTS = new Set([
@@ -51,11 +59,21 @@ function need(name: string): string {
 }
 const opt = (name: string) => process.env[name]?.trim() || undefined;
 
+/** "60,240" -> [60, 240]; only supported windows, at least one. */
+export function parseWindows(raw: string): WindowMin[] {
+  const out = [...new Set(raw.split(",").map((x) => Number(x.trim())))].filter((m): m is WindowMin =>
+    (SUPPORTED_WINDOWS_MIN as readonly number[]).includes(m),
+  );
+  if (!out.length) throw new Error(`WINDOWS_MINUTES "${raw}": use any of ${SUPPORTED_WINDOWS_MIN.join(", ")}`);
+  return out.sort((a, b) => a - b);
+}
+
 export function loadEnv() {
   const dryRun = process.env.DRY_RUN === "true";
   return {
     dryRun,
     killSwitch: process.env.KILL_SWITCH === "true",
+    windowsMin: parseWindows(process.env.WINDOWS_MINUTES ?? "60"),
     rpcUrl: need("RPC_URL"),
     rideApi: (opt("RIDE_API_URL") ?? "https://ride-api.fly.dev").replace(/\/+$/, ""),
     birdeyeKey: need("BIRDEYE_API_KEY"),

@@ -4,7 +4,18 @@ import { randomUUID } from "node:crypto";
 import type { Keypair, PublicKey } from "@solana/web3.js";
 import { type Candidate, Brain } from "./brain";
 import { type Chain } from "./chain";
-import { DECIDE_EVERY_MS, FUND, MIN_LIQUIDITY_USD, SHORTLIST_SIZE, SIZE_SHARE, TAKE_PROFIT, type Env } from "./config";
+import {
+  DECIDE_EVERY_MS,
+  FUND,
+  MAX_ROUND_TRIP_COST,
+  MIN_LIQUIDITY_USD,
+  ROUND_TRIP_OVERHEAD,
+  SHORTLIST_SIZE,
+  SIZE_SHARE,
+  TAKE_PROFIT,
+  USDC_MINT,
+  type Env,
+} from "./config";
 import type { Market } from "./market";
 import { type BuildOk, type RideApi, isReset, isTransient } from "./ride";
 import { shortlist } from "./rules";
@@ -16,7 +27,7 @@ const MIN_SOL = 0.02;
 const STALE_AFTER_SECS = 3 * 3600;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const money = (n: number) => `${n < 0 ? "-" : ""}$${Math.abs(n).toFixed(2)}`;
-const mins = (secs: number) => `${secs / 60}m`;
+const mins = (secs: number) => (secs >= 3600 ? `${secs / 3600}h` : `${secs / 60}m`);
 
 export class Bot {
   private lowBalanceAlertAt = 0;
@@ -48,46 +59,59 @@ export class Bot {
     }
     if (!(await this.balancesOk())) return;
 
+    const usdc = Math.floor((await this.chain.treasuryUsdc()) * SIZE_SHARE);
+    if (usdc < 5) {
+      console.log(`[decide] treasury too small for a call ($${usdc})`);
+      return;
+    }
+
     const [tokens, verified] = await Promise.all([this.market.topTokens(MIN_LIQUIDITY_USD), this.market.verifiedMints()]);
-    // Twice the shortlist, then keep the ones with room under the fund's limits.
-    const ranked = shortlist(tokens, verified, SHORTLIST_SIZE * 2);
-    const roomy = [];
+    // Three times the shortlist, then keep the ones with room under the fund's limits
+    // and a cheap enough round trip at this call's size.
+    const ranked = shortlist(tokens, verified, SHORTLIST_SIZE * 3);
+    const kept: { token: (typeof ranked)[number]; roundTripCost: number }[] = [];
+    const skipped: string[] = [];
     for (const t of ranked) {
       const l = await this.ride.limits(this.wallet.toBase58(), t.mint);
       if (l && (l.dailyFundRemaining <= 0 || l.velocityRemaining <= 0)) {
         console.log(`[decide] fund limit reached (daily ${l.dailyFundRemaining}, hourly ${l.velocityRemaining}): skipping round`);
         return;
       }
-      if (!l || (l.dailyTokenRemaining > 0 && l.concurrentRemaining > 0)) roomy.push(t);
-      if (roomy.length === SHORTLIST_SIZE) break;
+      if (l && (l.dailyTokenRemaining <= 0 || l.concurrentRemaining <= 0)) continue;
+      const quoted = await this.market.roundTripCost(t.mint, usdc, this.wallet.toBase58(), USDC_MINT).catch(() => null);
+      const cost = quoted === null ? null : quoted + ROUND_TRIP_OVERHEAD;
+      if (cost === null || cost > MAX_ROUND_TRIP_COST) {
+        skipped.push(`${t.symbol} ${cost === null ? "no quote" : `${(cost * 100).toFixed(2)}%`}`);
+        continue;
+      }
+      kept.push({ token: t, roundTripCost: cost });
+      if (kept.length === SHORTLIST_SIZE) break;
     }
-    if (!roomy.length) {
-      console.log("[decide] no eligible token with room");
+    if (skipped.length) console.log(`[decide] too costly to trade at $${usdc}: ${skipped.join(", ")}`);
+    if (!kept.length) {
+      console.log("[decide] no eligible token with room and a cheap round trip");
       return;
     }
 
     const cands: Candidate[] = await Promise.all(
-      roomy.map(async (token) => ({
+      kept.map(async ({ token, roundTripCost }) => ({
         token,
-        candles5m: await this.market.candles(token.mint, "5m", 24).catch(() => []),
-        candles1h: await this.market.candles(token.mint, "1H", 12).catch(() => []),
+        roundTripCost,
+        candles15m: await this.market.candles(token.mint, "15m", 24).catch(() => []),
+        candles1h: await this.market.candles(token.mint, "1H", 24).catch(() => []),
       })),
     );
+    const names = kept.map((k) => k.token.symbol);
     const d = await this.brain.decide(cands);
     await this.store.logDecision({
       action: d.action,
       symbol: d.action === "trade" ? d.symbol : null,
       reason: d.reason,
-      shortlist: roomy.map((t) => t.symbol),
+      shortlist: names,
     });
-    console.log(`[decide] shortlist ${roomy.map((t) => t.symbol).join(", ")} → ${d.action === "trade" ? `${d.symbol} ${mins(d.durationSecs)}` : "pass"}: ${d.reason}`);
+    console.log(`[decide] shortlist ${names.join(", ")} → ${d.action === "trade" ? `${d.symbol} ${mins(d.durationSecs)}` : "pass"}: ${d.reason}`);
     if (d.action === "pass") return;
 
-    const usdc = Math.floor((await this.chain.treasuryUsdc()) * SIZE_SHARE);
-    if (usdc < 5) {
-      console.log(`[decide] treasury too small for a call ($${usdc})`);
-      return;
-    }
     if (this.env.dryRun) {
       await this.tg.send(`[dry run] would open ${d.symbol} Up for ${mins(d.durationSecs)}, ${money(usdc)}\n${d.reason}`);
       return;

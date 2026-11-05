@@ -32,7 +32,8 @@ A bot that makes Up calls on the Ride fund **fomcvault** on its own, through rid
 - **Tokens:** Jupiter-verified, $100K+ liquidity, filtered further by the bot on 24h volume.
 - **Pace:** as many calls as the fund limits allow (up to 16/day).
 - **Size:** 25% of the live USDC treasury per call.
-- **Duration:** 5 min, 30 min or 1 hour, picked per call.
+- **Duration:** 1, 4 or 6 hours, picked per call (`WINDOWS_MINUTES`; 4h/6h once fomcvault accepts them).
+- **Entry filters:** skip a token up more than 1.5% in the last 5 minutes, and one whose buy + sell-back costs more than 0.6% at the call's size (Jupiter quote + 0.15% allowance).
 - **Early close:** checked at a regular interval; if a call is up 5% or more on the trade, close it.
 - **Safety:** kill switch only.
 - **Disclosure:** none; calls look like any other caller's. Claude's reasons stay in the bot's own records.
@@ -45,8 +46,8 @@ A bot that makes Up calls on the Ride fund **fomcvault** on its own, through rid
 **Every 15 minutes**
 1. Kill switch on → no new calls (open calls still run to their end).
 2. Room left under the limits? (own records + `GET /api/funds/limits`). If not, skip.
-3. Rules rank liquid tokens on Birdeye 1m/5m candles (momentum, volume spike, volatility), keep ~5.
-4. Claude Sonnet 5.5 picks one token and a duration (5m / 30m / 1h), or passes, with a short reason.
+3. Rules rank liquid tokens by an established 1h/6h/24h trend, drop fresh 5m jumps and costly round trips, keep ~5.
+4. Claude Sonnet 5.5 picks one token and a window (from `WINDOWS_MINUTES`), or passes, with a short reason.
 5. `POST /api/build-trade` (fund `fomcvault`, 25% of live USDC treasury, unique `Idempotency-Key`),
    sign, send in order. On failure, rebuild with the same key; on `intent_expired` /
    `resetIdempotency`, drop it.

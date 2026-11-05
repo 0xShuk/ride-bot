@@ -113,6 +113,37 @@ export class Market {
     return mints;
   }
 
+  /** Jupiter's output for swapping `amount` atoms, from the same build endpoint the app's swaps use. */
+  private async quoteOut(inputMint: string, outputMint: string, amount: bigint, taker: string): Promise<bigint> {
+    const q = new URLSearchParams({
+      inputMint,
+      outputMint,
+      amount: amount.toString(),
+      taker,
+      slippageBps: "50",
+      wrapAndUnwrapSol: "true",
+    });
+    let res = await fetchWithTimeout("jupiter quote", `https://api.jup.ag/swap/v2/build?${q}`, { headers: this.jupiterHeaders() });
+    // Rate-limited: wait and try twice more rather than skipping the token.
+    for (let i = 1; res.status === 429 && i <= 2; i++) {
+      await new Promise((r) => setTimeout(r, 2000 * i));
+      res = await fetchWithTimeout("jupiter quote", `https://api.jup.ag/swap/v2/build?${q}`, { headers: this.jupiterHeaders() });
+    }
+    const json = (await res.json().catch(() => ({}))) as { outAmount?: string; error?: string; errorCode?: string };
+    if (!res.ok || !json.outAmount || json.error || json.errorCode) {
+      throw new Error(`jupiter quote ${res.status}: ${json.error ?? json.errorCode ?? "no route"}`);
+    }
+    return BigInt(json.outAmount);
+  }
+
+  /** Share of `usdc` lost buying `mint` and selling it straight back, as Jupiter quotes it now (0.004 = 0.4%). */
+  async roundTripCost(mint: string, usdc: number, taker: string, usdcMint: string): Promise<number> {
+    const usdcAtoms = BigInt(Math.floor(usdc * 1e6));
+    const coins = await this.quoteOut(usdcMint, mint, usdcAtoms, taker);
+    const back = await this.quoteOut(mint, usdcMint, coins, taker);
+    return 1 - Number(back) / Number(usdcAtoms);
+  }
+
   /** Live USD prices from Jupiter. Missing mints are left out. */
   async prices(mints: string[]): Promise<Map<string, number>> {
     const out = new Map<string, number>();
