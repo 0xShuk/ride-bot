@@ -12,10 +12,10 @@ import {
   ROUND_TRIP_OVERHEAD,
   SHORTLIST_SIZE,
   SIZE_SHARE,
-  TAKE_PROFIT,
   USDC_MINT,
   type Env,
 } from "./config";
+import { exitStep } from "./exit";
 import type { Market } from "./market";
 import { type BuildOk, type RideApi, isReset, isTransient } from "./ride";
 import { shortlist } from "./rules";
@@ -240,24 +240,43 @@ export class Bot {
       }
     }
 
-    // Take profit on calls still inside their window.
+    // Take profit on calls still inside their window: at +5% Claude decides close or hold;
+    // while holding, the floor and the trail close without asking (see exit.ts).
     const live = calls.filter((c) => c.status === "open" && c.executedAt !== null && now < c.executedAt + c.durationSecs);
     if (live.length) {
       const prices = await this.market.prices([...new Set(live.map((c) => c.mint))]).catch(() => new Map<string, number>());
       for (const c of live) {
         const price = prices.get(c.mint);
-        if (!price || !c.inputUsd || !c.outputAtoms) continue;
+        if (!price || !c.inputUsd || !c.outputAtoms || !this.kp || !c.proposalPk) continue;
         const value = (Number(c.outputAtoms) / 10 ** c.outputDecimals) * price;
         const pnl = value / c.inputUsd - 1;
+        const peak = Math.max(c.peakPnlPct ?? pnl, pnl);
         if (c.peakPnlPct === null || pnl > c.peakPnlPct) await this.store.updateCall(c.id, { peakPnlPct: pnl });
-        if (pnl >= TAKE_PROFIT && this.kp && c.proposalPk) {
-          const r = await this.ride.closeCall(this.kp, c.proposalPk);
-          if (r.ok) {
-            await this.store.updateCall(c.id, { status: "close_requested" });
-            await this.tg.send(`Early close requested on ${c.symbol}: up ${(pnl * 100).toFixed(1)}%`);
-          } else {
-            console.log(`[monitor] close-call ${c.symbol} refused: ${r.code}`);
-          }
+
+        const next = exitStep(pnl, peak, c.lastReviewAt, now);
+        if (next.step === "none") continue;
+        if (next.step === "close") {
+          await this.requestClose(c, pnl, next.why);
+          continue;
+        }
+        const minutesLeft = (c.executedAt! + c.durationSecs - now) / 60;
+        const verdict = await this.brain
+          .reviewHold({
+            symbol: c.symbol,
+            pnl,
+            peakPnl: peak,
+            minutesLeft,
+            candles1m: await this.market.candles(c.mint, "1m", 30).catch(() => []),
+            candles15m: await this.market.candles(c.mint, "15m", 16).catch(() => []),
+          })
+          .catch((e) => ({ action: "close" as const, reason: `review failed (${e instanceof Error ? e.message : e}), locking the gain` }));
+        if (verdict.action === "close") {
+          await this.requestClose(c, pnl, verdict.reason);
+        } else {
+          await this.store.updateCall(c.id, { lastReviewAt: now });
+          await this.tg.send(
+            `Holding ${c.symbol} at +${(pnl * 100).toFixed(1)}% (peak ${(peak * 100).toFixed(1)}%, ${Math.round(minutesLeft)}m left): ${verdict.reason}`,
+          );
         }
       }
     }
@@ -270,6 +289,16 @@ export class Bot {
       if (pnl === null) continue;
       await this.store.updateCall(c.id, { status: "resolved", realizedPnlUsd: pnl });
       await this.tg.send(`${c.symbol} settled: ${money(pnl)}${c.inputUsd ? ` (${((pnl / c.inputUsd) * 100).toFixed(1)}%)` : ""}`);
+    }
+  }
+
+  private async requestClose(c: CallRow, pnl: number, why: string): Promise<void> {
+    const r = await this.ride.closeCall(this.kp!, c.proposalPk!);
+    if (r.ok) {
+      await this.store.updateCall(c.id, { status: "close_requested" });
+      await this.tg.send(`Early close requested on ${c.symbol}: up ${(pnl * 100).toFixed(1)}%. ${why}`);
+    } else {
+      console.log(`[monitor] close-call ${c.symbol} refused: ${r.code}`);
     }
   }
 

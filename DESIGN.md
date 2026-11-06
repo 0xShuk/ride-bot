@@ -13,7 +13,7 @@ A bot that makes Up calls on the Ride fund **fomcvault** on its own, through rid
 | Bond | 500,000 FOMC per call |
 | Position cap | 25% of the treasury's USDC (ride-api clamps) |
 | Allowed tokens | $100K+ liquidity (enforced by ride-api) |
-| Early-close minimum | 5% |
+| Early-close minimum | 4% (`minEarlyProfitBps` 400) |
 
 ### Fund limits (shared with human callers)
 
@@ -34,7 +34,7 @@ A bot that makes Up calls on the Ride fund **fomcvault** on its own, through rid
 - **Size:** 25% of the live USDC treasury per call.
 - **Duration:** 1, 4 or 6 hours, picked per call (`WINDOWS_MINUTES`; 4h/6h once fomcvault accepts them).
 - **Entry filters:** skip a token up more than 1.5% in the last 5 minutes, and one whose buy + sell-back costs more than 1% at the call's size (Jupiter quote + 0.15% allowance).
-- **Early close:** checked at a regular interval; if a call is up 5% or more on the trade, close it.
+- **Early close:** checked every 30 s. At +5% on the trade, Claude decides: close now or hold for more. While holding, it is asked again every 5 minutes, and the call closes without asking if the gain falls to 4.5% or 2 points below its peak. A failed review closes.
 - **Safety:** kill switch only.
 - **Disclosure:** none; calls look like any other caller's. Claude's reasons stay in the bot's own records.
 - **Alerts:** Telegram.
@@ -53,7 +53,7 @@ A bot that makes Up calls on the Ride fund **fomcvault** on its own, through rid
    `resetIdempotency`, drop it.
 
 **Every ~30 seconds, per open call**
-- Mark to market with Jupiter prices vs entry. Up ≥ 5% → `POST /api/close-call` (signed by the bot wallet).
+- Mark to market with Jupiter prices vs entry. Up ≥ 5% → Claude: close or hold (`src/exit.ts`). Close → `POST /api/close-call` (signed by the bot wallet).
 - Otherwise it resolves at window end; record the result from `GET /api/call-realized/:proposalPk`.
 
 ## Running

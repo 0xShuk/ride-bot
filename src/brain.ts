@@ -3,7 +3,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
-import { MODEL, TAKE_PROFIT, type WindowMin } from "./config";
+import { HOLD_REVIEW_EVERY_SECS, LOCK_FLOOR, MODEL, TAKE_PROFIT, TRAIL_POINTS, type WindowMin } from "./config";
 import type { Candle, ListToken } from "./market";
 
 export type Candidate = {
@@ -24,7 +24,7 @@ function system(windows: WindowMin[]): string {
 Each call buys one token with USDC, holds it for a fixed window (${windows.map(hours).join(", ")}), then sells it back to USDC.
 Profit is only what comes back minus what went in; there is no stop-loss.
 Swapping in and out costs money: each candidate shows its estimated round-trip cost. A call wins whenever the price rises by more than that cost by the end of the window, even by a fraction of a percent.
-If a call is up ${TAKE_PROFIT * 100}% before the window ends, it is closed early to lock the gain. That is a cap, not a target: a call does not need to reach it to be worth making.
+If a call is up ${TAKE_PROFIT * 100}% before the window ends, it may be closed early to lock the gain. That is not a target: a call does not need to reach it to be worth making.
 You get a shortlist of liquid tokens already filtered to established uptrends without a fresh 5-minute spike, with 15-minute and hourly candles.
 Pick at most one token and the window that best fits its setup, or pass if none is likely to rise clearly more than its cost within the window.
 Avoid tokens that already ran far above their recent range: buying near short-term tops lost the most in earlier calls.
@@ -50,6 +50,21 @@ export function describe(cands: Candidate[]): string {
     )
     .join("\n\n");
 }
+
+export type HoldReview = {
+  symbol: string;
+  pnl: number;
+  peakPnl: number;
+  minutesLeft: number;
+  candles1m: Candle[];
+  candles15m: Candle[];
+};
+
+const REVIEW_SYSTEM = `You manage one open call in a small autonomous trading experiment on Solana: a token bought with USDC, sold back automatically when its window ends.
+It is up at least ${TAKE_PROFIT * 100}%. Decide whether to close it now and lock the gain, or keep holding for a higher price.
+If you hold, you are asked again in ${HOLD_REVIEW_EVERY_SECS / 60} minutes. Meanwhile the call is closed automatically if its gain falls to ${LOCK_FLOOR * 100}% or ${TRAIL_POINTS * 100} points below its peak.
+An early close is only possible while the gain is above 4%; once it falls below, the call can only be sold at the end of its window, at whatever the price is then.
+Hold only when momentum is clearly still up (rising closes, steady or rising volume, no sharp rejection from the high). Close when the move is stalling, reversing, or spiking on fading volume, or when little time is left.`;
 
 export class Brain {
   private client: Anthropic;
@@ -88,5 +103,36 @@ export class Brain {
     const minutes = Number(pick.window_minutes);
     if (!(this.windows as number[]).includes(minutes)) return { action: "pass", reason: `bad window ${pick.window_minutes}` };
     return { action: "trade", mint: chosen.token.mint, symbol: chosen.token.symbol, durationSecs: minutes * 60, reason: pick.reason };
+  }
+
+  /** Past the take-profit: close now or keep holding. Throws on an API error; the caller closes then. */
+  async reviewHold(r: HoldReview): Promise<{ action: "close" | "hold"; reason: string }> {
+    const Verdict = z.object({
+      action: z.enum(["close", "hold"]),
+      reason: z.string().describe("One or two sentences on why."),
+    });
+    const res = await this.client.beta.messages.parse({
+      model: MODEL,
+      max_tokens: 16000,
+      betas: ["server-side-fallback-2026-07-01"],
+      fallbacks: "default",
+      output_config: { effort: "medium", format: zodOutputFormat(Verdict) },
+      system: REVIEW_SYSTEM,
+      messages: [
+        {
+          role: "user",
+          content: [
+            `Time: ${new Date().toISOString()}`,
+            `${r.symbol}: up ${(r.pnl * 100).toFixed(2)}% now, peak ${(r.peakPnl * 100).toFixed(2)}%, ${Math.round(r.minutesLeft)} minutes left in the window.`,
+            `Last ${r.candles1m.length} 1m closes: ${closes(r.candles1m)}`,
+            `Last ${r.candles1m.length} 1m volumes: ${vols(r.candles1m)}`,
+            `Last ${r.candles15m.length} 15m closes: ${closes(r.candles15m)}`,
+          ].join("\n"),
+        },
+      ],
+    });
+    const v = res.parsed_output;
+    if (res.stop_reason === "refusal" || !v) return { action: "close", reason: "no usable answer, locking the gain" };
+    return v;
   }
 }

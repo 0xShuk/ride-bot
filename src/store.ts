@@ -22,6 +22,8 @@ export type CallRow = {
   outputDecimals: number;
   executedAt: number | null; // unix seconds
   peakPnlPct: number | null;
+  /** Last time Claude chose to keep holding past the take-profit (unix seconds); null until then. */
+  lastReviewAt: number | null;
   realizedPnlUsd: number | null;
   error: string | null;
   createdAt: number; // unix ms
@@ -61,6 +63,7 @@ export class MemoryStore implements Store {
       outputAtoms: null,
       executedAt: null,
       peakPnlPct: null,
+      lastReviewAt: null,
       realizedPnlUsd: null,
       error: null,
       createdAt: Date.now(),
@@ -95,6 +98,7 @@ const COLS: Record<keyof CallRow, string> = {
   outputDecimals: "output_decimals",
   executedAt: "executed_at",
   peakPnlPct: "peak_pnl_pct",
+  lastReviewAt: "last_review_at",
   realizedPnlUsd: "realized_pnl_usd",
   error: "error",
   createdAt: "created_at",
@@ -105,7 +109,7 @@ const fromRow = (r: Record<string, unknown>): CallRow => {
   for (const [k, col] of Object.entries(COLS)) out[k] = r[col];
   // pg returns bigint/numeric as strings.
   for (const k of ["id", "durationSecs", "usdcRequested", "outputDecimals", "createdAt"]) out[k] = Number(out[k]);
-  for (const k of ["inputUsd", "executedAt", "peakPnlPct", "realizedPnlUsd"]) out[k] = out[k] === null ? null : Number(out[k]);
+  for (const k of ["inputUsd", "executedAt", "peakPnlPct", "lastReviewAt", "realizedPnlUsd"]) out[k] = out[k] === null ? null : Number(out[k]);
   return out as CallRow;
 };
 
@@ -145,7 +149,8 @@ export class PgStore implements Store {
         realized_pnl_usd numeric,
         error text,
         created_at bigint not null
-      );`);
+      );
+      alter table ridebot.calls add column if not exists last_review_at bigint;`);
   }
 
   async logDecision(d: { action: string; symbol: string | null; reason: string; shortlist: string[] }) {

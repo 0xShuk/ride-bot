@@ -23,8 +23,15 @@ export type WindowMin = (typeof SUPPORTED_WINDOWS_MIN)[number];
 /** Each call asks for this share of the live USDC treasury (the fund's cap is 25%).
  *  A hair under, so a small treasury move between build and execute doesn't trip SpendingLimitExceeded. */
 export const SIZE_SHARE = 0.25 * 0.97;
-/** Request an early close once the position is up this much on the trade. */
+/** Once the position is up this much on the trade, Claude decides: close now or keep holding. */
 export const TAKE_PROFIT = 0.05;
+/** While holding past TAKE_PROFIT, ask Claude again this often. */
+export const HOLD_REVIEW_EVERY_SECS = 5 * 60;
+/** While holding past TAKE_PROFIT, close at once if the gain falls to this. The fund only allows an
+ *  early close above 4% (minEarlyProfitBps 400); below that the call rides to the end of its window. */
+export const LOCK_FLOOR = 0.045;
+/** ...or if it falls this far (0.02 = 2 points) below its peak. */
+export const TRAIL_POINTS = 0.02;
 /** Skip a token that rose more than this (%) in the last 5 minutes: buying right after a jump lost the most. */
 export const MAX_PUMP_5M_PCT = 1.5;
 /** Skip a token whose buy-and-sell-back at the call's size costs more than this, all in. */
