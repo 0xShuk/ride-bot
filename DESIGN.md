@@ -74,7 +74,7 @@ High risk, chasing big moves (owner 2026-11-08):
    `resetIdempotency`, drop it.
 
 **Every ~30 seconds, per open call**
-- Mark to market with Jupiter prices vs entry; from +5% (or while holding), price the gain with a Jupiter sell quote. Up ≥ 5% → Claude: close or hold (`src/exit.ts`). Close → `POST /api/close-call` (signed by the bot wallet).
+- Mark to market with Jupiter prices vs entry; from +5% (or while holding), price the gain with a Jupiter sell quote. Up ≥ 5% → Claude: close or hold (`src/exit.ts`). Close → `POST /api/close-call` (signed by the bot wallet). Before each Claude review, a close already queued (`GET /api/close-call/status`) or already done (bet outcome on chain), e.g. from the website, stops the watching; so does a `not_closable` refusal. The call then just waits for its result.
 - Otherwise it resolves at window end; record the result from `GET /api/call-realized/:proposalPk`.
 
 ## Running

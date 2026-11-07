@@ -291,6 +291,7 @@ export class Bot {
           await this.requestClose(c, pnl, next.why);
           continue;
         }
+        if (await this.closedElsewhere(c)) continue;
         const minutesLeft = (c.executedAt! + c.durationSecs - now) / 60;
         const verdict = await this.brain
           .reviewHold({
@@ -341,11 +342,30 @@ export class Bot {
     return swing;
   }
 
+  /**
+   * Before asking Claude: an early close queued from the website, or one that already went through,
+   * means there is nothing left to decide. The call then just waits for its result.
+   */
+  private async closedElsewhere(c: CallRow): Promise<boolean> {
+    const [status, decided] = await Promise.all([
+      this.ride.closeStatus(c.proposalPk!).catch(() => null),
+      this.chain.betDecided(c.proposalPk!).catch(() => false),
+    ]);
+    if (!decided && status !== "queued" && status !== "blocked_below_threshold") return false;
+    await this.store.updateCall(c.id, { status: "close_requested" });
+    await this.tg.send(`${c.symbol}: an early close is already ${decided ? "done" : "queued"} (not by the bot). No longer watching it.`);
+    return true;
+  }
+
   private async requestClose(c: CallRow, pnl: number, why: string): Promise<void> {
     const r = await this.ride.closeCall(this.kp!, c.proposalPk!);
     if (r.ok) {
       await this.store.updateCall(c.id, { status: "close_requested" });
       await this.tg.send(`Early close requested on ${c.symbol}: up ${(pnl * 100).toFixed(1)}%. ${why}`);
+    } else if (r.code === "not_closable") {
+      // Usually already closed early from the website: nothing left to watch either way.
+      await this.store.updateCall(c.id, { status: "close_requested" });
+      await this.tg.send(`${c.symbol} can no longer be closed early (most likely closed from the website). No longer watching it.`);
     } else {
       console.log(`[monitor] close-call ${c.symbol} refused: ${r.code}`);
     }

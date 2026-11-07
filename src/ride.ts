@@ -100,6 +100,13 @@ export class RideApi {
     return { ok: body.ok === true, code: body.code };
   }
 
+  /** Whether an early close is queued for the call ("queued", or "blocked_below_threshold" while the
+   *  chain's profit gate refuses it), "none", or null if ride-api didn't answer. */
+  async closeStatus(proposalPk: string): Promise<string | null> {
+    const { status, body } = await this.json<{ status?: string }>(`/api/close-call/status?proposalPk=${proposalPk}`);
+    return status === 200 && typeof body.status === "string" ? body.status : null;
+  }
+
   /** Settled P&L, or null while the call is unresolved. */
   async realized(proposalPk: string): Promise<number | null> {
     const { status, body } = await this.json<{ realizedPnlUsd?: number | null }>(`/api/call-realized/${proposalPk}`);

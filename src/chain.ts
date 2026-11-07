@@ -57,6 +57,17 @@ export class Chain {
     };
   }
 
+  /** The call's bet is cancelled or already has an outcome: an early close went through, by anyone. */
+  async betDecided(proposalPk: string): Promise<boolean> {
+    const bet = PublicKey.findProgramAddressSync(
+      [Buffer.from("bet"), new PublicKey(proposalPk).toBuffer()],
+      new PublicKey(PROGRAMS.sowellGov),
+    )[0];
+    const info = await this.connection.getAccountInfo(bet);
+    if (!info) return false;
+    return betDecidedFrom(info.data);
+  }
+
   /**
    * Sign each transaction (keeping ride-api's co-signature) and send them in order,
    * waiting for each to confirm before the next. Throws with the failing label.
@@ -86,4 +97,15 @@ export class Chain {
     }
     throw new Error(`timed out waiting for ${sig}`);
   }
+}
+
+/**
+ * Bet layout (sowell-gov sdk `accounts/bet.ts`): account type u8, proposal, governance, creator,
+ * bet/yes/no amounts u64, yes/no weights u128, evaluation period u32, treasury cut u16, executed bool,
+ * executed_at Option<i64>, cancelled bool, outcome u8 (0 = pending).
+ */
+export function betDecidedFrom(d: Buffer): boolean {
+  let o = 1 + 32 * 3 + 8 * 3 + 16 * 2 + 4 + 2 + 1;
+  o += d[o] === 1 ? 9 : 1;
+  return d[o] === 1 || d[o + 1] !== 0;
 }
