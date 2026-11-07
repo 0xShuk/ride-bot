@@ -85,8 +85,8 @@ export class Market {
   }
 
   /** OHLCV candles, oldest first. */
-  async candles(mint: string, type: "1m" | "5m" | "15m" | "1H", count: number): Promise<Candle[]> {
-    const step = { "1m": 60, "5m": 300, "15m": 900, "1H": 3600 }[type];
+  async candles(mint: string, type: "1m" | "5m" | "15m" | "1H" | "4H", count: number): Promise<Candle[]> {
+    const step = { "1m": 60, "5m": 300, "15m": 900, "1H": 3600, "4H": 14400 }[type];
     const to = Math.floor(Date.now() / 1000);
     const data = await this.birdeye<{ items?: { unixTime: number; o: number; h: number; l: number; c: number; v: number }[] }>(
       "defi/ohlcv",
@@ -142,6 +142,11 @@ export class Market {
     const coins = await this.quoteOut(usdcMint, mint, usdcAtoms, taker);
     const back = await this.quoteOut(mint, usdcMint, coins, taker);
     return 1 - Number(back) / Number(usdcAtoms);
+  }
+
+  /** USDC atoms Jupiter would return now for selling `atoms` of `mint`. */
+  async sellQuote(mint: string, atoms: bigint, taker: string, usdcMint: string): Promise<bigint> {
+    return this.quoteOut(mint, usdcMint, atoms, taker);
   }
 
   /** Live USD prices from Jupiter. Missing mints are left out. */

@@ -1,11 +1,31 @@
 // The rules half of the brain: narrow liquid tokens down to a few worth showing Claude.
 
-import { MAX_PUMP_5M_PCT, MIN_LIQUIDITY_USD, MIN_VOLUME_24H_USD, SKIP_MINTS } from "./config";
+import { MAX_PUMP_5M_PCT, MIN_LIQUIDITY_USD, MIN_VOLUME_24H_USD, SKIP_MINTS, STYLE } from "./config";
 import type { ListToken } from "./market";
 
 /** Down ~90%+ on every timeframe Birdeye reported: a rug, not a dip. */
 const rugged = (t: ListToken) =>
   [t.change5m, t.change1h, t.change6h, t.change24h].every((c) => c !== null && c <= -90);
+
+/** Shortlist score for the fund's style. */
+export function score(t: ListToken): number {
+  return STYLE === "swing" ? swingScore(t) : steadyScore(t);
+}
+
+/**
+ * Score for a 1- to 2-day Up call chasing a big move: strong momentum on the 6h and 24h counts most,
+ * with far more room before damping, and turnover shows real interest. A fresh 5-minute spike still
+ * counts against.
+ */
+export function swingScore(t: ListToken): number {
+  const c5 = t.change5m ?? 0;
+  const c1h = t.change1h ?? 0;
+  const c6h = t.change6h ?? 0;
+  const c24h = t.change24h ?? 0;
+  const damp = (x: number, cap: number) => (x > cap ? cap - (x - cap) * 0.5 : x);
+  const turnover = t.liquidity > 0 ? Math.min(t.volume24h / t.liquidity, 50) : 0;
+  return 0.5 * damp(c1h, 10) + damp(c6h, 40) + 0.6 * damp(c24h, 100) - Math.max(0, c5 - 2) + 2 * Math.log1p(turnover);
+}
 
 /**
  * Score for a 1- to 6-hour Up call: an established trend (1h, 6h, 24h) counts, a fresh
@@ -13,7 +33,7 @@ const rugged = (t: ListToken) =>
  * and activity (volume relative to liquidity) breaks ties. Big moves are damped, since
  * a token far above its range tends to give some back.
  */
-export function score(t: ListToken): number {
+function steadyScore(t: ListToken): number {
   const c5 = t.change5m ?? 0;
   const c1h = t.change1h ?? 0;
   const c6h = t.change6h ?? 0;

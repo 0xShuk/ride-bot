@@ -1,6 +1,7 @@
 // The bot's records: Postgres in production, memory for a local dry run.
 // Tables live in their own schema (`ridebot`), so the bot can share a database with
 // another app (realms_api) without touching its tables or its Prisma migrations.
+// Each row carries its fund, so a worker per fund can share the tables.
 
 import pg from "pg";
 
@@ -40,6 +41,8 @@ export interface Store {
   resolvedSince(sinceMs: number): Promise<CallRow[]>;
   /** When the last decision was made (unix ms), or null. Survives restarts in Postgres. */
   lastDecisionAt(): Promise<number | null>;
+  /** Calls created since `sinceMs` that didn't fail before opening. */
+  callsSince(sinceMs: number): Promise<number>;
 }
 
 export class MemoryStore implements Store {
@@ -80,6 +83,9 @@ export class MemoryStore implements Store {
   async resolvedSince(sinceMs: number) {
     return this.calls.filter((c) => c.status === "resolved" && c.createdAt >= sinceMs);
   }
+  async callsSince(sinceMs: number) {
+    return this.calls.filter((c) => c.createdAt >= sinceMs && !(c.status === "failed" && c.proposalPk === null)).length;
+  }
 }
 
 const COLS: Record<keyof CallRow, string> = {
@@ -115,7 +121,10 @@ const fromRow = (r: Record<string, unknown>): CallRow => {
 
 export class PgStore implements Store {
   private pool: pg.Pool;
-  constructor(url: string) {
+  constructor(
+    url: string,
+    private fund: string,
+  ) {
     this.pool = new pg.Pool({ connectionString: url, ssl: url.includes("localhost") ? undefined : { rejectUnauthorized: false } });
   }
 
@@ -150,28 +159,31 @@ export class PgStore implements Store {
         error text,
         created_at bigint not null
       );
-      alter table ridebot.calls add column if not exists last_review_at bigint;`);
+      alter table ridebot.calls add column if not exists last_review_at bigint;
+      alter table ridebot.calls add column if not exists fund text not null default 'fomcvault';
+      alter table ridebot.decisions add column if not exists fund text not null default 'fomcvault';`);
   }
 
   async logDecision(d: { action: string; symbol: string | null; reason: string; shortlist: string[] }) {
-    await this.pool.query("insert into ridebot.decisions (action, symbol, reason, shortlist) values ($1, $2, $3, $4)", [
+    await this.pool.query("insert into ridebot.decisions (action, symbol, reason, shortlist, fund) values ($1, $2, $3, $4, $5)", [
       d.action,
       d.symbol,
       d.reason,
       d.shortlist,
+      this.fund,
     ]);
   }
 
   async lastDecisionAt() {
-    const { rows } = await this.pool.query("select extract(epoch from max(at)) * 1000 as at from ridebot.decisions");
+    const { rows } = await this.pool.query("select extract(epoch from max(at)) * 1000 as at from ridebot.decisions where fund = $1", [this.fund]);
     return rows[0]?.at == null ? null : Number(rows[0].at);
   }
 
   async createCall(c: Parameters<Store["createCall"]>[0]) {
     const { rows } = await this.pool.query(
-      `insert into ridebot.calls (idempotency_key, mint, symbol, duration_secs, usdc_requested, reason, status, output_decimals, created_at)
-       values ($1, $2, $3, $4, $5, $6, 'building', $7, $8) returning *`,
-      [c.idempotencyKey, c.mint, c.symbol, c.durationSecs, c.usdcRequested, c.reason, c.outputDecimals, Date.now()],
+      `insert into ridebot.calls (idempotency_key, mint, symbol, duration_secs, usdc_requested, reason, status, output_decimals, created_at, fund)
+       values ($1, $2, $3, $4, $5, $6, 'building', $7, $8, $9) returning *`,
+      [c.idempotencyKey, c.mint, c.symbol, c.durationSecs, c.usdcRequested, c.reason, c.outputDecimals, Date.now(), this.fund],
     );
     return fromRow(rows[0]);
   }
@@ -184,12 +196,20 @@ export class PgStore implements Store {
   }
 
   async activeCalls() {
-    const { rows } = await this.pool.query("select * from ridebot.calls where status not in ('resolved', 'failed') order by id");
+    const { rows } = await this.pool.query("select * from ridebot.calls where fund = $1 and status not in ('resolved', 'failed') order by id", [this.fund]);
     return rows.map(fromRow);
   }
 
   async resolvedSince(sinceMs: number) {
-    const { rows } = await this.pool.query("select * from ridebot.calls where status = 'resolved' and created_at >= $1", [sinceMs]);
+    const { rows } = await this.pool.query("select * from ridebot.calls where fund = $1 and status = 'resolved' and created_at >= $2", [this.fund, sinceMs]);
     return rows.map(fromRow);
+  }
+
+  async callsSince(sinceMs: number) {
+    const { rows } = await this.pool.query(
+      "select count(*) as n from ridebot.calls where fund = $1 and created_at >= $2 and not (status = 'failed' and proposal_pk is null)",
+      [this.fund, sinceMs],
+    );
+    return Number(rows[0].n);
   }
 }

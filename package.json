@@ -6,7 +6,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "start": "tsx src/index.ts",
+    "start": "node scripts/start-all.mjs",
+    "start:one": "tsx src/index.ts",
     "local": "tsx --env-file=.env src/index.ts",
     "local:once": "tsx --env-file=.env src/index.ts --once",
     "typecheck": "tsc --noEmit",

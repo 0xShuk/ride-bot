@@ -4,9 +4,12 @@ export class Telegram {
   constructor(
     private token: string | undefined,
     private chat: string | undefined,
+    /** Starts every message, so two funds' bots can share a chat. */
+    private label: string,
   ) {}
 
-  async send(text: string): Promise<void> {
+  async send(raw: string): Promise<void> {
+    const text = `[${this.label}] ${raw}`;
     console.log(`[tg] ${text.replace(/\n/g, " | ")}`);
     if (!this.token || !this.chat) return;
     try {

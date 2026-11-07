@@ -3,13 +3,26 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
-import { HOLD_REVIEW_EVERY_SECS, LOCK_FLOOR, MODEL, TAKE_PROFIT, TRAIL_POINTS, type WindowMin } from "./config";
+import {
+  HOLD_REVIEW_EVERY_SECS,
+  LOCK_FLOOR,
+  MAX_CALLS_PER_DAY,
+  MODEL,
+  STYLE,
+  TAKE_PROFIT,
+  TRAIL_FROM,
+  TRAIL_KEEP,
+  TRAIL_SWINGS,
+  type WindowMin,
+} from "./config";
 import type { Candle, ListToken } from "./market";
+
+/** Candles of one timeframe, oldest first, with the label Claude sees ("15m", "1h", ...). */
+export type Chart = { label: string; candles: Candle[] };
 
 export type Candidate = {
   token: ListToken;
-  candles15m: Candle[];
-  candles1h: Candle[];
+  charts: Chart[];
   /** All-in round-trip swap cost at the call's size (0.004 = 0.4%). */
   roundTripCost: number;
 };
@@ -17,9 +30,27 @@ export type Decision =
   | { action: "trade"; mint: string; symbol: string; durationSecs: number; reason: string }
   | { action: "pass"; reason: string };
 
-const hours = (m: number) => (m % 60 ? `${m} minutes` : `${m / 60} hour${m === 60 ? "" : "s"}`);
+const hours = (m: number) =>
+  m % 60 ? `${m} minutes` : m % 1440 === 0 ? `${m / 1440} day${m === 1440 ? "" : "s"}` : `${m / 60} hour${m === 60 ? "" : "s"}`;
 
 function system(windows: WindowMin[]): string {
+  return STYLE === "swing" ? swingSystem(windows) : steadySystem(windows);
+}
+
+function swingSystem(windows: WindowMin[]): string {
+  return `You run a small, high-risk autonomous trading experiment on Solana.
+Each call buys one token with USDC, holds it for a fixed window (${windows.map(hours).join(" or ")}), then sells it back to USDC.
+Profit is only what comes back minus what went in; there is no stop-loss.
+The goal is big moves: a call is worth making only when the token can plausibly rise 20% or more within the window. Small, safe gains are not the point; a loss is acceptable when the upside was large.
+Calls are scarce: ${MAX_CALLS_PER_DAY ?? "a few"} per day at most, and each one locks a bond. Spend them only on the strongest setups, and pass otherwise; most rounds should pass.
+If a call is up ${TAKE_PROFIT * 100}% before the window ends, you are asked whether to close it early or keep holding.
+You get a shortlist of liquid tokens with strong recent momentum, with hourly and 4-hour candles.
+Look for momentum with room to run: a breakout from a long base or range, a strong trend making higher highs and higher lows, or a clean reclaim after a deep pullback, with rising volume behind it.
+Avoid tokens that are already extended far above every recent range after a vertical move with fading volume, and tokens bleeding on every timeframe.
+Pick 2 days when the move needs time to develop, 1 day when it is already under way. Each candidate shows its round-trip swap cost.`;
+}
+
+function steadySystem(windows: WindowMin[]): string {
   return `You run a small autonomous trading experiment on Solana.
 Each call buys one token with USDC, holds it for a fixed window (${windows.map(hours).join(", ")}), then sells it back to USDC.
 Profit is only what comes back minus what went in; there is no stop-loss.
@@ -37,15 +68,20 @@ const usd = (x: number) => (x >= 1e6 ? `$${(x / 1e6).toFixed(1)}M` : `$${Math.ro
 const closes = (cs: Candle[]) => cs.map((c) => Number(c.c.toPrecision(5))).join(", ");
 const vols = (cs: Candle[]) => cs.map((c) => Math.round(c.v)).join(", ");
 
+/** The first chart with closes and volumes, the rest with closes only. */
+const chartLines = (charts: Chart[], indent: string) =>
+  charts.flatMap(({ label, candles }, i) => [
+    `${indent}last ${candles.length} ${label} closes: ${closes(candles)}`,
+    ...(i === 0 ? [`${indent}last ${candles.length} ${label} volumes: ${vols(candles)}`] : []),
+  ]);
+
 export function describe(cands: Candidate[]): string {
   return cands
-    .map(({ token: t, candles15m, candles1h, roundTripCost }, i) =>
+    .map(({ token: t, charts, roundTripCost }, i) =>
       [
         `${i + 1}. ${t.symbol} — price $${t.price.toPrecision(5)}, liquidity ${usd(t.liquidity)}, 24h volume ${usd(t.volume24h)}, round-trip cost ~${(roundTripCost * 100).toFixed(2)}%`,
         `   change 5m ${pct(t.change5m)}, 1h ${pct(t.change1h)}, 6h ${pct(t.change6h)}, 24h ${pct(t.change24h)}`,
-        `   last ${candles15m.length} 15m closes: ${closes(candles15m)}`,
-        `   last ${candles15m.length} 15m volumes: ${vols(candles15m)}`,
-        `   last ${candles1h.length} 1h closes: ${closes(candles1h)}`,
+        ...chartLines(charts, "   "),
       ].join("\n"),
     )
     .join("\n\n");
@@ -56,15 +92,15 @@ export type HoldReview = {
   pnl: number;
   peakPnl: number;
   minutesLeft: number;
-  candles1m: Candle[];
-  candles15m: Candle[];
+  charts: Chart[];
 };
 
 const REVIEW_SYSTEM = `You manage one open call in a small autonomous trading experiment on Solana: a token bought with USDC, sold back automatically when its window ends.
-It is up at least ${TAKE_PROFIT * 100}%. Decide whether to close it now and lock the gain, or keep holding for a higher price.
-If you hold, you are asked again in ${HOLD_REVIEW_EVERY_SECS / 60} minutes. Meanwhile the call is closed automatically if its gain falls to ${LOCK_FLOOR * 100}% or ${TRAIL_POINTS * 100} points below its peak.
+Gains are what selling the whole position would return now, after swap costs. It is up at least ${TAKE_PROFIT * 100}%. Decide whether to close it now and lock the gain, or keep holding for a higher price.
+If you hold, you are asked again in ${HOLD_REVIEW_EVERY_SECS / 60} minutes. Meanwhile the call is closed automatically if its gain stays at ${LOCK_FLOOR * 100}% or below for a minute.
+Once its peak reaches ${TRAIL_FROM * 100}%, it is also closed if the gain stays for a minute below ${TRAIL_KEEP * 100}% of the peak (or ${TRAIL_SWINGS} typical 1-minute swings under it, whichever is lower).
 An early close is only possible while the gain is above 4%; once it falls below, the call can only be sold at the end of its window, at whatever the price is then.
-Hold only when momentum is clearly still up (rising closes, steady or rising volume, no sharp rejection from the high). Close when the move is stalling, reversing, or spiking on fading volume, or when little time is left.`;
+${STYLE === "swing" ? "This is a high-risk vault chasing big moves: pullbacks of several points are normal, and a strong trend is worth holding for a much larger gain. " : "Small pullbacks after a move are normal. "}Hold when the trend is still up (higher lows, steady or rising volume, no sharp rejection from the high). Close when the move is stalling, reversing, or spiking on fading volume, or when little time is left.`;
 
 export class Brain {
   private client: Anthropic;
@@ -124,9 +160,7 @@ export class Brain {
           content: [
             `Time: ${new Date().toISOString()}`,
             `${r.symbol}: up ${(r.pnl * 100).toFixed(2)}% now, peak ${(r.peakPnl * 100).toFixed(2)}%, ${Math.round(r.minutesLeft)} minutes left in the window.`,
-            `Last ${r.candles1m.length} 1m closes: ${closes(r.candles1m)}`,
-            `Last ${r.candles1m.length} 1m volumes: ${vols(r.candles1m)}`,
-            `Last ${r.candles15m.length} 15m closes: ${closes(r.candles15m)}`,
+            ...chartLines(r.charts, ""),
           ].join("\n"),
         },
       ],

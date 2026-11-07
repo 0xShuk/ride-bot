@@ -53,9 +53,9 @@ async function main() {
   const wallet = kp?.publicKey ?? (env.walletAddress ? new PublicKey(env.walletAddress) : null);
   if (!wallet) throw new Error("set BOT_KEYPAIR, or BOT_WALLET for a dry run");
 
-  const store = env.databaseUrl ? new PgStore(env.databaseUrl) : new MemoryStore();
+  const store = env.databaseUrl ? new PgStore(env.databaseUrl, FUND.key) : new MemoryStore();
   await store.init();
-  const tg = new Telegram(env.telegramToken, env.telegramChat);
+  const tg = new Telegram(env.telegramToken, env.telegramChat, FUND.symbol);
   const bot = new Bot(
     env,
     wallet,

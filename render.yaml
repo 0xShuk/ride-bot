@@ -16,6 +16,13 @@ services:
         value: "true"
       - key: KILL_SWITCH
         value: "false"
+      # One worker runs every fund in FUNDS (scripts/start-all.mjs); <FUND>_* overrides the shared values.
+      - key: FUNDS
+        value: fomcvault,ridor
+      - key: RIDOR_WINDOWS_MINUTES
+        value: "1440,2880"
+      - key: RIDOR_DRY_RUN
+        value: "true"
       - key: WINDOWS_MINUTES
         value: "60"
       - key: RPC_URL
@@ -34,4 +41,3 @@ services:
         sync: false
       - key: TELEGRAM_CHAT_ID
         sync: false
-

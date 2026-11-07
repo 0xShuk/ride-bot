@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { FUND, USDC_MINT } from "./config";
 import type { ListToken } from "./market";
-import { eligible, score, shortlist } from "./rules";
+import { eligible, score, shortlist, swingScore } from "./rules";
 
 const tok = (mint: string, o: Partial<ListToken> = {}): ListToken => ({
   mint,
@@ -76,5 +76,19 @@ describe("shortlist", () => {
     ];
     expect(shortlist(list, verified, 2).map((t) => t.mint)).toEqual(["b", "d"]);
     expect(shortlist(list, verified, 2, new Set(["b"])).map((t) => t.mint)).toEqual(["d", "c"]);
+  });
+});
+
+describe("swingScore", () => {
+  it("ranks a strong 6h/24h run above a quiet steady climb", () => {
+    const base = { ...tok("A"), liquidity: 100_000, volume24h: 1_000_000 };
+    const runner = { ...base, change5m: 0.5, change1h: 3, change6h: 25, change24h: 60 };
+    const quiet = { ...base, change5m: 0.2, change1h: 1, change6h: 3, change24h: 5 };
+    expect(swingScore(runner)).toBeGreaterThan(swingScore(quiet));
+  });
+
+  it("counts a fresh 5-minute spike against", () => {
+    const base = { ...tok("A"), liquidity: 100_000, volume24h: 1_000_000, change1h: 3, change6h: 25, change24h: 60 };
+    expect(swingScore({ ...base, change5m: 8 })).toBeLessThan(swingScore({ ...base, change5m: 1 }));
   });
 });

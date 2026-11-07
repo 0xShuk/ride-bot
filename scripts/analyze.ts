@@ -14,7 +14,7 @@
 import pg from "pg";
 import { Connection, PublicKey, type ParsedTransactionWithMeta } from "@solana/web3.js";
 import { TREASURY } from "../src/chain";
-import { USDC_MINT } from "../src/config";
+import { FUND, USDC_MINT } from "../src/config";
 import type { Candle } from "../src/market";
 
 const db = process.env.DATABASE_URL;
@@ -109,7 +109,7 @@ async function findSale(buyTime: number, windowEnd: number, usdcOut: number): Pr
 
 (async () => {
   const pool = new pg.Pool({ connectionString: db, ssl: db.includes("localhost") ? undefined : { rejectUnauthorized: false } });
-  const { rows } = await pool.query<Row>("select * from ridebot.calls where status = 'resolved' order by id");
+  const { rows } = await pool.query<Row>("select * from ridebot.calls where fund = $1 and status = 'resolved' order by id", [FUND.key]);
   await pool.end();
   if (!rows.length) return console.log("No settled calls yet.");
 

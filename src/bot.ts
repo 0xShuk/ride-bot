@@ -7,11 +7,15 @@ import { type Chain } from "./chain";
 import {
   DECIDE_EVERY_MS,
   FUND,
+  MAX_CALLS_PER_DAY,
   MAX_ROUND_TRIP_COST,
   MIN_LIQUIDITY_USD,
   ROUND_TRIP_OVERHEAD,
   SHORTLIST_SIZE,
   SIZE_SHARE,
+  STYLE,
+  TAKE_PROFIT,
+  TRAIL_FROM,
   USDC_MINT,
   type Env,
 } from "./config";
@@ -32,6 +36,10 @@ const mins = (secs: number) => (secs >= 3600 ? `${secs / 3600}h` : `${secs / 60}
 export class Bot {
   private lowBalanceAlertAt = 0;
   private lastRoundAt = 0;
+  /** Per call: monitor checks in a row at or under its exit line. */
+  private belowLine = new Map<number, number>();
+  /** Per coin: typical 1-minute swing (mean high-low range / close), refreshed every 5 minutes. */
+  private swings = new Map<string, { swing: number; at: number }>();
 
   constructor(
     private env: Env,
@@ -58,6 +66,13 @@ export class Bot {
       return;
     }
     if (!(await this.balancesOk())) return;
+    if (MAX_CALLS_PER_DAY !== null) {
+      const made = await this.store.callsSince(Date.now() - 24 * 3600_000);
+      if (made >= MAX_CALLS_PER_DAY) {
+        console.log(`[decide] ${made} calls in the last 24h, the bot's cap is ${MAX_CALLS_PER_DAY}: skipping round`);
+        return;
+      }
+    }
 
     const usdc = Math.floor((await this.chain.treasuryUsdc()) * SIZE_SHARE);
     if (usdc < 5) {
@@ -97,8 +112,16 @@ export class Bot {
       kept.map(async ({ token, roundTripCost }) => ({
         token,
         roundTripCost,
-        candles15m: await this.market.candles(token.mint, "15m", 24).catch(() => []),
-        candles1h: await this.market.candles(token.mint, "1H", 24).catch(() => []),
+        charts:
+          STYLE === "swing"
+            ? [
+                { label: "1h", candles: await this.market.candles(token.mint, "1H", 48).catch(() => []) },
+                { label: "4h", candles: await this.market.candles(token.mint, "4H", 42).catch(() => []) },
+              ]
+            : [
+                { label: "15m", candles: await this.market.candles(token.mint, "15m", 24).catch(() => []) },
+                { label: "1h", candles: await this.market.candles(token.mint, "1H", 24).catch(() => []) },
+              ],
       })),
     );
     const names = kept.map((k) => k.token.symbol);
@@ -127,13 +150,13 @@ export class Bot {
   }
 
   private async balancesOk(): Promise<boolean> {
-    const [fomc, sol] = await Promise.all([
+    const [bondCoins, sol] = await Promise.all([
       this.chain.tokenBalance(this.wallet, FUND.bondMint),
       this.chain.solBalance(this.wallet),
     ]);
     const bond = Number(FUND.bondAtoms / 1_000_000n);
-    if (fomc >= bond && sol >= MIN_SOL) return true;
-    const msg = `Low balance: ${fomc.toLocaleString()} FOMC (need ${bond.toLocaleString()}), ${sol.toFixed(4)} SOL (need ${MIN_SOL}). No new calls.`;
+    if (bondCoins >= bond && sol >= MIN_SOL) return true;
+    const msg = `Low balance: ${bondCoins.toLocaleString()} ${FUND.symbol} (need ${bond.toLocaleString()}), ${sol.toFixed(4)} SOL (need ${MIN_SOL}). No new calls.`;
     console.log(`[decide] ${msg}`);
     if (Date.now() - this.lowBalanceAlertAt > 6 * 3600_000) {
       this.lowBalanceAlertAt = Date.now();
@@ -241,19 +264,28 @@ export class Bot {
     }
 
     // Take profit on calls still inside their window: at +5% Claude decides close or hold;
-    // while holding, the floor and the trail close without asking (see exit.ts).
+    // while holding, the floor and the trail close without asking (see exit.ts). The market price only
+    // tells when to look; the gain itself comes from a quote for selling the whole position.
     const live = calls.filter((c) => c.status === "open" && c.executedAt !== null && now < c.executedAt + c.durationSecs);
     if (live.length) {
       const prices = await this.market.prices([...new Set(live.map((c) => c.mint))]).catch(() => new Map<string, number>());
       for (const c of live) {
         const price = prices.get(c.mint);
         if (!price || !c.inputUsd || !c.outputAtoms || !this.kp || !c.proposalPk) continue;
-        const value = (Number(c.outputAtoms) / 10 ** c.outputDecimals) * price;
-        const pnl = value / c.inputUsd - 1;
+        const marketPnl = (Number(c.outputAtoms) / 10 ** c.outputDecimals) * price / c.inputUsd - 1;
+        if (c.lastReviewAt === null && marketPnl < TAKE_PROFIT) continue;
+        const back = await this.market.sellQuote(c.mint, BigInt(c.outputAtoms), this.wallet.toBase58(), USDC_MINT).catch((e) => {
+          console.log(`[monitor] sell quote ${c.symbol} failed: ${e instanceof Error ? e.message : e}`);
+          return null;
+        });
+        if (back === null) continue;
+        const pnl = Number(back) / 1e6 / c.inputUsd - 1;
         const peak = Math.max(c.peakPnlPct ?? pnl, pnl);
         if (c.peakPnlPct === null || pnl > c.peakPnlPct) await this.store.updateCall(c.id, { peakPnlPct: pnl });
 
-        const next = exitStep(pnl, peak, c.lastReviewAt, now);
+        const swing = peak >= TRAIL_FROM ? await this.swing(c.mint) : 0;
+        const next = exitStep(pnl, peak, c.lastReviewAt, now, swing, this.belowLine.get(c.id) ?? 0);
+        this.belowLine.set(c.id, next.below);
         if (next.step === "none") continue;
         if (next.step === "close") {
           await this.requestClose(c, pnl, next.why);
@@ -266,8 +298,16 @@ export class Bot {
             pnl,
             peakPnl: peak,
             minutesLeft,
-            candles1m: await this.market.candles(c.mint, "1m", 30).catch(() => []),
-            candles15m: await this.market.candles(c.mint, "15m", 16).catch(() => []),
+            charts:
+              STYLE === "swing"
+                ? [
+                    { label: "15m", candles: await this.market.candles(c.mint, "15m", 32).catch(() => []) },
+                    { label: "1h", candles: await this.market.candles(c.mint, "1H", 48).catch(() => []) },
+                  ]
+                : [
+                    { label: "1m", candles: await this.market.candles(c.mint, "1m", 30).catch(() => []) },
+                    { label: "15m", candles: await this.market.candles(c.mint, "15m", 16).catch(() => []) },
+                  ],
           })
           .catch((e) => ({ action: "close" as const, reason: `review failed (${e instanceof Error ? e.message : e}), locking the gain` }));
         if (verdict.action === "close") {
@@ -290,6 +330,15 @@ export class Bot {
       await this.store.updateCall(c.id, { status: "resolved", realizedPnlUsd: pnl });
       await this.tg.send(`${c.symbol} settled: ${money(pnl)}${c.inputUsd ? ` (${((pnl / c.inputUsd) * 100).toFixed(1)}%)` : ""}`);
     }
+  }
+
+  private async swing(mint: string): Promise<number> {
+    const hit = this.swings.get(mint);
+    if (hit && Date.now() - hit.at < 5 * 60_000) return hit.swing;
+    const cs = await this.market.candles(mint, "1m", 30).catch(() => []);
+    const swing = cs.length ? cs.reduce((s, k) => s + (k.h - k.l) / k.c, 0) / cs.length : (hit?.swing ?? 0);
+    this.swings.set(mint, { swing, at: Date.now() });
+    return swing;
   }
 
   private async requestClose(c: CallRow, pnl: number, why: string): Promise<void> {
