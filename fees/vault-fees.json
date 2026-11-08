@@ -1,0 +1,125 @@
+{
+  "treasury": "51nL6fj192Z9eUeNDR3vrGAkcXiEiuT9wsycGfk1uvjV",
+  "feeTaker": "ejBYopijneorWAQ1rN6FiZMvmfXbcjcz4mELCNMRsPW",
+  "initiator": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+  "transactions": 856,
+  "feeTakerSolChange": 0,
+  "totals": {
+    "unattributed": {
+      "volume": 676,
+      "revenue": 0,
+      "swapFee": 0,
+      "profitFee": 0,
+      "fills": 3
+    },
+    "others": {
+      "volume": 23267.919714,
+      "revenue": 89.335154,
+      "swapFee": 80.04418600000001,
+      "profitFee": 9.290968,
+      "fills": 52
+    },
+    "initiator": {
+      "volume": 47304.833472,
+      "revenue": 195.584728,
+      "swapFee": 162.881602,
+      "profitFee": 32.703126,
+      "fills": 134
+    }
+  },
+  "days": {
+    "2026-11-04": {
+      "unattributed": {
+        "volume": 0,
+        "revenue": 0,
+        "swapFee": 0,
+        "profitFee": 0,
+        "fills": 0
+      },
+      "initiator": {
+        "volume": 11183.965742,
+        "revenue": 38.555758,
+        "swapFee": 38.555758,
+        "profitFee": 0,
+        "fills": 18
+      },
+      "others": {
+        "volume": 8899.457879000001,
+        "revenue": 30.592329000000003,
+        "swapFee": 30.592329000000003,
+        "profitFee": 0,
+        "fills": 14
+      }
+    },
+    "2026-11-05": {
+      "others": {
+        "volume": 5189.979321,
+        "revenue": 17.935883,
+        "swapFee": 13.748754,
+        "profitFee": 4.187129,
+        "fills": 10
+      },
+      "unattributed": {
+        "volume": 0,
+        "revenue": 0,
+        "swapFee": 0,
+        "profitFee": 0,
+        "fills": 0
+      },
+      "initiator": {
+        "volume": 8965.109859,
+        "revenue": 34.408771,
+        "swapFee": 31.018443,
+        "profitFee": 3.3903280000000002,
+        "fills": 22
+      }
+    },
+    "2026-11-06": {
+      "unattributed": {
+        "volume": 0,
+        "revenue": 0,
+        "swapFee": 0,
+        "profitFee": 0,
+        "fills": 0
+      },
+      "initiator": {
+        "volume": 14813.919566999999,
+        "revenue": 57.67931,
+        "swapFee": 51.228903,
+        "profitFee": 6.450407,
+        "fills": 50
+      },
+      "others": {
+        "volume": 7028.266698,
+        "revenue": 32.671435,
+        "swapFee": 27.567595999999995,
+        "profitFee": 5.103839,
+        "fills": 13
+      }
+    },
+    "2026-11-07": {
+      "unattributed": {
+        "volume": 676,
+        "revenue": 0,
+        "swapFee": 0,
+        "profitFee": 0,
+        "fills": 3
+      },
+      "others": {
+        "volume": 2150.215816,
+        "revenue": 8.135507,
+        "swapFee": 8.135507,
+        "profitFee": 0,
+        "fills": 15
+      },
+      "initiator": {
+        "volume": 12341.838304,
+        "revenue": 64.940889,
+        "swapFee": 42.078497999999996,
+        "profitFee": 22.862391,
+        "fills": 44
+      }
+    }
+  },
+  "unvalued": []
+}

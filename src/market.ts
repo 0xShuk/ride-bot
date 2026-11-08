@@ -42,7 +42,7 @@ export class Market {
     return { "User-Agent": UA, ...(this.jupiterKey ? { "x-api-key": this.jupiterKey } : {}) };
   }
 
-  /** Top tokens by 24h volume with at least `minLiquidity`, two pages of 50. */
+  /** Top tokens by 24h volume with at least `minLiquidity`, four pages of 50. */
   async topTokens(minLiquidity: number): Promise<ListToken[]> {
     type Item = {
       address: string;
@@ -57,7 +57,7 @@ export class Market {
       price_change_24h_percent?: number | null;
     };
     const out: ListToken[] = [];
-    for (const offset of [0, 50]) {
+    for (const offset of [0, 50, 100, 150]) {
       const data = await this.birdeye<{ items?: Item[] }>("defi/v3/token/list", {
         sort_by: "volume_24h_usd",
         sort_type: "desc",

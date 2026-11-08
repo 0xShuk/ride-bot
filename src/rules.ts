@@ -1,11 +1,14 @@
 // The rules half of the brain: narrow liquid tokens down to a few worth showing Claude.
 
-import { MAX_PUMP_5M_PCT, MIN_LIQUIDITY_USD, MIN_VOLUME_24H_USD, SKIP_MINTS, STYLE } from "./config";
+import { MAX_PUMP_5M_PCT, MIN_LIQUIDITY_USD, MIN_MOVE_PCT, MIN_VOLUME_24H_USD, SKIP_MINTS, STYLE } from "./config";
 import type { ListToken } from "./market";
 
 /** Down ~90%+ on every timeframe Birdeye reported: a rug, not a dip. */
 const rugged = (t: ListToken) =>
   [t.change5m, t.change1h, t.change6h, t.change24h].every((c) => c !== null && c <= -90);
+
+/** Barely moved on every timeframe: a tokenized stock or pegged token, not a trade. */
+const flat = (t: ListToken) => [t.change1h, t.change6h, t.change24h].every((c) => Math.abs(c ?? 0) < MIN_MOVE_PCT);
 
 /** Shortlist score for the fund's style. */
 export function score(t: ListToken): number {
@@ -50,7 +53,8 @@ export function eligible(t: ListToken, verified: Map<string, number>): boolean {
     t.liquidity >= MIN_LIQUIDITY_USD &&
     t.volume24h >= MIN_VOLUME_24H_USD &&
     (t.change5m ?? 0) <= MAX_PUMP_5M_PCT &&
-    !rugged(t)
+    !rugged(t) &&
+    !flat(t)
   );
 }
 

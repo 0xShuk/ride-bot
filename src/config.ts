@@ -64,7 +64,7 @@ const PROFILES: Record<string, Profile> = {
     lockFloor: 0.12,
     trailFrom: 0.3,
     maxPump5mPct: 4,
-    maxRoundTripCost: 0.02,
+    maxRoundTripCost: 0.03, // owner 2026-11-08: small next to the 20%+ moves it chases
     minLiquidityUsd: 50_000, // the fund allows $20K; calls are ~$120
     minVolume24hUsd: 250_000,
   },
@@ -108,6 +108,9 @@ export const TRAIL_KEEP = 0.6;
 export const TRAIL_SWINGS = 2;
 /** A floor or trail close fires only after this many monitor checks in a row under the line, so a wick doesn't sell. */
 export const CONFIRM_CHECKS = 2;
+/** Skip a token that moved less than this (%) over 1h, 6h and 24h alike: tokenized stocks and pegged
+ *  tokens that can't move enough to pay for the swap. */
+export const MIN_MOVE_PCT = 2;
 /** Skip a token that rose more than this (%) in the last 5 minutes: buying right after a jump lost the most. */
 export const MAX_PUMP_5M_PCT = P.maxPump5mPct;
 /** Skip a token whose buy-and-sell-back at the call's size costs more than this, all in. */

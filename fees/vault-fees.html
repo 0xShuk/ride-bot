@@ -1,0 +1,50 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vault Fee Revenue</title>
+<style>
+:root{--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--grid:#e6e5e1;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--tip:#ffffff}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--grid:#383835;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--tip:#262624}}
+:root[data-theme=dark]{--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--grid:#383835;--s1:#3987e5;--s2:#d95926;--s3:#199e70;--tip:#262624}
+body{margin:0;background:var(--surface);color:var(--ink);font:14px/1.45 system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:24px 16px}
+h1{font-size:20px;margin:0 0 4px}h2{font-size:15px;margin:28px 0 8px}p{color:var(--ink2);margin:0}
+.legend{display:flex;gap:16px;margin:12px 0;color:var(--ink2);flex-wrap:wrap}.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+svg{width:100%;height:auto;display:block;overflow:visible}text{fill:var(--ink2);font-size:11px}
+.tt{position:fixed;pointer-events:none;background:var(--tip);color:var(--ink);border:1px solid var(--grid);border-radius:6px;padding:6px 8px;font-size:12px;box-shadow:0 2px 8px #0002;display:none;white-space:nowrap}
+table{border-collapse:collapse;width:100%;margin-top:8px;font-variant-numeric:tabular-nums}th,td{padding:4px 8px;border-bottom:1px solid var(--grid);text-align:right}th:first-child,td:first-child{text-align:left}
+.wrap{overflow-x:auto}
+</style></head><body><main>
+<h1>Fee revenue from the vault</h1>
+<p>Day-wise volume (USDC side of each fill) and what reached the fee taker, by who started the ride. UTC days.</p>
+<div class="legend"><span><i style="background:var(--s1)"></i>3DvJ… rides</span><span><i style="background:var(--s2)"></i>other wallets</span><span><i style="background:var(--s3)"></i>unattributed</span></div>
+<h2>Volume</h2><div id="v"></div>
+<h2>Revenue</h2><div id="r"></div>
+<h2>Table</h2><div class="wrap"><table><thead><tr><th>Day</th><th>3DvJ… rides volume</th><th>3DvJ… rides revenue</th><th>other wallets volume</th><th>other wallets revenue</th><th>unattributed volume</th><th>unattributed revenue</th></tr></thead><tbody>
+<tr><td>2026-11-04</td><td>$11183.97</td><td>$38.56</td><td>$8899.46</td><td>$30.59</td><td>$0.00</td><td>$0.00</td></tr>
+<tr><td>2026-11-05</td><td>$8965.11</td><td>$34.41</td><td>$5189.98</td><td>$17.94</td><td>$0.00</td><td>$0.00</td></tr>
+<tr><td>2026-11-06</td><td>$14813.92</td><td>$57.68</td><td>$7028.27</td><td>$32.67</td><td>$0.00</td><td>$0.00</td></tr>
+<tr><td>2026-11-07</td><td>$12341.84</td><td>$64.94</td><td>$2150.22</td><td>$8.14</td><td>$676.00</td><td>$0.00</td></tr>
+</tbody></table></div>
+<div class="tt" id="tt"></div>
+<script>
+const groups=["initiator","others","unattributed"],labels={"initiator":"3DvJ… rides","others":"other wallets","unattributed":"unattributed"},data=[{"day":"2026-11-04","initiator":{"v":11183.965742,"r":38.555758},"others":{"v":8899.457879000001,"r":30.592329000000003},"unattributed":{"v":0,"r":0}},{"day":"2026-11-05","initiator":{"v":8965.109859,"r":34.408771},"others":{"v":5189.979321,"r":17.935883},"unattributed":{"v":0,"r":0}},{"day":"2026-11-06","initiator":{"v":14813.919566999999,"r":57.67931},"others":{"v":7028.266698,"r":32.671435},"unattributed":{"v":0,"r":0}},{"day":"2026-11-07","initiator":{"v":12341.838304,"r":64.940889},"others":{"v":2150.215816,"r":8.135507},"unattributed":{"v":676,"r":0}}];
+const tt=document.getElementById('tt'),fmt=n=>'$'+n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+function chart(el,key){
+  const W=880,H=260,L=64,B=28,T=8,n=data.length,bw=Math.max(6,Math.min(48,(W-L)/n*0.6));
+  const max=Math.max(1e-9,...data.map(d=>groups.reduce((s,g)=>s+d[g][key],0)));
+  const step=Math.pow(10,Math.floor(Math.log10(max/4))),nice=Math.ceil(max/4/step)*step,top=nice*4;
+  const y=v=>T+(H-T-B)*(1-v/top),x=i=>L+(W-L)*(i+0.5)/n;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+key+' by day">';
+  for(let k=0;k<=4;k++){const v=nice*k;s+='<line x1="'+L+'" x2="'+W+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--grid)"/><text x="'+(L-8)+'" y="'+(y(v)+4)+'" text-anchor="end">'+fmt(v).replace('.00','')+'</text>'}
+  data.forEach((d,i)=>{let base=0;const segs=groups.map((g,gi)=>({g,gi,v:d[g][key]})).filter(q=>q.v>0);
+    segs.forEach((q,si)=>{const y0=y(base),y1=y(base+q.v),h=Math.max(0,y0-y1-(si?2:0)),last=si===segs.length-1;
+      s+='<path data-i="'+i+'" d="M'+(x(i)-bw/2)+','+(y0-(si?2:0))+'V'+(y1+(last?4:0))+(last?'q0,-4 4,-4H'+(x(i)+bw/2-4)+'q4,0 4,4':'H'+(x(i)+bw/2))+'V'+(y0-(si?2:0))+'Z" fill="var(--s'+(q.gi+1)+')"/>';base+=q.v});
+    s+='<rect data-i="'+i+'" x="'+(x(i)-(W-L)/n/2)+'" y="'+T+'" width="'+((W-L)/n)+'" height="'+(H-T-B)+'" fill="transparent"/>';
+    if(n<=16||i%Math.ceil(n/12)===0)s+='<text x="'+x(i)+'" y="'+(H-8)+'" text-anchor="middle">'+d.day.slice(5)+'</text>'});
+  el.innerHTML=s+'</svg>';
+  el.querySelectorAll('[data-i]').forEach(r=>{r.addEventListener('mousemove',e=>{const d=data[r.dataset.i];
+    tt.innerHTML='<b>'+d.day+'</b><br>'+groups.map(g=>labels[g]+': '+fmt(d[g][key])).join('<br>')+'<br>Total: '+fmt(groups.reduce((s,g)=>s+d[g][key],0));
+    tt.style.display='block';tt.style.left=Math.min(e.clientX+12,innerWidth-tt.offsetWidth-8)+'px';tt.style.top=(e.clientY+12)+'px'});
+    r.addEventListener('mouseleave',()=>tt.style.display='none')});
+}
+chart(document.getElementById('v'),'v');chart(document.getElementById('r'),'r');
+</script></main></body></html>

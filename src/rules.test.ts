@@ -12,7 +12,7 @@ const tok = (mint: string, o: Partial<ListToken> = {}): ListToken => ({
   change5m: 0,
   change1h: 0,
   change6h: 0,
-  change24h: 0,
+  change24h: 5,
   trades24h: 1000,
   ...o,
 });
@@ -43,6 +43,14 @@ describe("eligible", () => {
   it("drops a rug (down 90%+ on every timeframe) but keeps a token with gaps in its data", () => {
     expect(eligible(tok("a", { change5m: -91, change1h: -95, change6h: -95, change24h: -99 }), verified)).toBe(false);
     expect(eligible(tok("a", { change5m: null, change1h: -95, change6h: -95, change24h: -99 }), verified)).toBe(true);
+  });
+});
+
+describe("flat coins", () => {
+  it("skips a coin that moved under 2% on 1h, 6h and 24h alike", () => {
+    expect(eligible(tok("a", { change1h: 0.3, change6h: -1.2, change24h: 1.9 }), verified)).toBe(false);
+    expect(eligible(tok("a", { change1h: 0.3, change6h: -1.2, change24h: -2.5 }), verified)).toBe(true);
+    expect(eligible(tok("a", { change1h: null, change6h: null, change24h: null }), verified)).toBe(false);
   });
 });
 
