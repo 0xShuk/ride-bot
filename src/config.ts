@@ -17,6 +17,9 @@ type Profile = {
   trailFrom: number;
   maxPump5mPct: number;
   maxRoundTripCost: number;
+  /** Skip a coin whose average hourly candle (high - low over close, last 24h) is under this: it
+   *  can't reach the take-profit inside a window. */
+  minHourlyRange: number;
   minLiquidityUsd: number;
   minVolume24hUsd: number;
 };
@@ -43,6 +46,8 @@ const PROFILES: Record<string, Profile> = {
     trailFrom: 0.08,
     maxPump5mPct: 1.5,
     maxRoundTripCost: 0.01,
+    // Owner 2026-11-09: PEPE-type coins moving 0-1% lost ride after ride.
+    minHourlyRange: 0.015,
     minLiquidityUsd: 100_000, // the fund itself requires $100K liquidity
     minVolume24hUsd: 1_000_000,
   },
@@ -65,6 +70,7 @@ const PROFILES: Record<string, Profile> = {
     trailFrom: 0.3,
     maxPump5mPct: 4,
     maxRoundTripCost: 0.03, // owner 2026-11-08: small next to the 20%+ moves it chases
+    minHourlyRange: 0.025,
     minLiquidityUsd: 50_000, // the fund allows $20K; calls are ~$120
     minVolume24hUsd: 250_000,
   },
@@ -115,6 +121,10 @@ export const MIN_MOVE_PCT = 2;
 export const MAX_PUMP_5M_PCT = P.maxPump5mPct;
 /** Skip a token whose buy-and-sell-back at the call's size costs more than this, all in. */
 export const MAX_ROUND_TRIP_COST = P.maxRoundTripCost;
+export const MIN_HOURLY_RANGE = P.minHourlyRange;
+/** Liquidity tiers for mixing the shortlist (large / mid / small caps), in USD. */
+export const LARGE_CAP_LIQUIDITY = 5_000_000;
+export const MID_CAP_LIQUIDITY = 1_000_000;
 /** Added to Jupiter's quoted round trip for what the quote doesn't show (executor tip, drift between
  *  quote and execution). Measured buy legs on liquid tokens cost 0-0.3% against 0.02-0.06% quotes. */
 export const ROUND_TRIP_OVERHEAD = 0.0015;
@@ -127,6 +137,7 @@ export const SKIP_MINTS = new Set([
   "2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH", // USDG
   "CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH", // CASH
   "A1KLoBrKBde8Ty9qtNQUtq3C2ortoC3u7twggz7sEto6", // USDY
+  "HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr", // EURC
   FUND.bondMint,
 ]);
 

@@ -16,6 +16,7 @@ import {
   type WindowMin,
 } from "./config";
 import type { Candle, ListToken } from "./market";
+import type { Tier } from "./rules";
 
 /** Candles of one timeframe, oldest first, with the label Claude sees ("15m", "1h", ...). */
 export type Chart = { label: string; candles: Candle[] };
@@ -25,7 +26,12 @@ export type Candidate = {
   charts: Chart[];
   /** All-in round-trip swap cost at the call's size (0.004 = 0.4%). */
   roundTripCost: number;
+  tier: Tier;
+  /** Average hourly candle range over the last 24h (0.02 = 2%). */
+  hourlyRange: number;
 };
+/** One of the bot's calls still inside its window; pnl from the market price, null if unpriced. */
+export type OpenCall = { symbol: string; minutesLeft: number; pnl: number | null };
 export type Decision =
   | { action: "trade"; mint: string; symbol: string; durationSecs: number; reason: string }
   | { action: "pass"; reason: string };
@@ -47,21 +53,24 @@ If a call is up ${TAKE_PROFIT * 100}% before the window ends, you are asked whet
 You get a shortlist of liquid tokens with strong recent momentum, with hourly and 4-hour candles.
 Look for momentum with room to run: a breakout from a long base or range, a strong trend making higher highs and higher lows, or a clean reclaim after a deep pullback, with rising volume behind it.
 Avoid tokens that are already extended far above every recent range after a vertical move with fading volume, and tokens bleeding on every timeframe.
-Pick 2 days when the move needs time to develop, 1 day when it is already under way. Each candidate shows its round-trip swap cost.`;
+Pick 2 days when the move needs time to develop, 1 day when it is already under way. Each candidate shows its round-trip swap cost.
+${MIX}`;
 }
 
 function steadySystem(windows: WindowMin[]): string {
   return `You run a small autonomous trading experiment on Solana.
 Each call buys one token with USDC, holds it for a fixed window (${windows.map(hours).join(", ")}), then sells it back to USDC.
 Profit is only what comes back minus what went in; there is no stop-loss.
-Swapping in and out costs money: each candidate shows its estimated round-trip cost. A call wins whenever the price rises by more than that cost by the end of the window, even by a fraction of a percent.
-If a call is up ${TAKE_PROFIT * 100}% before the window ends, it may be closed early to lock the gain. That is not a target: a call does not need to reach it to be worth making.
-You get a shortlist of liquid tokens already filtered to established uptrends without a fresh 5-minute spike, with 15-minute and hourly candles.
-Pick at most one token and the window that best fits its setup, or pass if none is likely to rise clearly more than its cost within the window.
+Calls make money mainly through the early close: once a call is up ${TAKE_PROFIT * 100}%, it can be closed early (or held for more). A coin that only drifts a percent or so in the window loses the swap cost and the noise, ride after ride. Pick only setups that can plausibly gain ${TAKE_PROFIT * 100}% or more inside the window; each candidate shows its average hourly range, i.e. how far it typically moves in an hour.
+You get a shortlist of liquid tokens in uptrends without a fresh 5-minute spike, mixing large, mid and small caps, with 15-minute and hourly candles and the round-trip swap cost.
+Pick at most one token and the window that best fits its setup, or pass if none can clearly make that move.
 Avoid tokens that already ran far above their recent range: buying near short-term tops lost the most in earlier calls.
-Prefer a pullback or consolidation inside a trend that is still intact, with steady or rising volume.
-Pick longer windows for slower trends; the price needs time to move well past the swap cost.`;
+Prefer a breakout from a base, or a pullback or consolidation inside a trend that is still intact, with steady or rising volume.
+Pick longer windows for setups that need time to develop.
+${MIX}`;
 }
+
+const MIX = `You also see the calls already open. Calls that move together win or lose together, so spread the risk: never pick a coin likely to move with an open call (same narrative or sector, or another wrapper of the same asset), and balance sizes, adding a mid or small cap when the open calls are large caps and the other way round. Every call should be a real opportunity, not a filler.`;
 
 const pct = (x: number | null) => (x === null ? "n/a" : `${x.toFixed(2)}%`);
 const usd = (x: number) => (x >= 1e6 ? `$${(x / 1e6).toFixed(1)}M` : `$${Math.round(x / 1e3)}K`);
@@ -77,14 +86,21 @@ const chartLines = (charts: Chart[], indent: string) =>
 
 export function describe(cands: Candidate[]): string {
   return cands
-    .map(({ token: t, charts, roundTripCost }, i) =>
+    .map(({ token: t, charts, roundTripCost, tier, hourlyRange }, i) =>
       [
-        `${i + 1}. ${t.symbol} — price $${t.price.toPrecision(5)}, liquidity ${usd(t.liquidity)}, 24h volume ${usd(t.volume24h)}, round-trip cost ~${(roundTripCost * 100).toFixed(2)}%`,
+        `${i + 1}. ${t.symbol} (${tier} cap) — price $${t.price.toPrecision(5)}, liquidity ${usd(t.liquidity)}, 24h volume ${usd(t.volume24h)}, round-trip cost ~${(roundTripCost * 100).toFixed(2)}%, average hourly range ${(hourlyRange * 100).toFixed(1)}%`,
         `   change 5m ${pct(t.change5m)}, 1h ${pct(t.change1h)}, 6h ${pct(t.change6h)}, 24h ${pct(t.change24h)}`,
         ...chartLines(charts, "   "),
       ].join("\n"),
     )
     .join("\n\n");
+}
+
+export function describeOpen(open: OpenCall[]): string {
+  if (!open.length) return "Open calls: none.";
+  const line = (o: OpenCall) =>
+    `- ${o.symbol}: ${o.pnl === null ? "price n/a" : `${o.pnl >= 0 ? "+" : ""}${(o.pnl * 100).toFixed(1)}%`}, ${Math.round(o.minutesLeft)} minutes left`;
+  return ["Open calls:", ...open.map(line)].join("\n");
 }
 
 export type HoldReview = {
@@ -111,7 +127,7 @@ export class Brain {
     this.client = new Anthropic({ apiKey });
   }
 
-  async decide(cands: Candidate[]): Promise<Decision> {
+  async decide(cands: Candidate[], open: OpenCall[]): Promise<Decision> {
     if (!cands.length) return { action: "pass", reason: "empty shortlist" };
     const Pick = z.object({
       action: z.enum(["trade", "pass"]),
@@ -128,7 +144,7 @@ export class Brain {
       fallbacks: "default",
       output_config: { effort: "medium", format: zodOutputFormat(Pick) },
       system: system(this.windows),
-      messages: [{ role: "user", content: `Time: ${new Date().toISOString()}\n\nShortlist:\n\n${describe(cands)}` }],
+      messages: [{ role: "user", content: `Time: ${new Date().toISOString()}\n\n${describeOpen(open)}\n\nShortlist:\n\n${describe(cands)}` }],
     });
     if (res.stop_reason === "refusal") return { action: "pass", reason: "model declined" };
     const pick = res.parsed_output;

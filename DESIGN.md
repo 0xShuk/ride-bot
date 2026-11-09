@@ -50,7 +50,7 @@ High risk, chasing big moves (owner 2026-11-08):
 
 - **Brain:** rules shortlist, Claude Sonnet 5.5 picks.
 - **Direction:** Up only (`POST /api/build-trade`).
-- **Tokens:** the top 200 by 24h volume (Birdeye), Jupiter-verified, $100K+ liquidity, filtered further by the bot on 24h volume. Coins that moved under 2% on 1h, 6h and 24h alike (tokenized stocks, pegged tokens) are skipped.
+- **Tokens:** the top 200 by 24h volume (Birdeye), Jupiter-verified, $100K+ liquidity, filtered further by the bot on 24h volume. Coins that moved under 2% on 1h, 6h and 24h alike (tokenized stocks, pegged tokens) are skipped. Also skipped: a coin the bot already has an open call on (calls on one coin win or lose together), and a coin whose average hourly candle range over the last 24h is under 1.5% (2.5% on Ridor), e.g. PEPE-type coins that move 0-1%. The shortlist takes the best of each size tier in turn (large caps $5M+ liquidity, mid $1M-5M, small under $1M), and Claude sees the open calls and is told to spread risk across coins, narratives and sizes.
 - **Pace:** as many calls as the fund limits allow (up to 32/day).
 - **Size:** 25% of the live USDC treasury per call.
 - **Duration:** 1, 4 or 6 hours, picked per call (`WINDOWS_MINUTES`; 4h/6h once fomcvault accepts them).

@@ -2,13 +2,14 @@
 
 import { randomUUID } from "node:crypto";
 import type { Keypair, PublicKey } from "@solana/web3.js";
-import { type Candidate, Brain } from "./brain";
+import { type Candidate, type OpenCall, Brain } from "./brain";
 import { type Chain } from "./chain";
 import {
   DECIDE_EVERY_MS,
   FUND,
   MAX_CALLS_PER_DAY,
   MAX_ROUND_TRIP_COST,
+  MIN_HOURLY_RANGE,
   MIN_LIQUIDITY_USD,
   ROUND_TRIP_OVERHEAD,
   SHORTLIST_SIZE,
@@ -20,9 +21,9 @@ import {
   type Env,
 } from "./config";
 import { exitStep } from "./exit";
-import type { Market } from "./market";
+import type { Candle, Market } from "./market";
 import { type BuildOk, type RideApi, isReset, isTransient } from "./ride";
-import { shortlist } from "./rules";
+import { hourlyRange, shortlist, tier } from "./rules";
 import type { CallRow, Store } from "./store";
 import type { Telegram } from "./telegram";
 
@@ -80,12 +81,19 @@ export class Bot {
       return;
     }
 
-    const [tokens, verified] = await Promise.all([this.market.topTokens(MIN_LIQUIDITY_USD), this.market.verifiedMints()]);
-    // Three times the shortlist, then keep the ones with room under the fund's limits
-    // and a cheap enough round trip at this call's size.
-    const ranked = shortlist(tokens, verified, SHORTLIST_SIZE * 3);
-    const kept: { token: (typeof ranked)[number]; roundTripCost: number }[] = [];
+    const [tokens, verified, active] = await Promise.all([
+      this.market.topTokens(MIN_LIQUIDITY_USD),
+      this.market.verifiedMints(),
+      this.store.activeCalls(),
+    ]);
+    // One open call per coin: calls on the same coin win or lose together.
+    const held = new Set(active.map((c) => c.mint));
+    // Three times the shortlist, then keep the ones with room under the fund's limits,
+    // enough movement to reach the take-profit, and a cheap enough round trip at this call's size.
+    const ranked = shortlist(tokens, verified, SHORTLIST_SIZE * 3, held);
+    const kept: { token: (typeof ranked)[number]; roundTripCost: number; hourly: Candle[] }[] = [];
     const skipped: string[] = [];
+    const quiet: string[] = [];
     for (const t of ranked) {
       const l = await this.ride.limits(this.wallet.toBase58(), t.mint);
       if (l && (l.dailyFundRemaining <= 0 || l.velocityRemaining <= 0)) {
@@ -93,15 +101,22 @@ export class Bot {
         return;
       }
       if (l && (l.dailyTokenRemaining <= 0 || l.concurrentRemaining <= 0)) continue;
+      const hourly = await this.market.candles(t.mint, "1H", STYLE === "swing" ? 48 : 24).catch(() => []);
+      const range = hourlyRange(hourly.slice(-24));
+      if (range < MIN_HOURLY_RANGE) {
+        quiet.push(`${t.symbol} ${(range * 100).toFixed(2)}%`);
+        continue;
+      }
       const quoted = await this.market.roundTripCost(t.mint, usdc, this.wallet.toBase58(), USDC_MINT).catch(() => null);
       const cost = quoted === null ? null : quoted + ROUND_TRIP_OVERHEAD;
       if (cost === null || cost > MAX_ROUND_TRIP_COST) {
         skipped.push(`${t.symbol} ${cost === null ? "no quote" : `${(cost * 100).toFixed(2)}%`}`);
         continue;
       }
-      kept.push({ token: t, roundTripCost: cost });
+      kept.push({ token: t, roundTripCost: cost, hourly });
       if (kept.length === SHORTLIST_SIZE) break;
     }
+    if (quiet.length) console.log(`[decide] moves too little (average hourly range): ${quiet.join(", ")}`);
     if (skipped.length) console.log(`[decide] too costly to trade at $${usdc}: ${skipped.join(", ")}`);
     if (!kept.length) {
       console.log("[decide] no eligible token with room and a cheap round trip");
@@ -109,23 +124,25 @@ export class Bot {
     }
 
     const cands: Candidate[] = await Promise.all(
-      kept.map(async ({ token, roundTripCost }) => ({
+      kept.map(async ({ token, roundTripCost, hourly }) => ({
         token,
         roundTripCost,
+        tier: tier(token),
+        hourlyRange: hourlyRange(hourly.slice(-24)),
         charts:
           STYLE === "swing"
             ? [
-                { label: "1h", candles: await this.market.candles(token.mint, "1H", 48).catch(() => []) },
+                { label: "1h", candles: hourly },
                 { label: "4h", candles: await this.market.candles(token.mint, "4H", 42).catch(() => []) },
               ]
             : [
                 { label: "15m", candles: await this.market.candles(token.mint, "15m", 24).catch(() => []) },
-                { label: "1h", candles: await this.market.candles(token.mint, "1H", 24).catch(() => []) },
+                { label: "1h", candles: hourly },
               ],
       })),
     );
     const names = kept.map((k) => k.token.symbol);
-    const d = await this.brain.decide(cands);
+    const d = await this.brain.decide(cands, await this.openBook(active));
     await this.store.logDecision({
       action: d.action,
       symbol: d.action === "trade" ? d.symbol : null,
@@ -146,6 +163,21 @@ export class Bot {
       usdc,
       reason: d.reason,
       decimals: verified.get(d.mint) ?? 0,
+    });
+  }
+
+  /** The bot's open calls as Claude sees them when picking the next one. */
+  private async openBook(active: CallRow[]): Promise<OpenCall[]> {
+    const now = Math.floor(Date.now() / 1000);
+    const live = active.filter((c) => c.executedAt !== null && now < c.executedAt + c.durationSecs);
+    const prices = await this.market.prices([...new Set(live.map((c) => c.mint))]).catch(() => new Map<string, number>());
+    return live.map((c) => {
+      const price = prices.get(c.mint);
+      return {
+        symbol: c.symbol,
+        minutesLeft: (c.executedAt! + c.durationSecs - now) / 60,
+        pnl: price && c.inputUsd && c.outputAtoms ? ((Number(c.outputAtoms) / 10 ** c.outputDecimals) * price) / c.inputUsd - 1 : null,
+      };
     });
   }
 

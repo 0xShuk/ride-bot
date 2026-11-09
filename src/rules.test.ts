@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { FUND, USDC_MINT } from "./config";
 import type { ListToken } from "./market";
-import { eligible, score, shortlist, swingScore } from "./rules";
+import { eligible, hourlyRange, score, shortlist, swingScore } from "./rules";
 
 const tok = (mint: string, o: Partial<ListToken> = {}): ListToken => ({
   mint,
@@ -84,6 +84,26 @@ describe("shortlist", () => {
     ];
     expect(shortlist(list, verified, 2).map((t) => t.mint)).toEqual(["b", "d"]);
     expect(shortlist(list, verified, 2, new Set(["b"])).map((t) => t.mint)).toEqual(["d", "c"]);
+  });
+});
+
+describe("shortlist mix", () => {
+  it("takes the best of each size tier in turn", () => {
+    const list = [
+      tok("a", { liquidity: 9_000_000, change1h: 5 }),
+      tok("b", { liquidity: 8_000_000, change1h: 4 }),
+      tok("c", { liquidity: 2_000_000, change1h: 1 }),
+      tok("d", { liquidity: 300_000, change1h: 0.5 }),
+    ];
+    expect(shortlist(list, verified, 4).map((t) => t.mint)).toEqual(["a", "c", "d", "b"]);
+  });
+});
+
+describe("hourlyRange", () => {
+  it("averages high-low over close", () => {
+    const k = (h: number, l: number, c: number) => ({ t: 0, o: c, h, l, c, v: 0 });
+    expect(hourlyRange([k(102, 100, 100), k(104, 100, 100)])).toBeCloseTo(0.03);
+    expect(hourlyRange([])).toBe(0);
   });
 });
 

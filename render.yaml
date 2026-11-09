@@ -24,7 +24,7 @@ services:
       - key: RIDOR_DRY_RUN
         value: "true"
       - key: WINDOWS_MINUTES
-        value: "60"
+        value: "240"
       - key: RPC_URL
         sync: false
       - key: BOT_KEYPAIR

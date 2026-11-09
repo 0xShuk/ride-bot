@@ -1,7 +1,16 @@
 // The rules half of the brain: narrow liquid tokens down to a few worth showing Claude.
 
-import { MAX_PUMP_5M_PCT, MIN_LIQUIDITY_USD, MIN_MOVE_PCT, MIN_VOLUME_24H_USD, SKIP_MINTS, STYLE } from "./config";
-import type { ListToken } from "./market";
+import {
+  LARGE_CAP_LIQUIDITY,
+  MAX_PUMP_5M_PCT,
+  MID_CAP_LIQUIDITY,
+  MIN_LIQUIDITY_USD,
+  MIN_MOVE_PCT,
+  MIN_VOLUME_24H_USD,
+  SKIP_MINTS,
+  STYLE,
+} from "./config";
+import type { Candle, ListToken } from "./market";
 
 /** Down ~90%+ on every timeframe Birdeye reported: a rug, not a dip. */
 const rugged = (t: ListToken) =>
@@ -58,7 +67,18 @@ export function eligible(t: ListToken, verified: Map<string, number>): boolean {
   );
 }
 
-/** The best `size` eligible tokens by score, skipping any in `exclude` (e.g. at their limit). */
+export type Tier = "large" | "mid" | "small";
+export const tier = (t: ListToken): Tier =>
+  t.liquidity >= LARGE_CAP_LIQUIDITY ? "large" : t.liquidity >= MID_CAP_LIQUIDITY ? "mid" : "small";
+
+/** Average hourly candle range (high - low over close): how far the coin typically moves in an hour. */
+export const hourlyRange = (cs: Candle[]) => (cs.length ? cs.reduce((s, k) => s + (k.h - k.l) / k.c, 0) / cs.length : 0);
+
+/**
+ * Up to `size` eligible tokens, skipping any in `exclude` (already held, at their limit), taking the
+ * best of each size tier in turn (large, mid, small caps) so the shortlist mixes risk instead of
+ * being all one kind of coin.
+ */
 export function shortlist(
   tokens: ListToken[],
   verified: Map<string, number>,
@@ -66,8 +86,13 @@ export function shortlist(
   exclude: Set<string> = new Set(),
 ): ListToken[] {
   const seen = new Set<string>();
-  return tokens
+  const ranked = tokens
     .filter((t) => eligible(t, verified) && !exclude.has(t.mint) && !seen.has(t.mint) && seen.add(t.mint))
-    .sort((a, b) => score(b) - score(a))
-    .slice(0, size);
+    .sort((a, b) => score(b) - score(a));
+  const tiers = (["large", "mid", "small"] as const).map((k) => ranked.filter((t) => tier(t) === k));
+  const out: ListToken[] = [];
+  for (let i = 0; out.length < Math.min(size, ranked.length); i++) {
+    for (const ts of tiers) if (ts[i] && out.length < size) out.push(ts[i]);
+  }
+  return out;
 }
