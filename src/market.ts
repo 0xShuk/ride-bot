@@ -44,6 +44,16 @@ export class Market {
 
   /** Top tokens by 24h volume with at least `minLiquidity`, four pages of 50. */
   async topTokens(minLiquidity: number): Promise<ListToken[]> {
+    return this.tokenList("volume_24h_usd", [0, 50, 100, 150], minLiquidity);
+  }
+
+  /** The biggest 1h gainers with at least `minLiquidity`, two pages of 50: small runners that never
+   *  reach the top by volume. */
+  async movers(minLiquidity: number): Promise<ListToken[]> {
+    return this.tokenList("price_change_1h_percent", [0, 50], minLiquidity);
+  }
+
+  private async tokenList(sortBy: string, offsets: number[], minLiquidity: number): Promise<ListToken[]> {
     type Item = {
       address: string;
       symbol?: string | null;
@@ -57,9 +67,9 @@ export class Market {
       price_change_24h_percent?: number | null;
     };
     const out: ListToken[] = [];
-    for (const offset of [0, 50, 100, 150]) {
+    for (const offset of offsets) {
       const data = await this.birdeye<{ items?: Item[] }>("defi/v3/token/list", {
-        sort_by: "volume_24h_usd",
+        sort_by: sortBy,
         sort_type: "desc",
         offset: String(offset),
         limit: "50",

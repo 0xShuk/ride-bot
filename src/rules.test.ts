@@ -30,7 +30,7 @@ describe("eligible", () => {
     expect(eligible(tok("a"), verified)).toBe(true);
     expect(eligible(tok("zz"), verified)).toBe(false);
     expect(eligible(tok("a", { liquidity: 99_999 }), verified)).toBe(false);
-    expect(eligible(tok("a", { volume24h: 999_999 }), verified)).toBe(false);
+    expect(eligible(tok("a", { volume24h: 149_999 }), verified)).toBe(false);
     expect(eligible(tok(USDC_MINT), verified)).toBe(false);
     expect(eligible(tok(FUND.bondMint), verified)).toBe(false);
   });

@@ -85,11 +85,16 @@ export class Bot {
       return;
     }
 
-    const [tokens, verified, stocks] = await Promise.all([
+    const [byVolume, movers, verified, stocks] = await Promise.all([
       this.market.topTokens(MIN_LIQUIDITY_USD),
+      this.market.movers(MIN_LIQUIDITY_USD).catch((e) => {
+        console.log(`[decide] movers list failed: ${e instanceof Error ? e.message : e}`);
+        return [];
+      }),
       this.market.verifiedMints(),
       this.market.stockMints(),
     ]);
+    const tokens = [...byVolume, ...movers]; // shortlist() drops the repeats
     // One open call per coin (calls on the same coin win or lose together), and no tokenized stocks.
     const skip = new Set([...active.map((c) => c.mint), ...stocks]);
     // Six times the shortlist, then keep the ones with room under the fund's limits,

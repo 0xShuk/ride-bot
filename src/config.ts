@@ -50,12 +50,13 @@ const PROFILES: Record<string, Profile> = {
     lockFloor: 0.044,
     trailFrom: 0.08,
     maxPump5mPct: 3, // volatile coins move 1-2% in 5 minutes all the time
-    maxRoundTripCost: 0.01,
+    // Owner 2026-11-10: the other caller's best rides (LMAO +79%, Hh3oTa, BELIEVE) cost 1.4-2.8% round trip.
+    maxRoundTripCost: 0.025,
     // 72h of rides (2026-11-10): coins under a 4% average hourly range gave 6 rides of 5%+ out of 56;
     // the payouts came from 8%+ coins.
     minHourlyRange: 0.04,
     minLiquidityUsd: 100_000, // the fund itself requires $100K liquidity
-    minVolume24hUsd: 1_000_000,
+    minVolume24hUsd: 150_000, // small runners trade $0.1-0.4M a day
   },
   ridor: {
     fund: {
