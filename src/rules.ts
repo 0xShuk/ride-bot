@@ -40,19 +40,19 @@ export function swingScore(t: ListToken): number {
 }
 
 /**
- * Score for a 1- to 6-hour Up call: an established trend (1h, 6h, 24h) counts, a fresh
- * 5-minute jump counts against (the calls that bought right after one lost the most),
- * and activity (volume relative to liquidity) breaks ties. Big moves are damped, since
- * a token far above its range tends to give some back.
+ * Score for a 4- to 6-hour Up call: how much the coin is moving (the payouts come from coins that move
+ * 8%+ an hour), tilted toward ones going up, with turnover for real interest. A fresh 5-minute jump
+ * counts against (buying right after one lost the most), and so does a coin collapsing on the 6h.
  */
 function steadyScore(t: ListToken): number {
   const c5 = t.change5m ?? 0;
   const c1h = t.change1h ?? 0;
   const c6h = t.change6h ?? 0;
   const c24h = t.change24h ?? 0;
-  const damp = (x: number, cap: number) => (x > cap ? cap - (x - cap) * 0.5 : x);
+  const moving = Math.abs(c1h) + 0.5 * Math.abs(c6h) + 0.2 * Math.abs(c24h);
+  const up = 0.5 * c1h + 0.3 * c6h;
   const turnover = t.liquidity > 0 ? Math.min(t.volume24h / t.liquidity, 50) : 0;
-  return damp(c1h, 6) + 0.8 * damp(c6h, 20) + 0.3 * damp(c24h, 40) - 1.5 * Math.max(0, c5 - 0.5) + Math.log1p(turnover);
+  return moving + up - 1.5 * Math.max(0, c5 - 0.5) - Math.max(0, -c6h - 15) + 2 * Math.log1p(turnover);
 }
 
 export function eligible(t: ListToken, verified: Map<string, number>): boolean {
@@ -65,6 +65,13 @@ export function eligible(t: ListToken, verified: Map<string, number>): boolean {
     !rugged(t) &&
     !flat(t)
   );
+}
+
+/** USDC for the next call: an equal share of the free treasury across the slots the bot's `open`
+ *  calls don't take yet, never more than `cap` of it. With `slots` null, simply `cap` of it. */
+export function callSize(freeUsdc: number, open: number, slots: number | null, cap: number): number {
+  const share = slots === null ? cap : Math.min(cap, 1 / Math.max(1, slots - open));
+  return Math.floor(freeUsdc * share);
 }
 
 export type Tier = "large" | "mid" | "small";

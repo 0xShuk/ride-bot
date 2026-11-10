@@ -14,6 +14,7 @@ import {
   ROUND_TRIP_OVERHEAD,
   SHORTLIST_SIZE,
   SIZE_SHARE,
+  SLOTS,
   STYLE,
   TAKE_PROFIT,
   TRAIL_FROM,
@@ -23,7 +24,7 @@ import {
 import { exitStep } from "./exit";
 import type { Candle, Market } from "./market";
 import { type BuildOk, type RideApi, isReset, isTransient } from "./ride";
-import { hourlyRange, shortlist, tier } from "./rules";
+import { callSize, hourlyRange, shortlist, tier } from "./rules";
 import type { CallRow, Store } from "./store";
 import type { Telegram } from "./telegram";
 
@@ -75,22 +76,25 @@ export class Bot {
       }
     }
 
-    const usdc = Math.floor((await this.chain.treasuryUsdc()) * SIZE_SHARE);
+    const active = await this.store.activeCalls();
+    // Calls whose USDC is still out (an early-closed one comes back within minutes).
+    const open = active.filter((c) => c.status === "building" || c.status === "open").length;
+    const usdc = callSize(await this.chain.treasuryUsdc(), open, SLOTS, SIZE_SHARE);
     if (usdc < 5) {
       console.log(`[decide] treasury too small for a call ($${usdc})`);
       return;
     }
 
-    const [tokens, verified, active] = await Promise.all([
+    const [tokens, verified, stocks] = await Promise.all([
       this.market.topTokens(MIN_LIQUIDITY_USD),
       this.market.verifiedMints(),
-      this.store.activeCalls(),
+      this.market.stockMints(),
     ]);
-    // One open call per coin: calls on the same coin win or lose together.
-    const held = new Set(active.map((c) => c.mint));
-    // Three times the shortlist, then keep the ones with room under the fund's limits,
+    // One open call per coin (calls on the same coin win or lose together), and no tokenized stocks.
+    const skip = new Set([...active.map((c) => c.mint), ...stocks]);
+    // Six times the shortlist, then keep the ones with room under the fund's limits,
     // enough movement to reach the take-profit, and a cheap enough round trip at this call's size.
-    const ranked = shortlist(tokens, verified, SHORTLIST_SIZE * 3, held);
+    const ranked = shortlist(tokens, verified, SHORTLIST_SIZE * 6, skip);
     const kept: { token: (typeof ranked)[number]; roundTripCost: number; hourly: Candle[] }[] = [];
     const skipped: string[] = [];
     const quiet: string[] = [];

@@ -20,7 +20,7 @@ export type ListToken = {
 export type Candle = { t: number; o: number; h: number; l: number; c: number; v: number };
 
 export class Market {
-  private verified: { mints: Map<string, number>; at: number } | null = null;
+  private verified: { mints: Map<string, number>; stocks: Set<string>; at: number } | null = null;
 
   constructor(
     private birdeyeKey: string,
@@ -99,7 +99,17 @@ export class Market {
 
   /** Jupiter-verified mints and their decimals, cached for an hour. */
   async verifiedMints(): Promise<Map<string, number>> {
-    if (this.verified && Date.now() - this.verified.at < 3_600_000) return this.verified.mints;
+    return (await this.verifiedList()).mints;
+  }
+
+  /** Verified mints Jupiter tags as tokenized stocks or other real-world assets: they track a market
+   *  that is often closed and barely move. */
+  async stockMints(): Promise<Set<string>> {
+    return (await this.verifiedList()).stocks;
+  }
+
+  private async verifiedList() {
+    if (this.verified && Date.now() - this.verified.at < 3_600_000) return this.verified;
     const res = await fetchWithTimeout(
       "jupiter verified list",
       "https://api.jup.ag/tokens/v2/tag?query=verified",
@@ -107,10 +117,11 @@ export class Market {
       45_000,
     );
     if (!res.ok) throw new Error(`jupiter tokens ${res.status}`);
-    const tokens = (await res.json()) as { id: string; decimals: number }[];
+    const tokens = (await res.json()) as { id: string; decimals: number; tags?: string[] | null }[];
     const mints = new Map(tokens.map((t) => [t.id, t.decimals]));
-    this.verified = { mints, at: Date.now() };
-    return mints;
+    const stocks = new Set(tokens.filter((t) => t.tags?.some((g) => g === "stocks" || g === "rwa")).map((t) => t.id));
+    this.verified = { mints, stocks, at: Date.now() };
+    return this.verified;
   }
 
   /** Jupiter's output for swapping `amount` atoms, from the same build endpoint the app's swaps use. */

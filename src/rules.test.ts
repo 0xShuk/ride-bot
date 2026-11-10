@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { FUND, USDC_MINT } from "./config";
 import type { ListToken } from "./market";
-import { eligible, hourlyRange, score, shortlist, swingScore } from "./rules";
+import { callSize, eligible, hourlyRange, score, shortlist, swingScore } from "./rules";
 
 const tok = (mint: string, o: Partial<ListToken> = {}): ListToken => ({
   mint,
@@ -35,9 +35,9 @@ describe("eligible", () => {
     expect(eligible(tok(FUND.bondMint), verified)).toBe(false);
   });
 
-  it("drops a token that jumped more than 1.5% in the last 5 minutes", () => {
-    expect(eligible(tok("a", { change5m: 1.5 }), verified)).toBe(true);
-    expect(eligible(tok("a", { change5m: 2.4 }), verified)).toBe(false);
+  it("drops a token that jumped more than 3% in the last 5 minutes", () => {
+    expect(eligible(tok("a", { change5m: 3 }), verified)).toBe(true);
+    expect(eligible(tok("a", { change5m: 3.4 }), verified)).toBe(false);
   });
 
   it("drops a rug (down 90%+ on every timeframe) but keeps a token with gaps in its data", () => {
@@ -55,6 +55,11 @@ describe("flat coins", () => {
 });
 
 describe("score", () => {
+  it("ranks a coin swinging hard above a quiet one", () => {
+    expect(score(tok("a", { change1h: -6, change6h: 12, change24h: 30 }))).toBeGreaterThan(score(tok("b", { change1h: 1, change6h: 2 })));
+  });
+
+
   it("ranks an established trend above flat", () => {
     expect(score(tok("a", { change1h: 2, change6h: 6, change24h: 10 }))).toBeGreaterThan(score(tok("b")));
   });
@@ -118,5 +123,18 @@ describe("swingScore", () => {
   it("counts a fresh 5-minute spike against", () => {
     const base = { ...tok("A"), liquidity: 100_000, volume24h: 1_000_000, change1h: 3, change6h: 25, change24h: 60 };
     expect(swingScore({ ...base, change5m: 8 })).toBeLessThan(swingScore({ ...base, change5m: 1 }));
+  });
+});
+
+describe("callSize", () => {
+  it("splits the free USDC equally over the slots left, capped", () => {
+    expect(callSize(1200, 0, 6, 0.2425)).toBe(200);
+    expect(callSize(1000, 1, 6, 0.2425)).toBe(200);
+    expect(callSize(400, 4, 6, 0.2425)).toBe(97); // 1/2 would be over the cap
+    expect(callSize(300, 6, 6, 0.2425)).toBe(72); // all slots taken: the cap
+  });
+
+  it("without slots, is the cap", () => {
+    expect(callSize(1000, 3, null, 0.194)).toBe(194);
   });
 });

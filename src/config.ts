@@ -3,12 +3,15 @@
 
 type Profile = {
   fund: { key: string; symbol: string; realm: string; governance: string; bondMint: string; bondAtoms: bigint };
-  /** steady: 1- to 6-hour calls on established trends, closing small gains early.
+  /** steady: 4- to 6-hour calls on volatile coins, closing at +5% or trailing for more.
    *  swing: few 1- to 2-day calls chasing big moves. */
   style: "steady" | "swing";
-  /** Each call asks for this share of the live USDC treasury. A hair under the fund's cap, so a small
-   *  treasury move between build and execute doesn't trip SpendingLimitExceeded. */
+  /** The most one call asks for, as a share of the live USDC treasury. A hair under the fund's cap, so a
+   *  small treasury move between build and execute doesn't trip SpendingLimitExceeded. */
   sizeShare: number;
+  /** Equal slots: each call gets the free USDC divided by the slots not yet taken by the bot's open
+   *  calls (capped at sizeShare), so the treasury ends up fully deployed. null = always sizeShare. */
+  slots: number | null;
   /** The bot's own cap on calls per rolling 24 hours, under the fund's; null = as many as the fund allows. */
   maxCallsPerDay: number | null;
   takeProfit: number;
@@ -36,6 +39,8 @@ const PROFILES: Record<string, Profile> = {
     },
     style: "steady",
     sizeShare: 0.25 * 0.97, // the fund's cap is 25%
+    // Owner 2026-11-10: maximum deployment. 32 calls a day with 4-6h windows is ~6 open at once.
+    slots: 6,
     maxCallsPerDay: null,
     takeProfit: 0.05,
     holdReviewEverySecs: 5 * 60,
@@ -44,10 +49,11 @@ const PROFILES: Record<string, Profile> = {
     // than quoted while the close is cranked.
     lockFloor: 0.044,
     trailFrom: 0.08,
-    maxPump5mPct: 1.5,
+    maxPump5mPct: 3, // volatile coins move 1-2% in 5 minutes all the time
     maxRoundTripCost: 0.01,
-    // Owner 2026-11-09: PEPE-type coins moving 0-1% lost ride after ride.
-    minHourlyRange: 0.015,
+    // 72h of rides (2026-11-10): coins under a 4% average hourly range gave 6 rides of 5%+ out of 56;
+    // the payouts came from 8%+ coins.
+    minHourlyRange: 0.04,
     minLiquidityUsd: 100_000, // the fund itself requires $100K liquidity
     minVolume24hUsd: 1_000_000,
   },
@@ -62,6 +68,7 @@ const PROFILES: Record<string, Profile> = {
     },
     style: "swing",
     sizeShare: 0.2 * 0.97, // the fund's cap is 20%
+    slots: null,
     // Owner 2026-11-08: bonds for about 11 rides, so only the best 4-5 setups a day.
     maxCallsPerDay: 5,
     takeProfit: 0.2,
@@ -97,6 +104,7 @@ export const SUPPORTED_WINDOWS_MIN = [60, 240, 360, 1440, 2880] as const;
 export type WindowMin = (typeof SUPPORTED_WINDOWS_MIN)[number];
 
 export const SIZE_SHARE = P.sizeShare;
+export const SLOTS = P.slots;
 /** Gains for early closing are measured by Jupiter's quote for selling the whole position, not the
  *  market price: the chain checks what the sale returns. */
 /** Once the position would sell for this much more than it cost, Claude decides: close now or keep holding. */

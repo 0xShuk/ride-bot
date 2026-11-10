@@ -58,15 +58,13 @@ ${MIX}`;
 }
 
 function steadySystem(windows: WindowMin[]): string {
-  return `You run a small autonomous trading experiment on Solana.
-Each call buys one token with USDC, holds it for a fixed window (${windows.map(hours).join(", ")}), then sells it back to USDC.
-Profit is only what comes back minus what went in; there is no stop-loss.
-Calls make money mainly through the early close: once a call is up ${TAKE_PROFIT * 100}%, it can be closed early (or held for more). A coin that only drifts a percent or so in the window loses the swap cost and the noise, ride after ride. Pick only setups that can plausibly gain ${TAKE_PROFIT * 100}% or more inside the window; each candidate shows its average hourly range, i.e. how far it typically moves in an hour.
-You get a shortlist of liquid tokens in uptrends without a fresh 5-minute spike, mixing large, mid and small caps, with 15-minute and hourly candles and the round-trip swap cost.
-Pick at most one token and the window that best fits its setup, or pass if none can clearly make that move.
-Avoid tokens that already ran far above their recent range: buying near short-term tops lost the most in earlier calls.
-Prefer a breakout from a base, or a pullback or consolidation inside a trend that is still intact, with steady or rising volume.
-Pick longer windows for setups that need time to develop.
+  return `You run an autonomous caller on a community trading vault on Solana.
+Each call buys one token with USDC, holds it for a fixed window (${windows.map(hours).join(" or ")}), then sells it back to USDC. There is no stop-loss.
+Calls pay through the early close: once a call is up ${TAKE_PROFIT * 100}%, it can be closed early or held for more. In past calls, coins moving under 4% an hour almost never got there, while coins moving 8%+ an hour paid nearly all the profit, with some losses of 10% or more along the way.
+So the shortlist holds only volatile coins (each shows its average hourly range), with no fresh 5-minute spike, mixing sizes where it can, with 15-minute and hourly candles and the round-trip swap cost.
+The vault wants steady activity: calls are expected most rounds. Pick the coin most likely to swing up ${TAKE_PROFIT * 100}% or more inside the window, and the window that fits it. Pass only when every candidate is clearly broken: collapsing on every timeframe with no buyers, a likely rug, or a vertical spike sitting at its top on fading volume.
+Prefer a coin bouncing off support or breaking out of a range with volume coming in over one already far above its range.
+Pick the longer window when the move needs time to develop.
 ${MIX}`;
 }
 
