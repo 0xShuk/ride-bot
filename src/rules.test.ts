@@ -134,6 +134,11 @@ describe("callSize", () => {
     expect(callSize(300, 6, 6, 0.2425)).toBe(72); // all slots taken: the cap
   });
 
+  it("under the slots threshold, is the cap", () => {
+    expect(callSize(600, 0, 6, 0.2425, 1000)).toBe(145);
+    expect(callSize(1200, 0, 6, 0.2425, 1000)).toBe(200);
+  });
+
   it("without slots, is the cap", () => {
     expect(callSize(1000, 3, null, 0.194)).toBe(194);
   });

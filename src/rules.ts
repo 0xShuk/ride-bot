@@ -67,10 +67,11 @@ export function eligible(t: ListToken, verified: Map<string, number>): boolean {
   );
 }
 
-/** USDC for the next call: an equal share of the free treasury across the slots the bot's `open`
- *  calls don't take yet, never more than `cap` of it. With `slots` null, simply `cap` of it. */
-export function callSize(freeUsdc: number, open: number, slots: number | null, cap: number): number {
-  const share = slots === null ? cap : Math.min(cap, 1 / Math.max(1, slots - open));
+/** USDC for the next call. With `freeUsdc` of at least `slotsFrom`, an equal share of it across the
+ *  slots the bot's `open` calls don't take yet (1/6 with 6 slots and nothing open); otherwise, or with
+ *  `slots` null, `cap` of it. Never more than `cap`. */
+export function callSize(freeUsdc: number, open: number, slots: number | null, cap: number, slotsFrom = 0): number {
+  const share = slots === null || freeUsdc < slotsFrom ? cap : Math.min(cap, 1 / Math.max(1, slots - open));
   return Math.floor(freeUsdc * share);
 }
 

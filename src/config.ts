@@ -106,6 +106,9 @@ export type WindowMin = (typeof SUPPORTED_WINDOWS_MIN)[number];
 
 export const SIZE_SHARE = P.sizeShare;
 export const SLOTS = P.slots;
+/** Owner 2026-11-10: equal slots only once the free USDC is at least this; under it, each call takes the
+ *  fund's cap (slots made calls of $15-20 on a few hundred dollars). */
+export const SLOTS_FROM_USDC = 1200;
 /** Gains for early closing are measured by Jupiter's quote for selling the whole position, not the
  *  market price: the chain checks what the sale returns. */
 /** Once the position would sell for this much more than it cost, Claude decides: close now or keep holding. */

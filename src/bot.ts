@@ -15,6 +15,7 @@ import {
   SHORTLIST_SIZE,
   SIZE_SHARE,
   SLOTS,
+  SLOTS_FROM_USDC,
   STYLE,
   TAKE_PROFIT,
   TRAIL_FROM,
@@ -79,7 +80,7 @@ export class Bot {
     const active = await this.store.activeCalls();
     // Calls whose USDC is still out (an early-closed one comes back within minutes).
     const open = active.filter((c) => c.status === "building" || c.status === "open").length;
-    const usdc = callSize(await this.chain.treasuryUsdc(), open, SLOTS, SIZE_SHARE);
+    const usdc = callSize(await this.chain.treasuryUsdc(), open, SLOTS, SIZE_SHARE, SLOTS_FROM_USDC);
     if (usdc < 5) {
       console.log(`[decide] treasury too small for a call ($${usdc})`);
       return;
