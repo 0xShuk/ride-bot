@@ -44,7 +44,7 @@ High risk, chasing big moves (owner 2026-11-08):
 - **Windows:** 1 or 2 days (`WINDOWS_MINUTES=1440,2880`).
 - **Pace:** at most 5 calls per rolling 24h (the bot's own cap, under the fund's 16). Claude is told to call the best candidate most rounds (aiming for 20%+) and pass only when every candidate is clearly broken.
 - **Tokens:** Jupiter-verified, $50K+ liquidity, $250K+ 24h volume, round trip ≤ 3%, no 5-minute jump over 4%. Ranked by strong 6h/24h momentum (`swingScore`). Claude sees 1h and 4h candles.
-- **Early close:** Claude reviews at +20%, then every 15 minutes while holding. Floor 12%, trailing from a 30% peak (keeps 60% of the peak gain), each after two checks in a row.
+- **Early close:** Claude reviews at +20%, then every 15 minutes while holding, or at once if the gain falls 5 points below its high since the last hold. Floor 12%, trailing from a 25% peak (keeps 60% of the peak gain), each after two checks in a row.
 
 ## Decisions
 
@@ -55,7 +55,7 @@ High risk, chasing big moves (owner 2026-11-08):
 - **Size:** under $1,000 of free USDC, 25% of it per call (a hair under, 24.25%). From $1,000 up, equal slots for maximum deployment: the free USDC divided by the 6 slots minus the bot's calls still holding USDC, never more than the fund's 25% of the free USDC (`slots` and `sizeShare` in `src/config.ts`). With nothing open on $1,200 that is $200; once all 6 slots are taken, further calls get the 25% cap of what is left.
 - **Duration:** 1, 4 or 6 hours, picked per call (`WINDOWS_MINUTES`; 4h/6h once fomcvault accepts them).
 - **Entry filters:** skip a token up more than 3% in the last 5 minutes, and one whose buy + sell-back costs more than 2.5% at the call's size (Jupiter quote + 0.15% allowance).
-- **Early close:** checked every 30 s. Gains are measured by Jupiter's quote for selling the whole position, since the chain checks what the sale returns (≥ 4%). At +5%, Claude decides: close now or hold for more. While holding, it is asked again every 5 minutes, and the call closes without asking if the gain stays at 4.4% or below for two checks in a row. Once the peak reaches 8%, it trails: it closes under 60% of the peak gain (or two typical 1-minute swings under the peak, whichever is lower), never under 4.4%, again after two checks. A failed review closes.
+- **Early close:** checked every 30 s. Gains are measured by Jupiter's quote for selling the whole position, since the chain checks what the sale returns (≥ 4%). At +5%, Claude decides: close now or hold for more. While holding, it is asked again every 5 minutes, or at once if the gain falls 1.5 points below its high since Claude last said hold, and the call closes without asking if the gain stays at 4.4% or below for two checks in a row. Once the peak reaches 6%, it trails: it closes under 60% of the peak gain (or two typical 1-minute swings under the peak, whichever is lower), never under 4.4%, again after two checks. A failed review closes.
 - **Safety:** kill switch only.
 - **Disclosure:** none; calls look like any other caller's. Claude's reasons stay in the bot's own records.
 - **Alerts:** Telegram.

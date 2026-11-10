@@ -1,6 +1,6 @@
 // What to do with an open call this monitor tick: nothing, ask Claude (close or hold), or close now.
 
-import { CONFIRM_CHECKS, HOLD_REVIEW_EVERY_SECS, LOCK_FLOOR, TAKE_PROFIT, TRAIL_FROM, TRAIL_KEEP, TRAIL_SWINGS } from "./config";
+import { CONFIRM_CHECKS, HOLD_REVIEW_EVERY_SECS, LOCK_FLOOR, PULLBACK_REVIEW, TAKE_PROFIT, TRAIL_FROM, TRAIL_KEEP, TRAIL_SWINGS } from "./config";
 
 export type ExitStep = { step: "none" } | { step: "review" } | { step: "close"; why: string };
 
@@ -15,7 +15,8 @@ export function exitLine(peak: number, swing: number): number {
  * `pnl` and `peak` are gains by the sell quote. `lastReviewAt` is null until Claude first chooses to hold
  * past the take-profit. From then on the call closes once it has been at or under its exit line for
  * CONFIRM_CHECKS checks in a row (`below` counts the earlier ones; the result carries the new count),
- * and Claude is asked again every few minutes.
+ * and Claude is asked again every few minutes, or at once when the gain falls PULLBACK_REVIEW below
+ * `heldHigh`, its high since Claude last chose to hold.
  */
 export function exitStep(
   pnl: number,
@@ -24,6 +25,7 @@ export function exitStep(
   now: number,
   swing: number,
   below: number,
+  heldHigh: number = pnl,
 ): ExitStep & { below: number } {
   if (lastReviewAt === null) return { ...(pnl >= TAKE_PROFIT ? { step: "review" } : { step: "none" }), below: 0 };
   const line = exitLine(peak, swing);
@@ -34,6 +36,7 @@ export function exitStep(
     }
     return { step: "none", below: below + 1 };
   }
+  if (heldHigh - pnl >= PULLBACK_REVIEW - 1e-9) return { step: "review", below: 0 };
   if (now - lastReviewAt >= HOLD_REVIEW_EVERY_SECS) return { step: "review", below: 0 };
   return { step: "none", below: 0 };
 }

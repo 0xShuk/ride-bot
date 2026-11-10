@@ -41,6 +41,8 @@ export class Bot {
   private lastRoundAt = 0;
   /** Per call: monitor checks in a row at or under its exit line. */
   private belowLine = new Map<number, number>();
+  /** Per call: its highest gain since Claude last chose to hold (falls back to the peak after a restart). */
+  private heldHigh = new Map<number, number>();
   /** Per coin: typical 1-minute swing (mean high-low range / close), refreshed every 5 minutes. */
   private swings = new Map<string, { swing: number; at: number }>();
 
@@ -326,7 +328,9 @@ export class Bot {
         if (c.peakPnlPct === null || pnl > c.peakPnlPct) await this.store.updateCall(c.id, { peakPnlPct: pnl });
 
         const swing = peak >= TRAIL_FROM ? await this.swing(c.mint) : 0;
-        const next = exitStep(pnl, peak, c.lastReviewAt, now, swing, this.belowLine.get(c.id) ?? 0);
+        const heldHigh = Math.max(this.heldHigh.get(c.id) ?? peak, pnl);
+        this.heldHigh.set(c.id, heldHigh);
+        const next = exitStep(pnl, peak, c.lastReviewAt, now, swing, this.belowLine.get(c.id) ?? 0, heldHigh);
         this.belowLine.set(c.id, next.below);
         if (next.step === "none") continue;
         if (next.step === "close") {
@@ -357,6 +361,7 @@ export class Bot {
           await this.requestClose(c, pnl, verdict.reason);
         } else {
           await this.store.updateCall(c.id, { lastReviewAt: now });
+          this.heldHigh.set(c.id, pnl);
           await this.tg.send(
             `Holding ${c.symbol} at +${(pnl * 100).toFixed(1)}% (peak ${(peak * 100).toFixed(1)}%, ${Math.round(minutesLeft)}m left): ${verdict.reason}`,
           );

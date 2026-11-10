@@ -7,6 +7,7 @@ import {
   HOLD_REVIEW_EVERY_SECS,
   LOCK_FLOOR,
   MAX_CALLS_PER_DAY,
+  PULLBACK_REVIEW,
   MODEL,
   STYLE,
   TAKE_PROFIT,
@@ -111,7 +112,7 @@ export type HoldReview = {
 
 const REVIEW_SYSTEM = `You manage one open call in a small autonomous trading experiment on Solana: a token bought with USDC, sold back automatically when its window ends.
 Gains are what selling the whole position would return now, after swap costs. It is up at least ${TAKE_PROFIT * 100}%. Decide whether to close it now and lock the gain, or keep holding for a higher price.
-If you hold, you are asked again in ${HOLD_REVIEW_EVERY_SECS / 60} minutes. Meanwhile the call is closed automatically if its gain stays at ${LOCK_FLOOR * 100}% or below for a minute.
+If you hold, you are asked again in ${HOLD_REVIEW_EVERY_SECS / 60} minutes, or at once if the gain falls ${PULLBACK_REVIEW * 100} points below where it is now (or below any higher point it reaches). Meanwhile the call is closed automatically if its gain stays at ${LOCK_FLOOR * 100}% or below for a minute.
 Once its peak reaches ${TRAIL_FROM * 100}%, it is also closed if the gain stays for a minute below ${TRAIL_KEEP * 100}% of the peak (or ${TRAIL_SWINGS} typical 1-minute swings under it, whichever is lower).
 An early close is only possible while the gain is above 4%; once it falls below, the call can only be sold at the end of its window, at whatever the price is then.
 ${STYLE === "swing" ? "This is a high-risk vault chasing big moves: pullbacks of several points are normal, and a strong trend is worth holding for a much larger gain. " : "Small pullbacks after a move are normal. "}Hold when the trend is still up (higher lows, steady or rising volume, no sharp rejection from the high). Close when the move is stalling, reversing, or spiking on fading volume, or when little time is left.`;

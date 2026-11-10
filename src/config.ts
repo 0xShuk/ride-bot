@@ -18,6 +18,9 @@ type Profile = {
   holdReviewEverySecs: number;
   lockFloor: number;
   trailFrom: number;
+  /** While holding, ask Claude again at once when the gain falls this far below its high since Claude
+   *  last said hold, instead of waiting for the next timed review. */
+  pullbackReview: number;
   maxPump5mPct: number;
   maxRoundTripCost: number;
   /** Skip a coin whose average hourly candle (high - low over close, last 24h) is under this: it
@@ -48,7 +51,9 @@ const PROFILES: Record<string, Profile> = {
     // (minEarlyProfitBps 400); the 0.4 points cover the price moving and the sale filling worse
     // than quoted while the close is cranked.
     lockFloor: 0.044,
-    trailFrom: 0.08,
+    // Owner 2026-11-10: from 8%, a 6-8% peak was protected only by the 4.4% floor.
+    trailFrom: 0.06,
+    pullbackReview: 0.015,
     maxPump5mPct: 3, // volatile coins move 1-2% in 5 minutes all the time
     // Owner 2026-11-10: the other caller's best rides (LMAO +79%, Hh3oTa, BELIEVE) cost 1.4-2.8% round trip.
     maxRoundTripCost: 0.025,
@@ -75,7 +80,9 @@ const PROFILES: Record<string, Profile> = {
     takeProfit: 0.2,
     holdReviewEverySecs: 15 * 60,
     lockFloor: 0.12,
-    trailFrom: 0.3,
+    // Owner 2026-11-10: WEALTH peaked at 20.2% and closed at 10.5% with Claude asked only every 15 minutes.
+    trailFrom: 0.25,
+    pullbackReview: 0.05,
     maxPump5mPct: 4,
     maxRoundTripCost: 0.03, // owner 2026-11-08: small next to the 20%+ moves it chases
     minHourlyRange: 0.025,
@@ -120,6 +127,8 @@ export const HOLD_REVIEW_EVERY_SECS = P.holdReviewEverySecs;
 export const LOCK_FLOOR = P.lockFloor;
 /** Trailing starts once the peak gain reaches this; below it only the floor closes a held call. */
 export const TRAIL_FROM = P.trailFrom;
+/** While holding, a fall of this much from the high since the last hold asks Claude again at once. */
+export const PULLBACK_REVIEW = P.pullbackReview;
 /** Trailing keeps this share of the peak gain (a 10% peak closes at 6%)... */
 export const TRAIL_KEEP = 0.6;
 /** ...or allows this many of the coin's typical 1-minute swings below the peak, whichever leaves more room. */
