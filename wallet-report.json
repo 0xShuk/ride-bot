@@ -1,0 +1,2374 @@
+{
+  "wallet": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+  "since": 1708042276,
+  "bonds": {
+    "posted": "67000000000000",
+    "returned": "0"
+  },
+  "rides": [
+    {
+      "mint": "KMNo3nJsBXfcpJTVhZcXLW7RmTwTt4GVFE7suUBo9sS",
+      "openedAt": "2026-11-04T18:40:41.000Z",
+      "in": 695,
+      "sell": {
+        "time": 1793819477,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 691.588914,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 4.841122,
+        "tip": 0,
+        "treasury": 686.747792,
+        "early": false
+      },
+      "gross": -3.4110859999999548,
+      "vault": -8.252207999999996
+    },
+    {
+      "mint": "KMNo3nJsBXfcpJTVhZcXLW7RmTwTt4GVFE7suUBo9sS",
+      "openedAt": "2026-11-04T18:54:41.000Z",
+      "in": 749,
+      "sell": {
+        "time": 1793820519,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 735.007452,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 5.145052,
+        "tip": 0,
+        "treasury": 729.8624,
+        "early": false
+      },
+      "gross": -13.992548000000056,
+      "vault": -19.13760000000002
+    },
+    {
+      "mint": "KMNo3nJsBXfcpJTVhZcXLW7RmTwTt4GVFE7suUBo9sS",
+      "openedAt": "2026-11-04T18:56:51.000Z",
+      "in": 567,
+      "sell": {
+        "time": 1793820529,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 558.184938,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 3.907294,
+        "tip": 0,
+        "treasury": 554.277644,
+        "early": false
+      },
+      "gross": -8.815062000000012,
+      "vault": -12.72235599999999
+    },
+    {
+      "mint": "XsueG8BtpquVJX9LVLLEGuViXUungE6WmK5YZ3p3bd1",
+      "openedAt": "2026-11-04T19:11:42.000Z",
+      "in": 596,
+      "sell": {
+        "time": 1793821427,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 593.074725,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 4.151523,
+        "tip": 0,
+        "treasury": 588.923202,
+        "early": false
+      },
+      "gross": -2.925275000000056,
+      "vault": -7.076798000000053
+    },
+    {
+      "mint": "HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump",
+      "openedAt": "2026-11-04T20:26:44.000Z",
+      "in": 908,
+      "sell": {
+        "time": 1793825927,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 847.464863,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 5.932254,
+        "tip": 0,
+        "treasury": 841.532609,
+        "early": false
+      },
+      "gross": -60.53513699999996,
+      "vault": -66.46739100000002
+    },
+    {
+      "mint": "HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump",
+      "openedAt": "2026-11-04T20:41:54.000Z",
+      "in": 515,
+      "sell": {
+        "time": 1793826828,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 457.4759,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 3.202331,
+        "tip": 0,
+        "treasury": 454.273569,
+        "early": false
+      },
+      "gross": -57.524099999999976,
+      "vault": -60.72643099999999
+    },
+    {
+      "mint": "WENAZ2WyPbmgvUcKfQ8hyMDfBQP9bZ65hsZ5KTFrRGZ",
+      "openedAt": "2026-11-04T20:56:45.000Z",
+      "in": 391,
+      "sell": {
+        "time": 1793827726,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 387.465033,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.712255,
+        "tip": 0,
+        "treasury": 384.752778,
+        "early": false
+      },
+      "gross": -3.5349669999999946,
+      "vault": -6.247222000000022
+    },
+    {
+      "mint": "WXMRyRZhsa19ety5erZhHg4N3xj3EVN92u94422teJp",
+      "openedAt": "2026-11-04T21:43:10.000Z",
+      "in": 714,
+      "sell": {
+        "time": 1793830428,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 697.687747,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 4.883814,
+        "tip": 0,
+        "treasury": 692.803933,
+        "early": false
+      },
+      "gross": -16.312253000000055,
+      "vault": -21.19606699999997
+    },
+    {
+      "mint": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+      "openedAt": "2026-11-04T21:58:09.000Z",
+      "in": 541,
+      "sell": {
+        "time": 1793831327,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 540.01617,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 3.780113,
+        "tip": 0,
+        "treasury": 536.236057,
+        "early": false
+      },
+      "gross": -0.9838300000000118,
+      "vault": -4.76394300000004
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-05T11:28:27.000Z",
+      "in": 857,
+      "sell": {
+        "time": 1793879931,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 858.988854,
+        "payout": 1.789969,
+        "profitFee": 0.198885,
+        "swapFee": 5.999,
+        "tip": 0,
+        "treasury": 851.001,
+        "early": false
+      },
+      "gross": 1.9888539999999466,
+      "vault": -5.999000000000024
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-05T11:43:26.000Z",
+      "in": 366,
+      "sell": {
+        "time": 1793880833,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 368.902235,
+        "payout": 2.612012,
+        "profitFee": 0.290223,
+        "swapFee": 2.562,
+        "tip": 0,
+        "treasury": 363.438,
+        "early": false
+      },
+      "gross": 2.9022350000000188,
+      "vault": -2.562000000000012
+    },
+    {
+      "mint": "TTWofwAge91oFhZs7kpQdyrVRkmevgM88xijGvQFbKo",
+      "openedAt": "2026-11-05T13:13:38.000Z",
+      "in": 756,
+      "sell": {
+        "time": 1793898835,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 748.266495,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 5.237865,
+        "tip": 0,
+        "treasury": 743.02863,
+        "early": false
+      },
+      "gross": -7.7335050000000365,
+      "vault": -12.971369999999979
+    },
+    {
+      "mint": "TTWofwAge91oFhZs7kpQdyrVRkmevgM88xijGvQFbKo",
+      "openedAt": "2026-11-05T13:28:38.000Z",
+      "in": 573,
+      "sell": {
+        "time": 1793899734,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 538.363757,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 3.768546,
+        "tip": 0,
+        "treasury": 534.595211,
+        "early": false
+      },
+      "gross": -34.636243000000036,
+      "vault": -38.40478900000005
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-05T13:58:40.000Z",
+      "in": 326,
+      "sell": {
+        "time": 1793895857,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 342.017234,
+        "payout": 14.415511,
+        "profitFee": 1.601723,
+        "swapFee": 2.282,
+        "tip": 0,
+        "treasury": 323.718,
+        "early": true
+      },
+      "gross": 16.017233999999974,
+      "vault": -2.2819999999999823
+    },
+    {
+      "mint": "TTWofwAge91oFhZs7kpQdyrVRkmevgM88xijGvQFbKo",
+      "openedAt": "2026-11-05T14:28:25.000Z",
+      "in": 247,
+      "sell": {
+        "time": 1793903333,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 231.882704,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.623178,
+        "tip": 0,
+        "treasury": 230.259526,
+        "early": false
+      },
+      "gross": -15.11729600000001,
+      "vault": -16.740474000000006
+    },
+    {
+      "mint": "TTWofwAge91oFhZs7kpQdyrVRkmevgM88xijGvQFbKo",
+      "openedAt": "2026-11-05T14:58:25.000Z",
+      "in": 187,
+      "sell": {
+        "time": 1793905134,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 181.109209,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.267764,
+        "tip": 0,
+        "treasury": 179.841445,
+        "early": false
+      },
+      "gross": -5.890791000000007,
+      "vault": -7.158555000000007
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-05T15:58:26.000Z",
+      "in": 144,
+      "sell": {
+        "time": 1793896561,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 151.380617,
+        "payout": 6.642556,
+        "profitFee": 0.738061,
+        "swapFee": 1.008,
+        "tip": 0,
+        "treasury": 142.992,
+        "early": true
+      },
+      "gross": 7.380617000000001,
+      "vault": -1.0080000000000098
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-05T16:13:26.000Z",
+      "in": 109,
+      "sell": {
+        "time": 1793896550,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 114.576614,
+        "payout": 5.018953,
+        "profitFee": 0.557661,
+        "swapFee": 0.763,
+        "tip": 0,
+        "treasury": 108.237,
+        "early": true
+      },
+      "gross": 5.576614000000006,
+      "vault": -0.7630000000000052
+    },
+    {
+      "mint": "euro5sNHrZC2wu2RoLvy6xxoVMc3Qnd1vjxoWf4MftA",
+      "openedAt": "2026-11-05T17:43:27.000Z",
+      "in": 532,
+      "sell": {
+        "time": 1793915033,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 532.03775,
+        "payout": 0.033975,
+        "profitFee": 0.003775,
+        "swapFee": 3.724,
+        "tip": 0,
+        "treasury": 528.276,
+        "early": false
+      },
+      "gross": 0.03774999999995998,
+      "vault": -3.7240000000000464
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-05T17:58:28.000Z",
+      "in": 403,
+      "sell": {
+        "time": 1793915933,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 397.58439,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.78309,
+        "tip": 0,
+        "treasury": 394.8013,
+        "early": false
+      },
+      "gross": -5.415610000000015,
+      "vault": -8.198699999999974
+    },
+    {
+      "mint": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+      "openedAt": "2026-11-06T00:19:03.000Z",
+      "in": 819,
+      "sell": {
+        "time": 1793938884,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 805.988478,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 5.641919,
+        "tip": 0,
+        "treasury": 800.346559,
+        "early": false
+      },
+      "gross": -13.011522000000014,
+      "vault": -18.653441000000043
+    },
+    {
+      "mint": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+      "openedAt": "2026-11-06T01:34:01.000Z",
+      "in": 465,
+      "sell": {
+        "time": 1793943384,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 448.165005,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 3.137155,
+        "tip": 0,
+        "treasury": 445.02785,
+        "early": false
+      },
+      "gross": -16.834994999999992,
+      "vault": -19.97215
+    },
+    {
+      "mint": "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN",
+      "openedAt": "2026-11-06T02:18:54.000Z",
+      "in": 505,
+      "sell": {
+        "time": 1793946083,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 500.651337,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 3.504559,
+        "tip": 0,
+        "treasury": 497.146778,
+        "early": false
+      },
+      "gross": -4.348662999999988,
+      "vault": -7.853222000000017
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-06T07:48:55.000Z",
+      "in": 453,
+      "sell": {
+        "time": 1793953987,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 475.262036,
+        "payout": 20.035833,
+        "profitFee": 2.226203,
+        "swapFee": 3.171,
+        "tip": 0,
+        "treasury": 449.829,
+        "early": true
+      },
+      "gross": 22.262036000000023,
+      "vault": -3.1709999999999923
+    },
+    {
+      "mint": "TTWofwAge91oFhZs7kpQdyrVRkmevgM88xijGvQFbKo",
+      "openedAt": "2026-11-06T08:34:16.000Z",
+      "in": 453,
+      "sell": {
+        "time": 1793968585,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 449.785201,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 3.148496,
+        "tip": 0,
+        "treasury": 446.636705,
+        "early": false
+      },
+      "gross": -3.2147990000000277,
+      "vault": -6.363294999999994
+    },
+    {
+      "mint": "TTWofwAge91oFhZs7kpQdyrVRkmevgM88xijGvQFbKo",
+      "openedAt": "2026-11-06T08:49:14.000Z",
+      "in": 343,
+      "sell": {
+        "time": 1793969494,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 340.209898,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.381469,
+        "tip": 0,
+        "treasury": 337.828429,
+        "early": false
+      },
+      "gross": -2.7901019999999903,
+      "vault": -5.171570999999972
+    },
+    {
+      "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+      "openedAt": "2026-11-06T10:49:31.000Z",
+      "in": 195,
+      "sell": {
+        "time": 1793976686,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 199.96122,
+        "payout": 4.465098,
+        "profitFee": 0.496122,
+        "swapFee": 1.365,
+        "tip": 0,
+        "treasury": 193.635,
+        "early": false
+      },
+      "gross": 4.961219999999997,
+      "vault": -1.365000000000009
+    },
+    {
+      "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+      "openedAt": "2026-11-06T11:04:31.000Z",
+      "in": 148,
+      "sell": {
+        "time": 1793977586,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 149.52367,
+        "payout": 1.371303,
+        "profitFee": 0.152367,
+        "swapFee": 1.036,
+        "tip": 0,
+        "treasury": 146.964,
+        "early": false
+      },
+      "gross": 1.5236700000000098,
+      "vault": -1.0360000000000014
+    },
+    {
+      "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+      "openedAt": "2026-11-06T11:19:30.000Z",
+      "in": 113,
+      "sell": {
+        "time": 1793978487,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 113.918212,
+        "payout": 0.826391,
+        "profitFee": 0.091821,
+        "swapFee": 0.791,
+        "tip": 0,
+        "treasury": 112.209,
+        "early": false
+      },
+      "gross": 0.9182119999999969,
+      "vault": -0.7909999999999968
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-06T11:49:30.000Z",
+      "in": 85,
+      "sell": {
+        "time": 1793980284,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 77.58187,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.543073,
+        "tip": 0,
+        "treasury": 77.038797,
+        "early": false
+      },
+      "gross": -7.418130000000005,
+      "vault": -7.961202999999998
+    },
+    {
+      "mint": "FjPKUGnF5zBpdEv18gT8FJCtxh3MKrFkoeYekgYr1win",
+      "openedAt": "2026-11-06T12:04:31.000Z",
+      "in": 64,
+      "sell": {
+        "time": 1793981186,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 59.886032,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.419202,
+        "tip": 0,
+        "treasury": 59.46683,
+        "early": false
+      },
+      "gross": -4.113968,
+      "vault": -4.533169999999998
+    },
+    {
+      "mint": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+      "openedAt": "2026-11-06T12:19:32.000Z",
+      "in": 49,
+      "sell": {
+        "time": 1793976026,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 52.035297,
+        "payout": 2.731768,
+        "profitFee": 0.303529,
+        "swapFee": 0.343,
+        "tip": 0,
+        "treasury": 48.657,
+        "early": true
+      },
+      "gross": 3.035297,
+      "vault": -0.3430000000000035
+    },
+    {
+      "mint": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+      "openedAt": "2026-11-06T12:34:32.000Z",
+      "in": 37,
+      "sell": {
+        "time": 1793982985,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 37.897417,
+        "payout": 0.807676,
+        "profitFee": 0.089741,
+        "swapFee": 0.259,
+        "tip": 0,
+        "treasury": 36.741,
+        "early": false
+      },
+      "gross": 0.8974169999999972,
+      "vault": -0.25900000000000034
+    },
+    {
+      "mint": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+      "openedAt": "2026-11-06T13:19:32.000Z",
+      "in": 566,
+      "sell": {
+        "time": 1793985685,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 584.819894,
+        "payout": 16.937905,
+        "profitFee": 1.881989,
+        "swapFee": 3.962,
+        "tip": 0,
+        "treasury": 562.038,
+        "early": false
+      },
+      "gross": 18.819893999999977,
+      "vault": -3.961999999999989
+    },
+    {
+      "mint": "FjPKUGnF5zBpdEv18gT8FJCtxh3MKrFkoeYekgYr1win",
+      "openedAt": "2026-11-06T13:34:32.000Z",
+      "in": 429,
+      "sell": {
+        "time": 1793986585,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 410.596905,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.874178,
+        "tip": 0,
+        "treasury": 407.722727,
+        "early": false
+      },
+      "gross": -18.403095000000008,
+      "vault": -21.27727299999998
+    },
+    {
+      "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+      "openedAt": "2026-11-06T14:34:32.000Z",
+      "in": 324,
+      "sell": {
+        "time": 1793990187,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 336.086353,
+        "payout": 10.877718,
+        "profitFee": 1.208635,
+        "swapFee": 2.268,
+        "tip": 0,
+        "treasury": 321.732,
+        "early": false
+      },
+      "gross": 12.086352999999974,
+      "vault": -2.2679999999999723
+    },
+    {
+      "mint": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+      "openedAt": "2026-11-06T16:04:33.000Z",
+      "in": 386,
+      "sell": {
+        "time": 1793995585,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 382.396827,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.676777,
+        "tip": 0,
+        "treasury": 379.72005,
+        "early": false
+      },
+      "gross": -3.6031730000000266,
+      "vault": -6.279949999999985
+    },
+    {
+      "mint": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+      "openedAt": "2026-11-06T16:34:35.000Z",
+      "in": 369,
+      "sell": {
+        "time": 1793997385,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 359.641742,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.517492,
+        "tip": 0,
+        "treasury": 357.12425,
+        "early": false
+      },
+      "gross": -9.358257999999978,
+      "vault": -11.875749999999982
+    },
+    {
+      "mint": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+      "openedAt": "2026-11-06T16:50:06.000Z",
+      "in": 288,
+      "sell": {
+        "time": 1793998287,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 282.092447,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.974647,
+        "tip": 0,
+        "treasury": 280.1178,
+        "early": false
+      },
+      "gross": -5.907553000000007,
+      "vault": -7.882200000000012
+    },
+    {
+      "mint": "A7bdiYdS5GjqGFtxf17ppRHtDKPkkRqbKtR27dxvQXaS",
+      "openedAt": "2026-11-06T17:04:51.000Z",
+      "in": 218,
+      "sell": {
+        "time": 1793999630,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 213.160728,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.492125,
+        "tip": 0,
+        "treasury": 211.668603,
+        "early": false
+      },
+      "gross": -4.839271999999994,
+      "vault": -6.33139700000001
+    },
+    {
+      "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+      "openedAt": "2026-11-06T17:19:50.000Z",
+      "in": 166,
+      "sell": {
+        "time": 1794000086,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 164.207669,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.149453,
+        "tip": 0,
+        "treasury": 163.058216,
+        "early": false
+      },
+      "gross": -1.7923309999999901,
+      "vault": -2.9417840000000126
+    },
+    {
+      "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+      "openedAt": "2026-11-06T17:34:51.000Z",
+      "in": 262,
+      "sell": {
+        "time": 1794000985,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 258.326915,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.808288,
+        "tip": 0,
+        "treasury": 256.518627,
+        "early": false
+      },
+      "gross": -3.6730850000000146,
+      "vault": -5.481373000000019
+    },
+    {
+      "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+      "openedAt": "2026-11-06T17:49:53.000Z",
+      "in": 297,
+      "sell": {
+        "time": 1794001886,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 293.306155,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.053143,
+        "tip": 0,
+        "treasury": 291.253012,
+        "early": false
+      },
+      "gross": -3.6938450000000103,
+      "vault": -5.7469879999999876
+    },
+    {
+      "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+      "openedAt": "2026-11-06T18:05:53.000Z",
+      "in": 225,
+      "sell": {
+        "time": 1794002786,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 221.88611,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.553202,
+        "tip": 0,
+        "treasury": 220.332908,
+        "early": false
+      },
+      "gross": -3.113889999999998,
+      "vault": -4.667091999999997
+    },
+    {
+      "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+      "openedAt": "2026-11-06T18:35:56.000Z",
+      "in": 172,
+      "sell": {
+        "time": 1794004585,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 165.532149,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.158725,
+        "tip": 0,
+        "treasury": 164.373424,
+        "early": false
+      },
+      "gross": -6.467850999999996,
+      "vault": -7.626576
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T06:04:10.000Z",
+      "in": 771,
+      "sell": {
+        "time": 1794045988,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 791.60555,
+        "payout": 18.544995,
+        "profitFee": 2.060555,
+        "swapFee": 5.397,
+        "tip": 0,
+        "treasury": 765.603,
+        "early": false
+      },
+      "gross": 20.605549999999994,
+      "vault": -5.397000000000048
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T06:34:10.000Z",
+      "in": 584,
+      "sell": {
+        "time": 1794047787,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 578.919408,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 4.052435,
+        "tip": 0,
+        "treasury": 574.866973,
+        "early": false
+      },
+      "gross": -5.080592000000024,
+      "vault": -9.13302699999997
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T06:49:10.000Z",
+      "in": 442,
+      "sell": {
+        "time": 1794048688,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 446.880041,
+        "payout": 4.392037,
+        "profitFee": 0.488004,
+        "swapFee": 3.094,
+        "tip": 0,
+        "treasury": 438.906,
+        "early": false
+      },
+      "gross": 4.880041000000006,
+      "vault": -3.093999999999994
+    },
+    {
+      "mint": "FjPKUGnF5zBpdEv18gT8FJCtxh3MKrFkoeYekgYr1win",
+      "openedAt": "2026-11-07T07:48:58.000Z",
+      "in": 335,
+      "sell": {
+        "time": 1794042765,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 406.806447,
+        "payout": 64.625803,
+        "profitFee": 7.180644,
+        "swapFee": 2.345,
+        "tip": 0,
+        "treasury": 332.655,
+        "early": true
+      },
+      "gross": 71.80644699999999,
+      "vault": -2.3450000000000273
+    },
+    {
+      "mint": "oreoU2P8bN6jkk3jbaiVxYnG1dCXcYxwhwyK9jSybcp",
+      "openedAt": "2026-11-07T08:03:58.000Z",
+      "in": 254,
+      "sell": {
+        "time": 1794053187,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 252.481042,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.767367,
+        "tip": 0,
+        "treasury": 250.713675,
+        "early": false
+      },
+      "gross": -1.5189579999999978,
+      "vault": -3.286325000000005
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T08:18:58.000Z",
+      "in": 192,
+      "sell": {
+        "time": 1794054087,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 192.732952,
+        "payout": 0.659657,
+        "profitFee": 0.073295,
+        "swapFee": 1.344,
+        "tip": 0,
+        "treasury": 190.656,
+        "early": false
+      },
+      "gross": 0.7329520000000116,
+      "vault": -1.343999999999994
+    },
+    {
+      "mint": "FjPKUGnF5zBpdEv18gT8FJCtxh3MKrFkoeYekgYr1win",
+      "openedAt": "2026-11-07T08:34:00.000Z",
+      "in": 146,
+      "sell": {
+        "time": 1794042776,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 175.778175,
+        "payout": 26.800358,
+        "profitFee": 2.977817,
+        "swapFee": 1.022,
+        "tip": 0,
+        "treasury": 144.978,
+        "early": true
+      },
+      "gross": 29.778175000000005,
+      "vault": -1.0219999999999914
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T09:49:19.000Z",
+      "in": 226,
+      "sell": {
+        "time": 1794059486,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 233.201097,
+        "payout": 6.480988,
+        "profitFee": 0.720109,
+        "swapFee": 1.582,
+        "tip": 0,
+        "treasury": 224.418,
+        "early": false
+      },
+      "gross": 7.201097000000004,
+      "vault": -1.5819999999999936
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T10:04:18.000Z",
+      "in": 171,
+      "sell": {
+        "time": 1794060387,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 173.502653,
+        "payout": 2.252388,
+        "profitFee": 0.250265,
+        "swapFee": 1.197,
+        "tip": 0,
+        "treasury": 169.803,
+        "early": false
+      },
+      "gross": 2.5026530000000093,
+      "vault": -1.1970000000000027
+    },
+    {
+      "mint": "GJAFwWjJ3vnTsrQVabjBVK2TYB1YtRCQXRDfDgUnpump",
+      "openedAt": "2026-11-07T10:34:20.000Z",
+      "in": 316,
+      "sell": {
+        "time": 1794062187,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 274.76597,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.923361,
+        "tip": 0,
+        "treasury": 272.842609,
+        "early": false
+      },
+      "gross": -41.23403000000002,
+      "vault": -43.15739100000002
+    },
+    {
+      "mint": "GJAFwWjJ3vnTsrQVabjBVK2TYB1YtRCQXRDfDgUnpump",
+      "openedAt": "2026-11-07T10:49:19.000Z",
+      "in": 378,
+      "sell": {
+        "time": 1794063087,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 336.495157,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.355466,
+        "tip": 0,
+        "treasury": 334.139691,
+        "early": false
+      },
+      "gross": -41.504842999999994,
+      "vault": -43.86030899999997
+    },
+    {
+      "mint": "HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump",
+      "openedAt": "2026-11-07T11:34:18.000Z",
+      "in": 222,
+      "sell": {
+        "time": 1794065419,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 231.614263,
+        "payout": 8.652837,
+        "profitFee": 0.961426,
+        "swapFee": 1.554,
+        "tip": 0,
+        "treasury": 220.446,
+        "early": true
+      },
+      "gross": 9.614262999999994,
+      "vault": -1.554000000000002
+    },
+    {
+      "mint": "HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump",
+      "openedAt": "2026-11-07T11:49:18.000Z",
+      "in": 168,
+      "sell": {
+        "time": 1794066687,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 169.48223,
+        "payout": 1.334007,
+        "profitFee": 0.148223,
+        "swapFee": 1.176,
+        "tip": 0,
+        "treasury": 166.824,
+        "early": false
+      },
+      "gross": 1.482229999999987,
+      "vault": -1.1759999999999877
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T12:19:19.000Z",
+      "in": 188,
+      "sell": {
+        "time": 1794068488,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 192.425661,
+        "payout": 3.983095,
+        "profitFee": 0.442566,
+        "swapFee": 1.316,
+        "tip": 0,
+        "treasury": 186.684,
+        "early": false
+      },
+      "gross": 4.425660999999991,
+      "vault": -1.3160000000000025
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T12:34:21.000Z",
+      "in": 189,
+      "sell": {
+        "time": 1794069387,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 191.747163,
+        "payout": 2.472447,
+        "profitFee": 0.274716,
+        "swapFee": 1.323,
+        "tip": 0,
+        "treasury": 187.677,
+        "early": false
+      },
+      "gross": 2.7471630000000005,
+      "vault": -1.3230000000000075
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T12:49:20.000Z",
+      "in": 143,
+      "sell": {
+        "time": 1794070287,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 145.909635,
+        "payout": 2.618672,
+        "profitFee": 0.290963,
+        "swapFee": 1.001,
+        "tip": 0,
+        "treasury": 141.999,
+        "early": false
+      },
+      "gross": 2.9096350000000086,
+      "vault": -1.0010000000000048
+    },
+    {
+      "mint": "FjPKUGnF5zBpdEv18gT8FJCtxh3MKrFkoeYekgYr1win",
+      "openedAt": "2026-11-07T14:04:20.000Z",
+      "in": 74,
+      "sell": {
+        "time": 1794074787,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 72.552763,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.507869,
+        "tip": 0,
+        "treasury": 72.044894,
+        "early": false
+      },
+      "gross": -1.4472370000000012,
+      "vault": -1.9551060000000007
+    },
+    {
+      "mint": "HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump",
+      "openedAt": "2026-11-07T15:04:21.000Z",
+      "in": 204,
+      "sell": {
+        "time": 1794065629,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 213.814704,
+        "payout": 8.833234,
+        "profitFee": 0.98147,
+        "swapFee": 1.428,
+        "tip": 0,
+        "treasury": 202.572,
+        "early": true
+      },
+      "gross": 9.814704000000006,
+      "vault": -1.4279999999999973
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T15:49:20.000Z",
+      "in": 258,
+      "sell": {
+        "time": 1794077913,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 272.455574,
+        "payout": 13.010017,
+        "profitFee": 1.445557,
+        "swapFee": 1.806,
+        "tip": 0,
+        "treasury": 256.194,
+        "early": true
+      },
+      "gross": 14.455574000000013,
+      "vault": -1.8059999999999832
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T16:04:21.000Z",
+      "in": 236,
+      "sell": {
+        "time": 1794077902,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 250.548666,
+        "payout": 13.0938,
+        "profitFee": 1.454866,
+        "swapFee": 1.652,
+        "tip": 0,
+        "treasury": 234.348,
+        "early": true
+      },
+      "gross": 14.548665999999997,
+      "vault": -1.6519999999999868
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-07T16:49:29.000Z",
+      "in": 270,
+      "sell": {
+        "time": 1794077890,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 287.268922,
+        "payout": 15.54203,
+        "profitFee": 1.726892,
+        "swapFee": 1.89,
+        "tip": 0,
+        "treasury": 268.11,
+        "early": true
+      },
+      "gross": 17.268921999999975,
+      "vault": -1.8899999999999864
+    },
+    {
+      "mint": "GJAFwWjJ3vnTsrQVabjBVK2TYB1YtRCQXRDfDgUnpump",
+      "openedAt": "2026-11-07T17:19:24.000Z",
+      "in": 335,
+      "sell": {
+        "time": 1794074536,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 348.850231,
+        "payout": 12.465208,
+        "profitFee": 1.385023,
+        "swapFee": 2.345,
+        "tip": 0,
+        "treasury": 332.655,
+        "early": true
+      },
+      "gross": 13.850231000000008,
+      "vault": -2.3450000000000273
+    },
+    {
+      "mint": "Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk",
+      "openedAt": "2026-11-07T18:19:24.000Z",
+      "in": 425,
+      "sell": {
+        "time": 1794090087,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 420.537191,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.94376,
+        "tip": 0,
+        "treasury": 417.593431,
+        "early": false
+      },
+      "gross": -4.462808999999993,
+      "vault": -7.40656899999999
+    },
+    {
+      "mint": "Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk",
+      "openedAt": "2026-11-07T23:11:39.000Z",
+      "in": 707,
+      "sell": {
+        "time": 1794107638,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 697.783672,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 4.884485,
+        "tip": 0,
+        "treasury": 692.899187,
+        "early": false
+      },
+      "gross": -9.216327999999976,
+      "vault": -14.100813000000016
+    },
+    {
+      "mint": "Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk",
+      "openedAt": "2026-11-07T23:26:41.000Z",
+      "in": 535,
+      "sell": {
+        "time": 1794108538,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 521.810221,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 3.652671,
+        "tip": 0,
+        "treasury": 518.15755,
+        "early": false
+      },
+      "gross": -13.189779000000044,
+      "vault": -16.842449999999985
+    },
+    {
+      "mint": "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R",
+      "openedAt": "2026-11-07T23:56:40.000Z",
+      "in": 406,
+      "sell": {
+        "time": 1794110340,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 400.052742,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.800369,
+        "tip": 0,
+        "treasury": 397.252373,
+        "early": false
+      },
+      "gross": -5.947257999999977,
+      "vault": -8.747627000000023
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-08T12:41:57.000Z",
+      "in": 332,
+      "sell": {
+        "time": 1794156239,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 315.449164,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.208144,
+        "tip": 0,
+        "treasury": 313.24102,
+        "early": false
+      },
+      "gross": -16.550836000000004,
+      "vault": -18.758980000000008
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-08T12:56:56.000Z",
+      "in": 252,
+      "sell": {
+        "time": 1794157138,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 237.135634,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.659949,
+        "tip": 0,
+        "treasury": 235.475685,
+        "early": false
+      },
+      "gross": -14.86436599999999,
+      "vault": -16.524315
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T14:11:57.000Z",
+      "in": 191,
+      "sell": {
+        "time": 1794161639,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 191.566794,
+        "payout": 0.510115,
+        "profitFee": 0.056679,
+        "swapFee": 1.337,
+        "tip": 0,
+        "treasury": 189.663,
+        "early": false
+      },
+      "gross": 0.5667939999999874,
+      "vault": -1.336999999999989
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T14:42:00.000Z",
+      "in": 144,
+      "sell": {
+        "time": 1794163440,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 143.726769,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.006087,
+        "tip": 0,
+        "treasury": 142.720682,
+        "early": false
+      },
+      "gross": -0.27323100000000977,
+      "vault": -1.2793179999999893
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T14:56:57.000Z",
+      "in": 220,
+      "sell": {
+        "time": 1794164339,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 218.516309,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.529614,
+        "tip": 0,
+        "treasury": 216.986695,
+        "early": false
+      },
+      "gross": -1.4836909999999932,
+      "vault": -3.0133050000000026
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T15:12:12.000Z",
+      "in": 125,
+      "sell": {
+        "time": 1794165241,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 123.650659,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.865554,
+        "tip": 0,
+        "treasury": 122.785105,
+        "early": false
+      },
+      "gross": -1.3493409999999955,
+      "vault": -2.2148949999999985
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T15:27:13.000Z",
+      "in": 94,
+      "sell": {
+        "time": 1794166138,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 93.155073,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.652085,
+        "tip": 0,
+        "treasury": 92.502988,
+        "early": false
+      },
+      "gross": -0.8449269999999984,
+      "vault": -1.497011999999998
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T15:42:13.000Z",
+      "in": 71,
+      "sell": {
+        "time": 1794167039,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 70.961898,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.496733,
+        "tip": 0,
+        "treasury": 70.465165,
+        "early": false
+      },
+      "gross": -0.03810199999999497,
+      "vault": -0.5348350000000011
+    },
+    {
+      "mint": "Ai66LHZG9MCzg1WKdawwqduVAXpNDUuV8M3uyq5ppump",
+      "openedAt": "2026-11-08T16:27:12.000Z",
+      "in": 54,
+      "sell": {
+        "time": 1794166479,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 58.126517,
+        "payout": 3.713866,
+        "profitFee": 0.412651,
+        "swapFee": 0.378,
+        "tip": 0,
+        "treasury": 53.622,
+        "early": true
+      },
+      "gross": 4.126517,
+      "vault": -0.3780000000000001
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T20:12:14.000Z",
+      "in": 309,
+      "sell": {
+        "time": 1794183239,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 303.970681,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 2.127794,
+        "tip": 0,
+        "treasury": 301.842887,
+        "early": false
+      },
+      "gross": -5.029318999999987,
+      "vault": -7.157112999999981
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T20:27:14.000Z",
+      "in": 234,
+      "sell": {
+        "time": 1794184139,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 231.301516,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.61911,
+        "tip": 0,
+        "treasury": 229.682406,
+        "early": false
+      },
+      "gross": -2.6984840000000077,
+      "vault": -4.317594000000014
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T20:42:14.000Z",
+      "in": 177,
+      "sell": {
+        "time": 1794192239,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 176.996176,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.238973,
+        "tip": 0,
+        "treasury": 175.757203,
+        "early": false
+      },
+      "gross": -0.0038240000000087093,
+      "vault": -1.242796999999996
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T20:57:15.000Z",
+      "in": 134,
+      "sell": {
+        "time": 1794185942,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 133.966427,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.937764,
+        "tip": 0,
+        "treasury": 133.028663,
+        "early": false
+      },
+      "gross": -0.03357299999998986,
+      "vault": -0.9713370000000054
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-08T23:27:16.000Z",
+      "in": 107,
+      "sell": {
+        "time": 1794194940,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 106.484133,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.745388,
+        "tip": 0,
+        "treasury": 105.738745,
+        "early": false
+      },
+      "gross": -0.5158670000000001,
+      "vault": -1.2612550000000056
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-09T01:42:18.000Z",
+      "in": 258,
+      "sell": {
+        "time": 1794203042,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 254.6558,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.78259,
+        "tip": 0,
+        "treasury": 252.87321,
+        "early": false
+      },
+      "gross": -3.3442000000000007,
+      "vault": -5.12679
+    },
+    {
+      "mint": "PEPEqnuuCDbBC89p1u9vpnP1KQ2oj1xTcQBsjt9X55m",
+      "openedAt": "2026-11-09T01:57:18.000Z",
+      "in": 196,
+      "sell": {
+        "time": 1794203941,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 189.588358,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.327118,
+        "tip": 0,
+        "treasury": 188.26124,
+        "early": false
+      },
+      "gross": -6.4116420000000005,
+      "vault": -7.738760000000013
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-09T02:42:17.000Z",
+      "in": 247,
+      "sell": {
+        "time": 1794206641,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 233.526838,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.634687,
+        "tip": 0,
+        "treasury": 231.892151,
+        "early": false
+      },
+      "gross": -13.473162000000002,
+      "vault": -15.107848999999987
+    },
+    {
+      "mint": "SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb",
+      "openedAt": "2026-11-09T03:27:18.000Z",
+      "in": 195,
+      "sell": {
+        "time": 1794209340,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 185.436547,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.298055,
+        "tip": 0,
+        "treasury": 184.138492,
+        "early": false
+      },
+      "gross": -9.56345300000001,
+      "vault": -10.861507999999986
+    },
+    {
+      "mint": "AMD8XwJXgQ9WV45Wyj9yFLejxzf2J6VM1PJY8bJEjeES",
+      "openedAt": "2026-11-09T03:42:18.000Z",
+      "in": 174,
+      "sell": {
+        "time": 1794210240,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 169.648503,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.187539,
+        "tip": 0,
+        "treasury": 168.460964,
+        "early": false
+      },
+      "gross": -4.351496999999995,
+      "vault": -5.53903600000001
+    },
+    {
+      "mint": "SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb",
+      "openedAt": "2026-11-09T03:57:20.000Z",
+      "in": 132,
+      "sell": {
+        "time": 1794211199,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 125.64118,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.879488,
+        "tip": 0,
+        "treasury": 124.761692,
+        "early": false
+      },
+      "gross": -6.358819999999994,
+      "vault": -7.2383080000000035
+    },
+    {
+      "mint": "SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb",
+      "openedAt": "2026-11-09T04:12:19.000Z",
+      "in": 99,
+      "sell": {
+        "time": 1794211950,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 96.875463,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.678128,
+        "tip": 0,
+        "treasury": 96.197335,
+        "early": false
+      },
+      "gross": -2.1245370000000037,
+      "vault": -2.8026650000000046
+    },
+    {
+      "mint": "SPCXxcqXj6e5dJDVNovHN8744zkbhM2bYudU45BimGb",
+      "openedAt": "2026-11-09T04:27:19.000Z",
+      "in": 75,
+      "sell": {
+        "time": 1794212853,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 71.959085,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.503713,
+        "tip": 0,
+        "treasury": 71.455372,
+        "early": false
+      },
+      "gross": -3.0409149999999983,
+      "vault": -3.544628000000003
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-09T05:12:21.000Z",
+      "in": 57,
+      "sell": {
+        "time": 1794215552,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 57.293894,
+        "payout": 0.264505,
+        "profitFee": 0.029389,
+        "swapFee": 0.399,
+        "tip": 0,
+        "treasury": 56.601,
+        "early": false
+      },
+      "gross": 0.29389400000000165,
+      "vault": -0.3990000000000009
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-09T05:57:19.000Z",
+      "in": 105,
+      "sell": {
+        "time": 1794218255,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 105.865125,
+        "payout": 0.778613,
+        "profitFee": 0.086512,
+        "swapFee": 0.735,
+        "tip": 0,
+        "treasury": 104.265,
+        "early": false
+      },
+      "gross": 0.8651250000000061,
+      "vault": -0.7349999999999994
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-09T06:12:20.000Z",
+      "in": 125,
+      "sell": {
+        "time": 1794219150,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 123.784816,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.866493,
+        "tip": 0,
+        "treasury": 122.918323,
+        "early": false
+      },
+      "gross": -1.2151839999999936,
+      "vault": -2.081676999999999
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-09T06:27:21.000Z",
+      "in": 95,
+      "sell": {
+        "time": 1794220054,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 94.498816,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.661491,
+        "tip": 0,
+        "treasury": 93.837325,
+        "early": false
+      },
+      "gross": -0.501183999999995,
+      "vault": -1.162674999999993
+    },
+    {
+      "mint": "G7vQWurMkMMm2dU3iZpXYFTHT9Biio4F4gZCrwFpKNwG",
+      "openedAt": "2026-11-09T07:42:21.000Z",
+      "in": 217,
+      "sell": {
+        "time": 1794224551,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 220.53436,
+        "payout": 3.180924,
+        "profitFee": 0.353436,
+        "swapFee": 1.519,
+        "tip": 0,
+        "treasury": 215.481,
+        "early": false
+      },
+      "gross": 3.5343599999999924,
+      "vault": -1.5190000000000055
+    },
+    {
+      "mint": "METvsvVRapdj9cFLzq4Tr43xK4tAjQfwX76z3n6mWQL",
+      "openedAt": "2026-11-09T12:27:32.000Z",
+      "in": 297,
+      "sell": {
+        "time": 1794249006,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 304.31335,
+        "payout": 6.582015,
+        "profitFee": 0.731335,
+        "swapFee": 2.079,
+        "tip": 0,
+        "treasury": 294.921,
+        "early": false
+      },
+      "gross": 7.313350000000014,
+      "vault": -2.0790000000000077
+    },
+    {
+      "mint": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn",
+      "openedAt": "2026-11-09T12:42:31.000Z",
+      "in": 225,
+      "sell": {
+        "time": 1794249905,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 220.188142,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.541316,
+        "tip": 0,
+        "treasury": 218.646826,
+        "early": false
+      },
+      "gross": -4.811858000000001,
+      "vault": -6.353173999999996
+    },
+    {
+      "mint": "Dz9mQ9NzkBcCsuGPFJ3r1bS4wgqKMHBPiVuniW8Mbonk",
+      "openedAt": "2026-11-09T13:27:31.000Z",
+      "in": 161,
+      "sell": {
+        "time": 1794252457,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 156.962977,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.09874,
+        "tip": 0,
+        "treasury": 155.864237,
+        "early": false
+      },
+      "gross": -4.037023000000005,
+      "vault": -5.135762999999997
+    },
+    {
+      "mint": "9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump",
+      "openedAt": "2026-11-09T15:57:56.000Z",
+      "in": 213,
+      "sell": {
+        "time": 1794261606,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 192.189705,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.345327,
+        "tip": 0,
+        "treasury": 190.844378,
+        "early": false
+      },
+      "gross": -20.810294999999996,
+      "vault": -22.155621999999994
+    },
+    {
+      "mint": "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN",
+      "openedAt": "2026-11-09T16:13:17.000Z",
+      "in": 161,
+      "sell": {
+        "time": 1794262509,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 163.155701,
+        "payout": 1.940131,
+        "profitFee": 0.21557,
+        "swapFee": 1.127,
+        "tip": 0,
+        "treasury": 159.873,
+        "early": false
+      },
+      "gross": 2.1557009999999934,
+      "vault": -1.1270000000000095
+    },
+    {
+      "mint": "CARDSccUMFKoPRZxt5vt3ksUbxEFEcnZ3H2pd3dKxYjp",
+      "openedAt": "2026-11-10T00:48:30.000Z",
+      "in": 280,
+      "sell": {
+        "time": 1794273630,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 293.108408,
+        "payout": 11.797568,
+        "profitFee": 1.31084,
+        "swapFee": 1.96,
+        "tip": 0,
+        "treasury": 278.04,
+        "early": true
+      },
+      "gross": 13.108407999999997,
+      "vault": -1.9599999999999795
+    },
+    {
+      "mint": "PTNzAfFAB4LvoUQEUUGrFMyUoRLExMYjH6CcfyQfsVP",
+      "openedAt": "2026-11-10T06:19:06.000Z",
+      "in": 262,
+      "sell": {
+        "time": 1794313209,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 260.606648,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.824246,
+        "tip": 0,
+        "treasury": 258.782402,
+        "early": false
+      },
+      "gross": -1.393351999999993,
+      "vault": -3.2175980000000095
+    },
+    {
+      "mint": "HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump",
+      "openedAt": "2026-11-10T09:04:34.000Z",
+      "in": 174,
+      "sell": {
+        "time": 1794323109,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 151.6223,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.061356,
+        "tip": 0,
+        "treasury": 150.560944,
+        "early": false
+      },
+      "gross": -22.377700000000004,
+      "vault": -23.439055999999994
+    },
+    {
+      "mint": "9Pq7aLAbhDG2tTnS22cm6kuysZVcZpLFE368HWuypump",
+      "openedAt": "2026-11-10T09:19:35.000Z",
+      "in": 169,
+      "sell": {
+        "time": 1794316817,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 149.7238,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 1.048066,
+        "tip": 0,
+        "treasury": 148.675734,
+        "early": false
+      },
+      "gross": -19.27619999999999,
+      "vault": -20.324265999999994
+    },
+    {
+      "mint": "Hh3oTaqDCKKfdBgsQEvxp9sUwyNf8x9qmKqEMLBWpump",
+      "openedAt": "2026-11-10T09:34:34.000Z",
+      "in": 128,
+      "sell": {
+        "time": 1794324910,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 89.859223,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.629014,
+        "tip": 0,
+        "treasury": 89.230209,
+        "early": false
+      },
+      "gross": -38.140777,
+      "vault": -38.769791
+    },
+    {
+      "mint": "Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr",
+      "openedAt": "2026-11-10T09:49:39.000Z",
+      "in": 97,
+      "sell": {
+        "time": 1794325812,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 77.455408,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.542187,
+        "tip": 0,
+        "treasury": 76.913221,
+        "early": false
+      },
+      "gross": -19.544591999999994,
+      "vault": -20.086779000000007
+    },
+    {
+      "mint": "GTBxUiw6wJdmmkCGZgRHLyYxqu1vG4KtRpeox6yDpump",
+      "openedAt": "2026-11-10T10:04:52.000Z",
+      "in": 73,
+      "sell": {
+        "time": 1794326711,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 61.862105,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.433034,
+        "tip": 0,
+        "treasury": 61.429071,
+        "early": false
+      },
+      "gross": -11.137895,
+      "vault": -11.570929
+    },
+    {
+      "mint": "33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump",
+      "openedAt": "2026-11-10T10:34:51.000Z",
+      "in": 56,
+      "sell": {
+        "time": 1794313411,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 62.043314,
+        "payout": 5.438983,
+        "profitFee": 0.604331,
+        "swapFee": 0.392,
+        "tip": 0,
+        "treasury": 55.608,
+        "early": true
+      },
+      "gross": 6.043314000000002,
+      "vault": -0.392000000000003
+    },
+    {
+      "mint": "GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump",
+      "openedAt": "2026-11-10T10:49:59.000Z",
+      "in": 42,
+      "sell": {
+        "time": 1794308052,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 44.13737,
+        "payout": 1.923633,
+        "profitFee": 0.213737,
+        "swapFee": 0.294,
+        "tip": 0,
+        "treasury": 41.706,
+        "early": true
+      },
+      "gross": 2.137369999999997,
+      "vault": -0.29399999999999693
+    },
+    {
+      "mint": "8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump",
+      "openedAt": "2026-11-10T11:05:42.000Z",
+      "in": 42,
+      "sell": {
+        "time": 1794330462,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 32.434724,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.227043,
+        "tip": 0,
+        "treasury": 32.207681,
+        "early": false
+      },
+      "gross": -9.565275999999997,
+      "vault": -9.792318999999999
+    },
+    {
+      "mint": "GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump",
+      "openedAt": "2026-11-10T11:20:37.000Z",
+      "in": 32,
+      "sell": {
+        "time": 1794315267,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 37.84974,
+        "payout": 5.264766,
+        "profitFee": 0.584974,
+        "swapFee": 0.224,
+        "tip": 0,
+        "treasury": 31.776,
+        "early": true
+      },
+      "gross": 5.849739999999997,
+      "vault": -0.2240000000000002
+    },
+    {
+      "mint": "FgLfLhT3QoPWynZ53L3KUUsPhspWbdPUfMtmPfezXci6",
+      "openedAt": "2026-11-10T11:50:38.000Z",
+      "in": 18,
+      "sell": {
+        "time": 1794320804,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 18.72775,
+        "payout": 0.654975,
+        "profitFee": 0.072775,
+        "swapFee": 0.126,
+        "tip": 0,
+        "treasury": 17.874,
+        "early": true
+      },
+      "gross": 0.7277500000000003,
+      "vault": -0.12600000000000122
+    },
+    {
+      "mint": "6FhVPctYg363pQbs4iSvqyHe2cJzfsvFD96gePy6pump",
+      "openedAt": "2026-11-10T12:05:42.000Z",
+      "in": 14,
+      "sell": {
+        "time": 1794315242,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 14.699583,
+        "payout": 0.629625,
+        "profitFee": 0.069958,
+        "swapFee": 0.098,
+        "tip": 0,
+        "treasury": 13.902,
+        "early": true
+      },
+      "gross": 0.6995830000000005,
+      "vault": -0.09800000000000075
+    },
+    {
+      "mint": "BLVxek8YMXUQhcKmMvrFTrzh5FXg8ec88Crp6otEaCMf",
+      "openedAt": "2026-11-10T12:20:49.000Z",
+      "in": 151,
+      "sell": {
+        "time": 1794315330,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 159.829641,
+        "payout": 7.946677,
+        "profitFee": 0.882964,
+        "swapFee": 1.057,
+        "tip": 0,
+        "treasury": 149.943,
+        "early": true
+      },
+      "gross": 8.82964100000001,
+      "vault": -1.056999999999988
+    },
+    {
+      "mint": "33jENUQnjoitkMFpvNJcSHyLAHFWJuHwT6E3E8CNpump",
+      "openedAt": "2026-11-10T12:35:45.000Z",
+      "in": 96,
+      "sell": {
+        "time": 1794321734,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 104.845967,
+        "payout": 7.961371,
+        "profitFee": 0.884596,
+        "swapFee": 0.672,
+        "tip": 0,
+        "treasury": 95.328,
+        "early": true
+      },
+      "gross": 8.845967000000002,
+      "vault": -0.671999999999997
+    },
+    {
+      "mint": "FjPKUGnF5zBpdEv18gT8FJCtxh3MKrFkoeYekgYr1win",
+      "openedAt": "2026-11-10T13:49:09.000Z",
+      "in": 143,
+      "sell": {
+        "time": 1794340211,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 141.949234,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.993644,
+        "tip": 0,
+        "treasury": 140.95559,
+        "early": false
+      },
+      "gross": -1.05076600000001,
+      "vault": -2.044409999999999
+    },
+    {
+      "mint": "H74CYmXgMkYHYuSRsZt6RJb4NYp2u72Vw8BS5huApump",
+      "openedAt": "2026-11-10T14:04:26.000Z",
+      "in": 109,
+      "sell": {
+        "time": 1794320652,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 115.196569,
+        "payout": 5.576913,
+        "profitFee": 0.619656,
+        "swapFee": 0.763,
+        "tip": 0,
+        "treasury": 108.237,
+        "early": true
+      },
+      "gross": 6.196568999999997,
+      "vault": -0.7630000000000052
+    },
+    {
+      "mint": "9Pq7aLAbhDG2tTnS22cm6kuysZVcZpLFE368HWuypump",
+      "openedAt": "2026-11-10T14:19:26.000Z",
+      "in": 82,
+      "sell": {
+        "time": 1794342011,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 58.067842,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.406474,
+        "tip": 0,
+        "treasury": 57.661368,
+        "early": false
+      },
+      "gross": -23.932158,
+      "vault": -24.338631999999997
+    },
+    {
+      "mint": "FgLfLhT3QoPWynZ53L3KUUsPhspWbdPUfMtmPfezXci6",
+      "openedAt": "2026-11-10T14:34:21.000Z",
+      "in": 116,
+      "sell": {
+        "time": 1794342911,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 81.1909,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.568336,
+        "tip": 0,
+        "treasury": 80.622564,
+        "early": false
+      },
+      "gross": -34.8091,
+      "vault": -35.377436
+    },
+    {
+      "mint": "GexThZHgaswpAQ7Fi8QrHFubjPimUNSYhJiAA7XZpump",
+      "openedAt": "2026-11-10T14:49:30.000Z",
+      "in": 111,
+      "sell": {
+        "time": 1794343810,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 106.599728,
+        "payout": 0,
+        "profitFee": 0,
+        "swapFee": 0.746198,
+        "tip": 0,
+        "treasury": 105.85353,
+        "early": false
+      },
+      "gross": -4.400272000000001,
+      "vault": -5.146469999999994
+    },
+    {
+      "mint": "Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr",
+      "openedAt": "2026-11-10T18:45:11.000Z",
+      "in": 186,
+      "sell": {
+        "time": 1794341316,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 195.559163,
+        "payout": 8.603247,
+        "profitFee": 0.955916,
+        "swapFee": 1.302,
+        "tip": 0,
+        "treasury": 184.698,
+        "early": true
+      },
+      "gross": 9.559163000000012,
+      "vault": -1.3019999999999925
+    },
+    {
+      "mint": "8Xg89xT8Ve34sKiYqYuMs46mycREsCA2F362UscRpump",
+      "openedAt": "2026-11-10T19:00:13.000Z",
+      "in": 141,
+      "sell": {
+        "time": 1794342244,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 146.641958,
+        "payout": 5.077763,
+        "profitFee": 0.564195,
+        "swapFee": 0.987,
+        "tip": 0,
+        "treasury": 140.013,
+        "early": true
+      },
+      "gross": 5.641957999999988,
+      "vault": -0.9869999999999948
+    },
+    {
+      "mint": "HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump",
+      "openedAt": "2026-11-10T19:15:15.000Z",
+      "in": 107,
+      "sell": {
+        "time": 1794339010,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 117.793967,
+        "payout": 9.714571,
+        "profitFee": 1.079396,
+        "swapFee": 0.749,
+        "tip": 0,
+        "treasury": 106.251,
+        "early": true
+      },
+      "gross": 10.793966999999995,
+      "vault": -0.7489999999999952
+    },
+    {
+      "mint": "Hh3oTaqDCKKfdBgsQEvxp9sUwyNf8x9qmKqEMLBWpump",
+      "openedAt": "2026-11-10T19:30:15.000Z",
+      "in": 81,
+      "sell": null,
+      "gross": null,
+      "vault": null
+    },
+    {
+      "mint": "HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump",
+      "openedAt": "2026-11-10T19:45:16.000Z",
+      "in": 87,
+      "sell": {
+        "time": 1794341584,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 99.055487,
+        "payout": 10.849939,
+        "profitFee": 1.205548,
+        "swapFee": 0.609,
+        "tip": 0,
+        "treasury": 86.391,
+        "early": true
+      },
+      "gross": 12.055487,
+      "vault": -0.6089999999999947
+    },
+    {
+      "mint": "ApZuxdpzMrbEYTGEzeY9afh5pj9d6qPRJCTgQYiipbKg",
+      "openedAt": "2026-11-10T20:00:13.000Z",
+      "in": 106,
+      "sell": {
+        "time": 1794342784,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 116.081568,
+        "payout": 9.073412,
+        "profitFee": 1.008156,
+        "swapFee": 0.742,
+        "tip": 0,
+        "treasury": 105.258,
+        "early": true
+      },
+      "gross": 10.081568000000004,
+      "vault": -0.7420000000000044
+    },
+    {
+      "mint": "oPNWKYTYJyEs2RbpjUXfCTxrNtiTjTcz3ipvUvBBAH2",
+      "openedAt": "2026-11-10T20:15:16.000Z",
+      "in": 146,
+      "sell": {
+        "time": 1794342761,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 202.414897,
+        "payout": 50.773408,
+        "profitFee": 5.641489,
+        "swapFee": 1.022,
+        "tip": 0,
+        "treasury": 144.978,
+        "early": true
+      },
+      "gross": 56.414896999999996,
+      "vault": -1.0219999999999914
+    },
+    {
+      "mint": "Bv1a7cEj5aRnJQhMw4kRQqAFesMSd5LwcDnUzq52BMmr",
+      "openedAt": "2026-11-10T20:30:15.000Z",
+      "in": 158,
+      "sell": {
+        "time": 1794343895,
+        "caller": "3DvJWcHhtdhNLWMeBCh2Rma5chxyDWxoMmVvBFLihMZe",
+        "out": 174.909184,
+        "payout": 15.218266,
+        "profitFee": 1.690918,
+        "swapFee": 1.106,
+        "tip": 0,
+        "treasury": 156.894,
+        "early": true
+      },
+      "gross": 16.90918400000001,
+      "vault": -1.1059999999999945
+    },
+    {
+      "mint": "HsprHxBRgiVaQdRf3TnKNuZZtaX9JUSPgMFdAkk6pump",
+      "openedAt": "2026-11-10T20:45:15.000Z",
+      "in": 178,
+      "sell": null,
+      "gross": null,
+      "vault": null
+    },
+    {
+      "mint": "ApZuxdpzMrbEYTGEzeY9afh5pj9d6qPRJCTgQYiipbKg",
+      "openedAt": "2026-11-10T21:00:16.000Z",
+      "in": 199,
+      "sell": null,
+      "gross": null,
+      "vault": null
+    }
+  ]
+}

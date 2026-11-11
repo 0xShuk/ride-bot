@@ -12,6 +12,8 @@ type Profile = {
   /** Equal slots: each call gets the free USDC divided by the slots not yet taken by the bot's open
    *  calls (capped at sizeShare), so the treasury ends up fully deployed. null = always sizeShare. */
   slots: number | null;
+  /** Skip the round, keeping the day's call count, while a call would be smaller than this (USDC). */
+  minCallUsdc: number;
   /** The bot's own cap on calls per rolling 24 hours, under the fund's; null = as many as the fund allows. */
   maxCallsPerDay: number | null;
   takeProfit: number;
@@ -44,6 +46,8 @@ const PROFILES: Record<string, Profile> = {
     sizeShare: 0.25 * 0.97, // the fund's cap is 25%
     // Owner 2026-11-10: maximum deployment. 32 calls a day with 4-6h windows is ~6 open at once.
     slots: 6,
+    // Owner 2026-11-11: $20 calls won $1-3 and used up the daily limit before returning capital could be called.
+    minCallUsdc: 100,
     maxCallsPerDay: null,
     takeProfit: 0.05,
     holdReviewEverySecs: 5 * 60,
@@ -75,6 +79,7 @@ const PROFILES: Record<string, Profile> = {
     style: "swing",
     sizeShare: 0.2 * 0.97, // the fund's cap is 20%
     slots: null,
+    minCallUsdc: 5,
     // Owner 2026-11-08: bonds for about 11 rides, so only the best 4-5 setups a day.
     maxCallsPerDay: 5,
     takeProfit: 0.2,
@@ -113,6 +118,7 @@ export type WindowMin = (typeof SUPPORTED_WINDOWS_MIN)[number];
 
 export const SIZE_SHARE = P.sizeShare;
 export const SLOTS = P.slots;
+export const MIN_CALL_USDC = P.minCallUsdc;
 /** Owner 2026-11-10: equal slots only once the free USDC is at least this; under it, each call takes the
  *  fund's cap (slots made calls of $15-20 on a few hundred dollars). */
 export const SLOTS_FROM_USDC = 1200;

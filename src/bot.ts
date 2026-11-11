@@ -8,6 +8,7 @@ import {
   DECIDE_EVERY_MS,
   FUND,
   MAX_CALLS_PER_DAY,
+  MIN_CALL_USDC,
   MAX_ROUND_TRIP_COST,
   MIN_HOURLY_RANGE,
   MIN_LIQUIDITY_USD,
@@ -83,8 +84,8 @@ export class Bot {
     // Calls whose USDC is still out (an early-closed one comes back within minutes).
     const open = active.filter((c) => c.status === "building" || c.status === "open").length;
     const usdc = callSize(await this.chain.treasuryUsdc(), open, SLOTS, SIZE_SHARE, SLOTS_FROM_USDC);
-    if (usdc < 5) {
-      console.log(`[decide] treasury too small for a call ($${usdc})`);
+    if (usdc < MIN_CALL_USDC) {
+      console.log(`[decide] call would be $${usdc}, under the $${MIN_CALL_USDC} minimum: waiting for capital to come back`);
       return;
     }
 

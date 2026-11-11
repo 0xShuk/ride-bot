@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "analyze": "tsx --env-file=.env scripts/analyze.ts",
-    "compare": "tsx --env-file=.env scripts/compare.ts"
+    "compare": "tsx --env-file=.env scripts/compare.ts",
+    "wallet-report": "tsx --env-file=.env scripts/wallet-report.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.4.0",
