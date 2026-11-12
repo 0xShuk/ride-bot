@@ -44,11 +44,11 @@ const PROFILES: Record<string, Profile> = {
     },
     style: "steady",
     sizeShare: 0.25 * 0.97, // the fund's cap is 25%
-    // Owner 2026-11-10: maximum deployment. 32 calls a day with 4-6h windows is ~6 open at once.
-    slots: 6,
-    // Owner 2026-11-11: $20 calls won $1-3 and used up the daily limit before returning capital could be called.
-    minCallUsdc: 100,
-    maxCallsPerDay: null,
+    // Owner 2026-11-12: 10 calls a day is 2-3 open at once, so each takes the fund's 25% cap.
+    slots: null,
+    // Owner 2026-11-12: after a run of losses, fewer and better calls of at least $150.
+    minCallUsdc: 150,
+    maxCallsPerDay: 10,
     takeProfit: 0.05,
     holdReviewEverySecs: 5 * 60,
     // The chain lets an early close through only if the sale returns 4% more than the cost

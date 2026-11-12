@@ -72,8 +72,10 @@ export class Bot {
       return;
     }
     if (!(await this.balancesOk())) return;
+    let callsLeft: number | null = null;
     if (MAX_CALLS_PER_DAY !== null) {
       const made = await this.store.callsSince(Date.now() - 24 * 3600_000);
+      callsLeft = MAX_CALLS_PER_DAY - made;
       if (made >= MAX_CALLS_PER_DAY) {
         console.log(`[decide] ${made} calls in the last 24h, the bot's cap is ${MAX_CALLS_PER_DAY}: skipping round`);
         return;
@@ -155,7 +157,7 @@ export class Bot {
       })),
     );
     const names = kept.map((k) => k.token.symbol);
-    const d = await this.brain.decide(cands, await this.openBook(active));
+    const d = await this.brain.decide(cands, await this.openBook(active), callsLeft);
     await this.store.logDecision({
       action: d.action,
       symbol: d.action === "trade" ? d.symbol : null,

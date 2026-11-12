@@ -19,6 +19,9 @@ const rugged = (t: ListToken) =>
 /** Barely moved on every timeframe: a tokenized stock or pegged token, not a trade. */
 const flat = (t: ListToken) => [t.change1h, t.change6h, t.change24h].every((c) => Math.abs(c ?? 0) < MIN_MOVE_PCT);
 
+/** Down 10%+ on the 6h and down on the 24h: the -30% rides came from coins like this still falling. */
+const bleeding = (t: ListToken) => (t.change6h ?? 0) <= -10 && (t.change24h ?? 0) < 0;
+
 /** Shortlist score for the fund's style. */
 export function score(t: ListToken): number {
   return STYLE === "swing" ? swingScore(t) : steadyScore(t);
@@ -63,7 +66,8 @@ export function eligible(t: ListToken, verified: Map<string, number>): boolean {
     t.volume24h >= MIN_VOLUME_24H_USD &&
     (t.change5m ?? 0) <= MAX_PUMP_5M_PCT &&
     !rugged(t) &&
-    !flat(t)
+    !flat(t) &&
+    !(STYLE === "steady" && bleeding(t))
   );
 }
 

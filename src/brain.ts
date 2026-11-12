@@ -61,11 +61,11 @@ ${MIX}`;
 function steadySystem(windows: WindowMin[]): string {
   return `You run an autonomous caller on a community trading vault on Solana.
 Each call buys one token with USDC, holds it for a fixed window (${windows.map(hours).join(" or ")}), then sells it back to USDC. There is no stop-loss.
-Calls pay through the early close: once a call is up ${TAKE_PROFIT * 100}%, it can be closed early or held for more. In past calls, coins moving under 4% an hour almost never got there, while coins moving 8%+ an hour paid nearly all the profit, with some losses of 10% or more along the way.
-So the shortlist holds only volatile coins (each shows its average hourly range), with no fresh 5-minute spike, mixing sizes where it can, with 15-minute and hourly candles and the round-trip swap cost.
-The vault wants steady activity: calls are expected most rounds. Pick the coin most likely to swing up ${TAKE_PROFIT * 100}% or more inside the window, and the window that fits it. Pass only when every candidate is clearly broken: collapsing on every timeframe with no buyers, a likely rug, or a vertical spike sitting at its top on fading volume.
-Prefer a coin bouncing off support or breaking out of a range with volume coming in over one already far above its range.
-Pick the longer window when the move needs time to develop.
+Calls pay through the early close: once a call is up ${TAKE_PROFIT * 100}%, it can be closed early or held for more. Coins moving under 4% an hour almost never get there, while coins moving 8%+ an hour paid nearly all the profit.
+The shortlist holds only volatile coins (each shows its average hourly range), with no fresh 5-minute spike and none still bleeding on the 6h and 24h, with 15-minute and hourly candles and the round-trip swap cost.
+Calls are limited to ${MAX_CALLS_PER_DAY ?? "a few"} a day and each is a large share of the vault, so be selective. A recent run of losses came from volatile coins that kept falling for the whole window and ended down 10-30%; avoiding those matters more than catching every move.
+Call only when the setup is clearly up: higher lows on the hourly chart, the 15-minute chart holding above its recent lows, and volume rising on up candles. Good setups: a breakout from a range with volume coming in, or a clean bounce off a level that held before. Pass on anything else: a coin making lower highs, one that just spiked and is fading from its top, one sitting at a high after a vertical move, or a coin whose only appeal is that it moves a lot. Passing is normal; a round with no clear setup should pass.
+Pick the shorter window unless the move clearly needs longer: a call that fails to move early tends to keep falling.
 ${MIX}`;
 }
 
@@ -126,7 +126,8 @@ export class Brain {
     this.client = new Anthropic({ apiKey });
   }
 
-  async decide(cands: Candidate[], open: OpenCall[]): Promise<Decision> {
+  /** `callsLeft`: calls the bot may still make in the rolling 24h, when it has a cap. */
+  async decide(cands: Candidate[], open: OpenCall[], callsLeft: number | null = null): Promise<Decision> {
     if (!cands.length) return { action: "pass", reason: "empty shortlist" };
     const Pick = z.object({
       action: z.enum(["trade", "pass"]),
@@ -141,9 +142,14 @@ export class Brain {
       max_tokens: 16000,
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
-      output_config: { effort: "medium", format: zodOutputFormat(Pick) },
+      output_config: { effort: "high", format: zodOutputFormat(Pick) },
       system: system(this.windows),
-      messages: [{ role: "user", content: `Time: ${new Date().toISOString()}\n\n${describeOpen(open)}\n\nShortlist:\n\n${describe(cands)}` }],
+      messages: [
+        {
+          role: "user",
+          content: `Time: ${new Date().toISOString()}${callsLeft === null ? "" : `\nCalls left in the last 24h: ${callsLeft} of ${MAX_CALLS_PER_DAY}`}\n\n${describeOpen(open)}\n\nShortlist:\n\n${describe(cands)}`,
+        },
+      ],
     });
     if (res.stop_reason === "refusal") return { action: "pass", reason: "model declined" };
     const pick = res.parsed_output;

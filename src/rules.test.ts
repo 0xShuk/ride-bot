@@ -42,7 +42,15 @@ describe("eligible", () => {
 
   it("drops a rug (down 90%+ on every timeframe) but keeps a token with gaps in its data", () => {
     expect(eligible(tok("a", { change5m: -91, change1h: -95, change6h: -95, change24h: -99 }), verified)).toBe(false);
-    expect(eligible(tok("a", { change5m: null, change1h: -95, change6h: -95, change24h: -99 }), verified)).toBe(true);
+    expect(eligible(tok("a", { change5m: -95, change1h: -95, change6h: null, change24h: -99 }), verified)).toBe(true);
+  });
+});
+
+describe("bleeding coins", () => {
+  it("skips a coin down 10%+ on the 6h and down on the 24h", () => {
+    expect(eligible(tok("a", { change6h: -12, change24h: -3 }), verified)).toBe(false);
+    expect(eligible(tok("a", { change6h: -12, change24h: 4 }), verified)).toBe(true);
+    expect(eligible(tok("a", { change6h: -8, change24h: -20 }), verified)).toBe(true);
   });
 });
 
